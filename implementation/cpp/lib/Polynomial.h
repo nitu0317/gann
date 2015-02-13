@@ -19,7 +19,7 @@ class Polynomial1{
 		double setCoeff(int i, double val);
 		
 		//Prints the exponential form of the polynomial.
-		string toString();
+		std::string toString();
 	private:
 		vector<double> coefficients;
 };
