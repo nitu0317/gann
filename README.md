@@ -1,4 +1,4 @@
-FNN
+FNN++
 ===
 
 FNN++ is an implementation of the Functional Neural Network algorithm created by William Guss. 
