@@ -52,7 +52,7 @@ To design the library simple goals should be presented with example syntax for e
  }
 
  static double f(double x) { return x*x; }
-
+ 
  int main()
  {
     double x =1;
@@ -85,6 +85,8 @@ To design the library simple goals should be presented with example syntax for e
  function<int(int,int)> f1 = [](int x, int y){ return x+y; };
  ```
  [Storing the function incurs the overhead of abstraction from function however](http://stackoverflow.com/questions/3218821/c0x-lambda-overhead).
+
+ So now we have a simple way of implementing functional conversions in the feedforward aspect.
 
 4. We want to implement some form of fast error backpropagation.
 
