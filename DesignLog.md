@@ -1,5 +1,8 @@
 Design Log
 ===
+## 4/6/2015
+Today we will finish the fast algorithm for forward propagation and backward propagation. However, we are still nonethewiser on the full development of FNN++.
+
 
 ## 4/5/2015
 Seeing as the theoretical algorithm for the most part is completed,  we currently have two goals:
