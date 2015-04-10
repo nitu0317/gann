@@ -64,7 +64,7 @@ namespace fnn
     /// <remarks>   William Guss, 4/6/2015. </remarks>
     ///-------------------------------------------------------------------------------------------------
 
-    enum Sigmoid
+    enum FNNLIB Sigmoid
     {
         /// <summary>   The linear sigmoid activation function.</summary> 
         Linear,
