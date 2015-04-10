@@ -13,6 +13,7 @@
 #endif 
 
 #include <functional>
+#include <vector>
 
 namespace fnn{
 
@@ -38,12 +39,10 @@ namespace fnn{
 
         std::function<double(double)> FeedForward(std::function<double(double)> ξ);
 
-
-
-        
-
     private:
 
+        /// <summary>   The σ-cache for layers. </summary>
+        std::vector<std::function<double(double)>> σ_cache;
 
 
     };
