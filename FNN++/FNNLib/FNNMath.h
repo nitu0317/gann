@@ -57,21 +57,4 @@ namespace fnn
 
         static double NIntegrate(std::function<double(double)> f, double a, double b);
     };
-
-    ///=================================================================================================
-    /// <summary>   Different sigmoid activation functions. </summary>
-    ///
-    /// <remarks>   William Guss, 4/6/2015. </remarks>
-    ///-------------------------------------------------------------------------------------------------
-
-    enum FNNLIB Sigmoid
-    {
-        /// <summary>   The linear sigmoid activation function.</summary> 
-        Linear,
-        /// <summary>   The logistic activation function. </summary> 
-        Logistic,
-        /// <summary>   The hyperbolic tangent activation function. </summary>
-        Tanh
-    };
-
 }

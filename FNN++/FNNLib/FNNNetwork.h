@@ -14,6 +14,7 @@
 
 #include <functional>
 #include <vector>
+#include "FNNMath.h"
 
 namespace fnn{
 
@@ -25,6 +26,19 @@ namespace fnn{
 
     class FNNLIB Network{
     public:
+
+        ///=================================================================================================
+        /// <summary>   Constructs a functional neural network.. </summary>
+        ///
+        /// <remarks>   William, 4/10/2015. </remarks>
+        ///
+        /// <param name="lc">   The layer count. </param>
+        ///-------------------------------------------------------------------------------------------------
+
+        Network(int lc){
+            activator = Sigmoid::Logistic;
+            layerCount = lc;
+        }
 
         ///=================================================================================================
         /// <summary>   Runs the network using the fast feedforward algorithm. The algorithm caches
@@ -39,10 +53,24 @@ namespace fnn{
 
         std::function<double(double)> FeedForward(std::function<double(double)> ξ);
 
+
+
+        void SetActivation(Sigmoid activator){
+            this->activator = activator;
+        }
+
     private:
+
+        /// <summary>   The number of layers in the network. </summary>
+        int layerCount;
+
+        /// <summary>   The primary activator type for the neural network. </summary>
+        Sigmoid activator;
 
         /// <summary>   The σ-cache for layers. </summary>
         std::vector<std::function<double(double)>> σ_cache;
+        
+        
 
 
     };
