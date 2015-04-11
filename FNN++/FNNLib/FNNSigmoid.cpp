@@ -6,6 +6,7 @@
 
 #include "stdafx.h"
 #include "FNNSigmoid.h"
+#include <math.h>
 
 ///=================================================================================================
 /// <summary>   Evaluates the derivative of the activation function. </summary>
@@ -50,7 +51,7 @@ fnn::Sigmoid fnn::Sigmoid::Linear(void)
     return Sigmoid(
         [](double x) { return x; },
         [](double x) { return 1; }
-        );
+    );
 }
 
 ///=================================================================================================
@@ -63,6 +64,25 @@ fnn::Sigmoid fnn::Sigmoid::Linear(void)
 
 fnn::Sigmoid fnn::Sigmoid::Logistic(void)
 {
-    return Sigmoid
+    return Sigmoid(
+        [](double x){ return 1 / (1 + std::exp(-x)); },
+        [](double x){ return std::exp(x) / std::pow(1 + std::exp(x), 2); }
+    );
+}
+
+///=================================================================================================
+/// <summary>   Gets the hyperbolic tangent activation function. </summary>
+///
+/// <remarks>   William, 4/10/2015. </remaqrks>
+///
+/// <returns>   A Sigmoid. </returns>
+///-------------------------------------------------------------------------------------------------
+
+fnn::Sigmoid fnn::Sigmoid::Tanh(void)
+{
+    return Sigmoid(
+        [](double x){ return std::tanh(x); },
+        [](double x){return 1 - std::pow(std::tanh(x), 2);  }
+    );
 }
 
