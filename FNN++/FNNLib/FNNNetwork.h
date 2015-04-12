@@ -20,6 +20,7 @@
 #include <vector>
 #include "FNNMath.h"
 #include "FNNSigmoid.h"
+#include "FNNWeightSurface.h"
 
 namespace fnn{
 
@@ -65,6 +66,7 @@ namespace fnn{
 
         void SetActivation(Sigmoid activator);
 
+
     private:
 
         /// <summary>   The number of layers in the network. </summary>
@@ -75,6 +77,9 @@ namespace fnn{
 
         /// <summary>   The σ-cache for layers. </summary>
         std::vector<std::function<double(double)>> σ_cache;
+
+        /// <summary>   The weights. </summary>
+        std::vector<WeightSurface> weights;
         
         
 
