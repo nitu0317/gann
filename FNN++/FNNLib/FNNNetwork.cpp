@@ -18,9 +18,16 @@
 /// <returns>   The ouput, F[ξ]. </returns>
 ///-------------------------------------------------------------------------------------------------
 
-//std::function<double(double)> fnn::Network::FeedForward(std::function<double(double)> ξ)
-//{
-//	
-//	return
-//}
+std::function<double(double)> fnn::Network::FeedForward(std::function<double(double)> ξ)
+{
+    //build the layers
+    σ_cache[0] = ξ;
+    
+    //Calc Ix_1
+
+
+
+	
+    return[](double d){return 0; };
+}
 
