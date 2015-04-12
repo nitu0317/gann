@@ -6,14 +6,18 @@
 
 #pragma once
 
+#ifdef FNNDLL
 #ifdef FNNLIB_EXPORTS
 #define FNNLIB  __declspec(dllexport)   // export DLL information
 #else
 #define FNNLIB  __declspec(dllimport)   // import DLL information
-#endif 
+#endif
+#else
+#define FNNLIB
+#endif
 
 #include <functional>
-
+#include <iostream>
 
 
 ///=================================================================================================
@@ -21,6 +25,7 @@
 ///
 /// <remarks>   William Guss, 4/6/2015. </remarks>
 ///-------------------------------------------------------------------------------------------------
+
 
 namespace fnn{
     class FNNLIB Sigmoid

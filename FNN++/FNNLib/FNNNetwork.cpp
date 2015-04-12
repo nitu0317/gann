@@ -18,9 +18,9 @@
 /// <returns>   The ouput, F[ξ]. </returns>
 ///-------------------------------------------------------------------------------------------------
 
-std::function<double(double)> fnn::Network::FeedForward(std::function<double(double)> ξ)
-{
-	
-	return(0.0);
-}
+//std::function<double(double)> fnn::Network::FeedForward(std::function<double(double)> ξ)
+//{
+//	
+//	return
+//}
 

@@ -6,15 +6,20 @@
 
 #pragma once
 
+#ifdef FNNDLL
 #ifdef FNNLIB_EXPORTS
 #define FNNLIB  __declspec(dllexport)   // export DLL information
 #else
 #define FNNLIB  __declspec(dllimport)   // import DLL information
-#endif 
+#endif
+#else
+#define FNNLIB
+#endif
 
 #include <functional>
 #include <vector>
 #include "FNNMath.h"
+#include "FNNSigmoid.h"
 
 namespace fnn{
 
@@ -35,10 +40,7 @@ namespace fnn{
         /// <param name="lc">   The layer count. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        Network(int lc){
-            activator = Sigmoid::Logistic;
-            layerCount = lc;
-        }
+        Network(int lc);
 
         ///=================================================================================================
         /// <summary>   Runs the network using the fast feedforward algorithm. The algorithm caches
@@ -53,11 +55,15 @@ namespace fnn{
 
         std::function<double(double)> FeedForward(std::function<double(double)> ξ);
 
+        ///=================================================================================================
+        /// <summary>   Sets an activation. </summary>
+        ///
+        /// <remarks>   William Guss, 4/11/2015. </remarks>
+        ///
+        /// <param name="activator">    The activator. </param>
+        ///-------------------------------------------------------------------------------------------------
 
-
-        void SetActivation(Sigmoid activator){
-            this->activator = activator;
-        }
+        void SetActivation(Sigmoid activator);
 
     private:
 

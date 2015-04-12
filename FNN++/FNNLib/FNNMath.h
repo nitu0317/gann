@@ -6,11 +6,15 @@
 
 #pragma once //DONT LOOK AT ME 2 MANY TIMES ;)
 
+#ifdef FNNDLL
 #ifdef FNNLIB_EXPORTS
 #define FNNLIB  __declspec(dllexport)   // export DLL information
 #else
 #define FNNLIB  __declspec(dllimport)   // import DLL information
-#endif 
+#endif
+#else
+#define FNNLIB
+#endif
 
 #include <functional>
 
