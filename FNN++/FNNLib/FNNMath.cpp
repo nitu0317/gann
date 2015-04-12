@@ -6,7 +6,8 @@
 
 #include "stdafx.h"
 #include "FNNMath.h"
-
+#include <random>
+#include <time.h>
 ///=================================================================================================
 /// <summary>   Numerically integrates any integrable function using Simpson's rule with auto
 ///             scaling. </summary>
@@ -42,7 +43,7 @@ double fnn::Math::NIntegrate(std::function<double(double)> f, double a, double b
 
 double fnn::Math::NIntegrate(std::function<double(double)> f, double a, double b, double eps)
 {
-
+        
     double h = (b - a) / eps;
     double s = f(a) + f(b);
 
@@ -53,5 +54,41 @@ double fnn::Math::NIntegrate(std::function<double(double)> f, double a, double b
 	
     
     return s*h /3;
+}
+
+
+///=================================================================================================
+/// <summary>   Uniform real. </summary>
+///
+/// <remarks>   William Guss, 4/11/2015. </remarks>
+///
+/// <param name="min">  The minimum. </param>
+/// <param name="max">  The maximum. </param>
+///
+/// <returns>   A double. </returns>
+///-------------------------------------------------------------------------------------------------
+
+double fnn::Math::UniformReal(double min, double max)
+{
+    std::uniform_real_distribution<double> distribution(min, max);
+    static std::mt19937 engine(time(NULL));
+    return distribution(engine);
+}
+
+///=================================================================================================
+/// <summary>   Gaussian real. </summary>
+///
+/// <remarks>   William Guss, 4/11/2015. </remarks>
+///
+/// <param name="mean"> The mean. </param>
+///
+/// <returns>   A double. </returns>
+///-------------------------------------------------------------------------------------------------
+
+double fnn::Math::GaussianReal(double mean, double dev)
+{
+    std::normal_distribution<double> distribution(mean, dev);
+    static std::mt19937 engine(time(NULL));
+    return distribution(engine);
 }
 

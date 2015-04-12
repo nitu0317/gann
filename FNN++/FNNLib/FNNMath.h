@@ -17,10 +17,13 @@
 #endif
 
 #include <functional>
-
+#include <random>
+#include<time.h>
 
 namespace fnn
 {
+
+
     ///=================================================================================================
     /// <summary>  The main mathematics helper class for FNNLIB </summary>
     ///
@@ -60,5 +63,32 @@ namespace fnn
         ///-------------------------------------------------------------------------------------------------
 
         static double NIntegrate(std::function<double(double)> f, double a, double b);
+
+        ///=================================================================================================
+        /// <summary>   Uniform real. </summary>
+        ///
+        /// <remarks>   William Guss, 4/11/2015. </remarks>
+        ///
+        /// <param name="min">  The minimum. </param>
+        /// <param name="max">  The maximum. </param>
+        ///
+        /// <returns>   A double. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        static double UniformReal(double min = 0.0, double max = 0.0);
+
+        ///=================================================================================================
+        /// <summary>   Gaussian real. </summary>
+        ///
+        /// <remarks>   William Guss, 4/11/2015. </remarks>
+        ///
+        /// <param name="mean"> The mean. </param>
+        ///
+        /// <returns>   A double. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        static double GaussianReal(double mean = 0.0, double dev = 1.0);
+    private:
+
     };
 }
