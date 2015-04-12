@@ -68,6 +68,34 @@ namespace fnn{
 
         double GetCoefficient(int x, int y);
 
+        ///=================================================================================================
+        /// <summary>   Nudges the weight surface coefficients. </summary>
+        ///
+        /// <remarks>   William Guss, 4/11/2015. </remarks>
+        ///-------------------------------------------------------------------------------------------------
+
+        void Nudge();
+
+        ///=================================================================================================
+        /// <summary>   Gets size x coordinate. </summary>
+        ///
+        /// <remarks>   William Guss, 4/11/2015. </remarks>
+        ///
+        /// <returns>   The size x coordinate. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        int GetSizeX();
+
+        ///=================================================================================================
+        /// <summary>   Gets size y coordinate. </summary>
+        ///
+        /// <remarks>   William Guss, 4/11/2015. </remarks>
+        ///
+        /// <returns>   The size y coordinate. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        int GetSizeY();
+
 
     private:
         /// <summary>   The coefficient matrix. </summary>

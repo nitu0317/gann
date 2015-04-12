@@ -6,7 +6,7 @@
 
 #include "stdafx.h"
 #include "FNNWeightSurface.h"
-
+#include "FNNMath.h"
 
 #include <random>
 
@@ -30,6 +30,48 @@ fnn::WeightSurface::WeightSurface(int x, int y)
     for (int i = 0; i < x; i++)
         coef[i] = std::vector<double>(y);
 
-    //randomize each coefficient./
-    std::default_random_engine
+    Nudge();
+    
 }
+
+///=================================================================================================
+/// <summary>   Nudges the weight surface coefficients. </summary>
+///
+/// <remarks>   William Guss, 4/11/2015. </remarks>
+///-------------------------------------------------------------------------------------------------
+
+void fnn::WeightSurface::Nudge(void)
+{
+    for (int i = 0; i < sizex; i++)
+        for (int j = 0; j < sizex; j++)
+            coef[i][j] = Math::GaussianReal();
+}
+
+///=================================================================================================
+/// <summary>   Gets size x coordinate. </summary>
+///
+/// <remarks>   William Guss, 4/11/2015. </remarks>
+///
+/// <returns>   The size x coordinate. </returns>
+///-------------------------------------------------------------------------------------------------
+
+int fnn::WeightSurface::GetSizeX(void)
+{
+    
+    return sizex;
+}
+
+///=================================================================================================
+/// <summary>   Gets size y coordinate. </summary>
+///
+/// <remarks>   William Guss, 4/11/2015. </remarks>
+///
+/// <returns>   The size y coordinate. </returns>
+///-------------------------------------------------------------------------------------------------
+
+int fnn::WeightSurface::GetSizeY(void)
+{
+    
+    return sizey;
+}
+
