@@ -45,6 +45,14 @@ namespace fnn{
             std::function<double(double)> fprime);
 
         ///=================================================================================================
+        /// <summary>   Default constructor. </summary>
+        ///
+        /// <remarks>   William Guss, 4/12/2015. </remarks>
+        ///-------------------------------------------------------------------------------------------------
+
+        Sigmoid();
+
+        ///=================================================================================================
         /// <summary>   Evaluates the derivative of the activation function. </summary>
         ///
         /// <remarks>   William, 4/10/2015. </remarks>

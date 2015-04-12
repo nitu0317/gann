@@ -41,7 +41,7 @@ namespace fnn{
         /// <param name="lc">   The layer count. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        Network(int lc);
+        Network();
 
         ///=================================================================================================
         /// <summary>   Runs the network using the fast feedforward algorithm. The algorithm caches
@@ -66,14 +66,26 @@ namespace fnn{
 
         void SetActivation(Sigmoid activator);
 
+        ///=================================================================================================
+        /// <summary>   Adds a layer to 'y'. </summary>
+        ///
+        /// <remarks>   William Guss, 4/12/2015. </remarks>
+        ///
+        /// <param name="x">    The x coordinate. </param>
+        /// <param name="y">    The y coordinate. </param>
+        ///-------------------------------------------------------------------------------------------------
+
+        void AddLayer(int x, int y);
+
+        /// <summary>   The primary activator type for the neural network. </summary>
+        Sigmoid Activator;
 
     private:
 
         /// <summary>   The number of layers in the network. </summary>
         int layerCount;
 
-        /// <summary>   The primary activator type for the neural network. </summary>
-        Sigmoid activator;
+        
 
         /// <summary>   The σ-cache for layers. </summary>
         std::vector<std::function<double(double)>> σ_cache;
