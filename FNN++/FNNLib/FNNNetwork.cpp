@@ -47,7 +47,7 @@ std::function<double(double)> fnn::Network::FeedForward(std::function<double(dou
     //Calc Ix_1
     std::vector<double> I1(this->weights[0].GetSizeX()); 
     for (int i = 0; i < I1.size(); i++)
-        I1[i] = Math::NIntegrate([=](double j0){ return ξ(j0)*pow(j0, i); },
+        I1[i]=  Math::NIntegrate([=](double j0){ return ξ(j0)*pow(j0, i); },
             0, 1);
 
     std::vector<double> σ1coeff;
