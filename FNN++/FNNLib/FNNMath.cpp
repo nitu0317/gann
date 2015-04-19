@@ -8,6 +8,9 @@
 #include "FNNMath.h"
 #include <random>
 #include <time.h>
+#include <vector>
+#include <iostream>
+
 ///=================================================================================================
 /// <summary>   Numerically integrates any integrable function using Simpson's rule with auto
 ///             scaling. </summary>
@@ -90,5 +93,13 @@ double fnn::Math::GaussianReal(double mean, double dev)
     std::normal_distribution<double> distribution(mean, dev);
     static std::mt19937 engine(time(NULL));
     return distribution(engine);
+}
+
+double fnn::Math::LERP(std::vector<double> data)
+{
+	auto func = [double y](double x){
+		return x;
+	};
+	return func;
 }
 

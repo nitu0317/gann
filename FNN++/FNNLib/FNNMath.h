@@ -15,10 +15,10 @@
 #else
 #define FNNLIB
 #endif
-
 #include <functional>
 #include <random>
-#include<time.h>
+#include <time.h>
+#include <vector>
 
 namespace fnn
 {
@@ -88,6 +88,18 @@ namespace fnn
         ///-------------------------------------------------------------------------------------------------
 
         static double GaussianReal(double mean = 0.0, double dev = 1.0);
+
+		///=================================================================================================
+		/// <summary>   A linear interpolation algorithm </summary>
+		///
+		/// <remarks>   Phillip Kuznetsov, 4/18/2015. </remarks>
+		///
+		/// <param name="data"> The data points. </param>
+		///
+		/// <returns>   A linear interpolation function </returns>
+		///-------------------------------------------------------------------------------------------------
+
+		static std::function<double(double)> LERP(std::vector<double> data);
     private:
 
     };
