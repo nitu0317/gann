@@ -154,8 +154,45 @@ std::vector<double> fnn::Math::PolyMult(std::vector<double> poly1, std::vector<d
 
 std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> data)
 {
-	auto func = [](double x){
-		return x;
+	//data has to be sorted first according to x values
+	//coded with the assumption it is already sorted.
+	std::vector<std::function<double(double)>> functions;
+	std::vector<double> ranges{ data[0][0] };
+	for (auto i = 0; i < data.size() - 1; i++)
+	{
+		std::vector<double> pt1 = data[i];
+		std::vector<double> pt2 = data[i+1];
+		double slope = (pt1[1] - pt2[1]) / (pt1[0] - pt2[0]);
+		double intercept = pt1[1] - slope*pt1[0];
+		functions.push_back([slope, intercept](double x){return x*slope + intercept});
+		ranges.push_back(pt2[0]);
+	}
+
+	auto func = [functions, ranges](double x){
+		try{
+			if (x < ranges[0]) throw 0;
+		}
+		catch (int e)
+		{
+			std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
+			return -pow(2, 32);
+		}
+		for (auto i = 0; i < ranges.size()-1; i++)
+		{
+			if (x >= ranges[i] && x <= ranges[i + 1])
+			{
+				return functions[i](x);
+			}
+		}
+		try
+		{
+			throw 0;
+		}
+		catch (int e)
+		{
+			std::cout << x << " is outside of the bounds: ["<<ranges[0]<<","<<ranges[ranges.size()-1]<<"]. \n Returning -2^32.";
+		}
+		return -pow(2, 32);
 	};
 	return func;
 }
