@@ -19,9 +19,9 @@
 
 fnn::Network::Network()
 {
-    this->layerCount = 0;
+    this->layerCount = 0; // The first layer is always the inp;ut layer
     this->Activator = Sigmoid::Logistic();
-    this->σ_cache = std::vector<std::function<double(double)>>();
+    this->σ_cache = std::vector<std::function<double(double)>> (1); //We add one sigmoid term for the output
     this->weights = std::vector<WeightSurface>();
 }
 
@@ -29,7 +29,7 @@ fnn::Network::Network()
 
 
 ///=================================================================================================
-/// <summary>   Runs the network suing the fast feedforward algorithm. The algorithm caches
+/// <summary>   Runs the network using the fast feedforward algorithm. The algorithm caches
 ///             following that described in the paper. </summary>
 ///
 /// <remarks>   William, 4/10/2015. </remarks>
@@ -43,40 +43,52 @@ std::function<double(double)> fnn::Network::FeedForward(std::function<double(dou
 {
     //build the layers
     σ_cache[0] = ξ;
-    
-    //Calc Ix_1
-    std::vector<double> I1(this->weights[0].GetSizeX()); 
-    for (int i = 0; i < I1.size(); i++)
-        I1[i]=  Math::NIntegrate([=](double j0){ return ξ(j0)*pow(j0, i); },
+    std::vector<std::vector<double>> I_cache;
+
+    for (int l = 0; l < this->layerCount; l++){
+
+        // 1. Calculate the main integration of the net input, I
+        //    I = Int[σ[l-1]j^{x_2l}]
+        std::vector<double> I(this->weights[l].GetSizeX());
+
+        for (int i = 0; i < I.size(); i++)
+            I[i] = Math::NIntegrate([=](double j0){ return σ_cache[l](j0)*pow(j0, i); },
             0, 1);
 
-    std::vector<double> σ1coeff;
+        //    Push the calculated net to the integration cache.        
+        I_cache.push_back(I);
 
-    //combine like terms.
-    for (int j = 0; j < weights[0].GetSizeY(); j++){
-        double sum = 0;
-        for (int i = 0; i < weights[0].GetSizeX(); i++)
-            sum += weights[0].GetCoefficient(i, j)*I1[i];
-        σ1coeff.push_back(sum);
-        
+
+
+        // 2. Calculate the coefficients for the polynomial representing σ[l+1]
+        //    We do this by combining like terms from both the coefficients and
+        //    the integration cache.
+        //     
+        //    Consider that σ[l+1] = g(
+        for (int j = 0; j < weights[l].GetSizeY(); j++){
+            double sum = 0;
+            for (int i = 0; i < weights[l].GetSizeX(); i++)
+                sum += weights[l].GetCoefficient(i, j)*I[i];
+            σcoeff.push_back(sum);
+
+        }
+
+        //Create the functional.
+        σ_cache[l+1] = [=](double x)
+        {
+            double sum = 0;
+            for (int j = 0; j < weights[l].GetSizeY(); j++)
+                sum += σcoeff[j] * std::pow(x, j);
+
+            return Activator(sum);
+        };
     }
-
-    //Create the functional.
-    σ_cache[1] = [=](double x)
-    {
-        double sum = 0;
-        for (int j = 0; j < weights[0].GetSizeY(); j++)
-            sum += σ1coeff[j] * std::pow(x, j);
-
-        return Activator(sum);
-    };
-
     
     
 
 
     
-    return[](double d){ return 0; };
+    return σ_cache[this->layerCount];
 }
 
 ///=================================================================================================
