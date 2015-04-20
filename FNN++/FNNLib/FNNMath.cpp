@@ -117,26 +117,18 @@ std::vector<double> fnn::Math::PolyMult(std::vector<double> poly1, std::vector<d
 		for (auto j = 0; j < poly2.size(); j++)
 		{
 			//The term  = : x^term of hte polynomial. Also the index of the output vector
-			int term = i*j;
-			double coeff = poly1[i] * poly2[i];
-			try
+			int term = i+j;
+			std::cout << "Term " << term << "\t";
+			double coeff = poly1[i] * poly2[j];
+			std::cout <<poly1[i] << " " << poly2[j]<< " "<< coeff<< "\n";
+			
+			if (retPoly.size() == term)
 			{
-				if (retPoly.size() == term)
-				{
-					retPoly.push_back(coeff);
-				}
-				else if (retPoly.size() < term)
-				{
-					throw 1;
-				}
-				else
-				{
-					retPoly[term] += coeff;
-				}
+				retPoly.push_back(coeff);
 			}
-			catch (int e)
+			else
 			{
-				std::cout << "Error " << e << "occurred in poylnomial multiplication";
+				retPoly[term] += coeff;
 			}
 		}
 	}
@@ -166,7 +158,7 @@ std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> d
 		std::vector<double> pt2 = data[i+1];
 		double slope = (pt1[1] - pt2[1]) / (pt1[0] - pt2[0]);
 		double intercept = pt1[1] - slope*pt1[0];
-		functions.push_back([slope, intercept](double x){return x*slope + intercept});
+		functions.push_back([slope, intercept](double x){return x*slope + intercept; });
 		ranges.push_back(pt2[0]);
 	}
 
@@ -256,12 +248,20 @@ std::function<double(double)> fnn::Math::PERP(std::vector<std::vector<double>> d
 			}
 		}
 	}
+	std::cout << "Polynomial: " << coef[0];
+	for (auto i = 1; i < coef.size(); i++)
+	{
+		std::cout << " + " << coef[i] << "*x^" << i;
+	}
+	std::cout << "\n";
 	auto func = [coef](double x){
 		double output = 0;
 		for (auto i = 0; i < coef.size(); i++)
 		{
 			output += coef[i] * pow(x, i);
+			
 		}
+		
 		return output; };
 	return func;
 }

@@ -125,6 +125,7 @@ namespace fnn
 		///-------------------------------------------------------------------------------------------------
 
 		static std::function<double(double)> PERP(std::vector<std::vector<double>> data);
+
     private:
 
     };

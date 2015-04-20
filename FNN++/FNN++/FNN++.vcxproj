@@ -78,6 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="randomDataset.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
