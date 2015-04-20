@@ -11,6 +11,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 
 ///=================================================================================================
 /// <summary>   Numerically integrates any integrable function using Simpson's rule with auto
@@ -155,6 +156,7 @@ std::vector<double> fnn::Math::PolyMult(std::vector<double> poly1, std::vector<d
 std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> data)
 {
 	//data has to be sorted first according to x values
+	std::sort(data.begin(), data.end(), [](const std::vector<double>& a, const std::vector<double>& b){ return a[0] > b[0]; });
 	//coded with the assumption it is already sorted.
 	std::vector<std::function<double(double)>> functions;
 	std::vector<double> ranges{ data[0][0] };
