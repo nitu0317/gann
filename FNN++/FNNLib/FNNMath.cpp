@@ -218,25 +218,19 @@ std::function<double(double)> fnn::Math::PERP(std::vector<std::vector<double>> d
 		double mult = denom * pti[1];
 		for (auto i = 0; i < tempCf.size(); i++)
 		{
-			try
-			{
 				if (coef.size() == i)
 				{
 					coef.push_back(tempCf[i] * mult);
 				}
 				else if (coef.size() < i)
 				{
-					throw 1;
+                    std::cout << "Mismatch of tempCF and coef";
 				}
 				else
 				{
 					coef[i] += tempCf[i] * mult;
 				}
-			}
-			catch (int e)
-			{
-				std::cout << "Mismatch of tempCF and coef";
-			}
+
 		}
 	}
 	auto func = [coef](double x){
