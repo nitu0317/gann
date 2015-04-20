@@ -147,6 +147,7 @@ std::vector<double> fnn::Math::PolyMult(std::vector<double> poly1, std::vector<d
 
 std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> data)
 {
+    
 	//data has to be sorted first according to x values
 	std::sort(data.begin(), data.end(), [](const std::vector<double>& a, const std::vector<double>& b){ return a[0] > b[0]; });
 	//coded with the assumption it is already sorted.
@@ -163,14 +164,13 @@ std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> d
 	}
 
 	auto func = [functions, ranges](double x){
-		try{
-			if (x < ranges[0]) throw 0;
-		}
-		catch (int e)
-		{
-			std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
-			return -pow(2, 32);
-		}
+		
+            if (x < ranges[0]){
+                std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
+                return -pow(2, 32);
+            }
+		
+		
 		for (auto i = 0; i < ranges.size()-1; i++)
 		{
 			if (x >= ranges[i] && x <= ranges[i + 1])
@@ -178,14 +178,9 @@ std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> d
 				return functions[i](x);
 			}
 		}
-		try
-		{
-			throw 0;
-		}
-		catch (int e)
-		{
+		
 			std::cout << x << " is outside of the bounds: ["<<ranges[0]<<","<<ranges[ranges.size()-1]<<"]. \n Returning -2^32.";
-		}
+		
 		return -pow(2, 32);
 	};
 	return func;
@@ -227,25 +222,20 @@ std::function<double(double)> fnn::Math::PERP(std::vector<std::vector<double>> d
 		double mult = denom * pti[1];
 		for (auto i = 0; i < tempCf.size(); i++)
 		{
-			try
-			{
 				if (coef.size() == i)
 				{
 					coef.push_back(tempCf[i] * mult);
 				}
 				else if (coef.size() < i)
 				{
-					throw 1;
+
+                    std::cout << "Mismatch of tempCF and coef";
 				}
 				else
 				{
 					coef[i] += tempCf[i] * mult;
 				}
-			}
-			catch (int e)
-			{
-				std::cout << "Mismatch of tempCF and coef";
-			}
+			
 		}
 	}
 	std::cout << "Polynomial: " << coef[0];
