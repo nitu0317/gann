@@ -75,3 +75,20 @@ int fnn::WeightSurface::GetSizeY(void)
     return sizey;
 }
 
+///=================================================================================================
+/// <summary>   Gets a coefficient. </summary>
+///
+/// <remarks>   William Guss, 4/11/2015. </remarks>
+///
+/// <param name="x">    The x coordinate. </param>
+/// <param name="y">    The y coordinate. </param>
+///
+/// <returns>   The coefficient. </returns>
+///-------------------------------------------------------------------------------------------------
+
+double fnn::WeightSurface::GetCoefficient(int x, int y)
+{
+	
+    return this->coef[x][y];
+}
+
