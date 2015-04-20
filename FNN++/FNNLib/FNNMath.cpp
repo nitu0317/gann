@@ -119,38 +119,32 @@ std::vector<double> fnn::Math::PolyMult(std::vector<double> poly1, std::vector<d
 			//The term  = : x^term of hte polynomial. Also the index of the output vector
 			int term = i*j;
 			double coeff = poly1[i] * poly2[i];
-			try
-			{
+
 				if (retPoly.size() == term)
 				{
 					retPoly.push_back(coeff);
 				}
 				else if (retPoly.size() < term)
 				{
-					throw 1;
+                    std::cout << "Error " << 1 << "occurred in poylnomial multiplication";
 				}
 				else
 				{
 					retPoly[term] += coeff;
 				}
-			}
-			catch (int e)
-			{
-				std::cout << "Error " << e << "occurred in poylnomial multiplication";
-			}
 		}
 	}
 	return retPoly;
 }
 
 ///=================================================================================================
-/// <summary>   A linear interpolation algorithm </summary>
+/// <summary>   A linear interpolation algorithm. </summary>
 ///
 /// <remarks>   Phillip Kuznetsov, 4/18/2015. </remarks>
 ///
-/// <param name="data"> 2D vector of input data points </param>
+/// <param name="data"> 2D vector of input data points. </param>
 ///
-/// <returns>   A linear interpolation function </returns>
+/// <returns>   A linear interpolation function. </returns>
 ///-------------------------------------------------------------------------------------------------
 
 std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> data)
@@ -166,34 +160,23 @@ std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> d
 		std::vector<double> pt2 = data[i+1];
 		double slope = (pt1[1] - pt2[1]) / (pt1[0] - pt2[0]);
 		double intercept = pt1[1] - slope*pt1[0];
-		functions.push_back([slope, intercept](double x){return x*slope + intercept});
+        functions.push_back([slope, intercept](double x){ return x*slope + intercept;  });
 		ranges.push_back(pt2[0]);
 	}
 
 	auto func = [functions, ranges](double x){
-		try{
-			if (x < ranges[0]) throw 0;
-		}
-		catch (int e)
-		{
-			std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
-			return -pow(2, 32);
-		}
+
+        if (x < ranges[0]){
+            std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
+            return -pow(2, 32);
+        }
+
 		for (auto i = 0; i < ranges.size()-1; i++)
-		{
-			if (x >= ranges[i] && x <= ranges[i + 1])
-			{
 				return functions[i](x);
-			}
-		}
-		try
-		{
-			throw 0;
-		}
-		catch (int e)
-		{
-			std::cout << x << " is outside of the bounds: ["<<ranges[0]<<","<<ranges[ranges.size()-1]<<"]. \n Returning -2^32.";
-		}
+		
+		
+		std::cout << x << " is outside of the bounds: ["<<ranges[0]<<","<<ranges[ranges.size()-1]<<"]. \n Returning -2^32.";
+		
 		return -pow(2, 32);
 	};
 	return func;
