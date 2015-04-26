@@ -44,7 +44,7 @@ void fnn::WeightSurface::Nudge(void)
 {
     for (int i = 0; i < sizex; i++)
         for (int j = 0; j < sizex; j++)
-            coef[i][j] = Math::GaussianReal();
+            coef[i][j] = Math::GaussianReal()/(double)Math::Factorial(i+j);
 }
 
 ///=================================================================================================

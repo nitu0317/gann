@@ -53,7 +53,8 @@ std::function<double(double)> fnn::Network::FeedForward(std::function<double(dou
 
         for (int i = 0; i < I.size(); i++)
             I[i] = Math::NIntegrate([=](double j0){ return σ_cache[l](j0)*pow(j0, i); },
-            0, 1);
+                0, 1);
+         
 
         //    Push the calculated net to the integration cache.        
         I_cache.push_back(I);

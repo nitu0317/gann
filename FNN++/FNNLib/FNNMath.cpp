@@ -29,7 +29,7 @@
 double fnn::Math::NIntegrate(std::function<double(double)> f, double a, double b)
 {
 	
-	return(0.0);
+    return fnn::Math::NIntegrate(f, a, b, (a - b) * 10); //TODO: This is kinda arbitrary but,
 }
 
 ///=================================================================================================
@@ -254,5 +254,22 @@ std::function<double(double)> fnn::Math::PERP(std::vector<std::vector<double>> d
 		
 		return output; };
 	return func;
+}
+
+///=================================================================================================
+/// <summary>   Factorial implementation. </summary>
+///
+/// <remarks>   William, 4/26/2015. </remarks>
+///
+/// <param name="n">    The int to process. </param>
+///
+/// <returns>   An int. </returns>
+///-------------------------------------------------------------------------------------------------
+
+int fnn::Math::Factorial(int n)
+{
+    if (n == 0) return 1;
+    
+    return n*fnn::Math::Factorial(n - 1);
 }
 

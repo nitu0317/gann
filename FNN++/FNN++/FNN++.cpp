@@ -17,11 +17,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::vector<double> poly2{ 1, -2 ,1};
 	std::vector<double> ya = fnn::Math::PolyMult(poly1, poly2);
 	std::cout << ya[0];
-	for (int i = 1; i < ya.size(); i++)
-	{
-		std::cout << " + " << ya[i] << "x^" << i;
-	}
-	std::cout << "\n";
+
 	
 	/*vector<vector<double>> dataset;
 	vector<double> range{ -50, 50 };
@@ -40,14 +36,23 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	auto poly = Math::PERP(dataset);
 	*/
+
     //Construct a network
     Network net = Network();
-    net.Activator = Sigmoid::Logistic();
+    net.Activator = Sigmoid::Tanh();
+    net.AddLayer(10, 10);
     net.AddLayer(10, 10);
 
-    //auto output = net.FeedForward(f);
+    //TODO: Fix a glitch with this paret.
 
 
+   
+    auto f = [](double x) { return sin(x); };
+
+    auto output = net.FeedForward(f);
+
+    for (double x = 0; x < 10; x += 0.05)
+        cout << "" << x << "=>" << output(x) << "\n";
     
     system("pause");
 

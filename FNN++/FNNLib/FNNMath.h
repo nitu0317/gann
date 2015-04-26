@@ -126,6 +126,18 @@ namespace fnn
 
 		static std::function<double(double)> PERP(std::vector<std::vector<double>> data);
 
+        ///=================================================================================================
+        /// <summary>   Factorial implementation. </summary>
+        ///
+        /// <remarks>   William, 4/26/2015. </remarks>
+        ///
+        /// <param name="n">    The int to process. </param>
+        ///
+        /// <returns>   An int. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        static int Factorial(int n);
+
     private:
 
     };
