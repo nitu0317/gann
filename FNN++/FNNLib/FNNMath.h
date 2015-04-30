@@ -19,6 +19,7 @@
 #include <random>
 #include <time.h>
 #include <vector>
+#include <time.h>
 
 namespace fnn
 {
@@ -88,6 +89,18 @@ namespace fnn
         ///-------------------------------------------------------------------------------------------------
 
         static double GaussianReal(double mean = 0.0, double dev = 1.0);
+
+        ///=================================================================================================
+        /// <summary>   Gauss Jordan elimination for matrices. </summary>
+        ///
+        /// <remarks>   Phillip Kuznetsov, 4/29/2015. </remarks>
+        ///
+        /// <param name="matrix">   The systems of equation augmented matrix. </param>
+        ///
+        /// <returns>   A vector of the variable values solved by completed Gauss-Jordan elimination. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        static std::vector<double> GaussJordan(std::vector<std::vector<double>> matrix);
 		
 		///=================================================================================================
 		/// <summary>   A polynomial multiplication helper </summary>
