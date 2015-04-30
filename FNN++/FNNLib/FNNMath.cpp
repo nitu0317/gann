@@ -31,7 +31,7 @@
 double fnn::Math::NIntegrate(std::function<double(double)> f, double a, double b)
 {
 	
-    return fnn::Math::NIntegrate(f, a, b, (a - b) * 10); //TODO: This is kinda arbitrary but,
+	return fnn::Math::NIntegrate(f, a, b, (a - b) * 10); //TODO: This is kinda arbitrary but,
 }
 
 ///=================================================================================================
@@ -149,7 +149,7 @@ std::vector<double> fnn::Math::PolyMult(std::vector<double> poly1, std::vector<d
 
 std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> data)
 {
-    
+	
 	//data has to be sorted first according to x values
 	std::sort(data.begin(), data.end(), [](const std::vector<double>& a, const std::vector<double>& b){ return a[0] > b[0]; });
 	//coded with the assumption it is already sorted.
@@ -167,10 +167,10 @@ std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> d
 
 	auto func = [functions, ranges](double x){
 		
-            if (x < ranges[0]){
-                std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
-                return -pow(2, 32);
-            }
+			if (x < ranges[0]){
+				std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
+				return -pow(2, 32);
+			}
 		
 		
 		for (auto i = 0; i < ranges.size()-1; i++)
@@ -231,7 +231,7 @@ std::function<double(double)> fnn::Math::PERP(std::vector<std::vector<double>> d
 				else if (coef.size() < i)
 				{
 
-                    std::cout << "Mismatch of tempCF and coef";
+					std::cout << "Mismatch of tempCF and coef";
 				}
 				else
 				{
@@ -270,9 +270,9 @@ std::function<double(double)> fnn::Math::PERP(std::vector<std::vector<double>> d
 
 int fnn::Math::Factorial(int n)
 {
-    if (n == 0) return 1;
-    
-    return n*fnn::Math::Factorial(n - 1);
+	if (n == 0) return 1;
+	
+	return n*fnn::Math::Factorial(n - 1);
 }
 
 ///=================================================================================================
@@ -288,84 +288,190 @@ int fnn::Math::Factorial(int n)
 std::vector<double> fnn::Math::GaussJordan(std::vector<std::vector<double>> matrix)
 {
 
-    //the return vector
-    std::vector<double> ret (matrix.size());
-    //This for loop reorders the matrix into row-echelon form.
-    for (auto i = 0; i < matrix.size(); i++)
+	//the return vector
+	std::vector<double> ret(matrix.size());
+	//This for loop reorders the matrix into row-echelon form.
+	for (auto i = 0; i < matrix.size(); i++)
+	{
+		std::vector<double> cur = matrix[i];
+		if (cur[i] == 0)
+		{
+			for (auto kek = 0; kek < matrix.size(); kek++)
+			{
+				if (kek == i)
+				{
+					continue;
+				}
+				if (matrix[kek][i] != 0 && cur[kek] != 0)
+				{
+					matrix[i] = matrix[kek];
+					matrix[kek] = cur;
+				}
+			}
+		}
+	}
+	//comment this block out during regular run time.
+	std::cout << "The ordered matrix\n{";
+	for (auto i = 0; i < matrix.size(); i++)
+	{
+		std::cout << "{" << matrix[i][0];
+		for (auto j = 1; j < matrix[0].size(); j++)
+		{
+			std::cout << "," << matrix[i][j];
+		}
+		std::cout << "},\n";
+	}
+	std::cout << "};";
+
+	//This loop solves the row-echelon equations.
+	for (auto i = 0; i < matrix.size(); i++)
+	{
+		std::vector<double> cur = matrix[i];
+		//first reduce the specific vector component to one.
+		double scaler = cur[i];
+		for (auto j = 0; j < cur.size(); j++)
+		{
+			cur[j] = cur[j] / scaler;
+		}
+		matrix[i] = cur;
+		//then subtract from the other matrices
+		for (auto kek = 0; kek < matrix.size(); kek++)
+		{
+			if (kek == i)
+				continue;
+
+			double scaler = -matrix[kek][i];
+			for (auto lol = 0; lol < cur.size(); lol++)
+			{
+				matrix[kek][lol] += cur[lol] * scaler;
+			}
+		}
+	}
+	//comment this block out during regular run time.
+	std::cout << "The ordered matrix\n{";
+	for (auto i = 0; i < matrix.size(); i++)
+	{
+		std::cout << "{" << matrix[i][0];
+		for (auto j = 1; j < matrix[0].size(); j++)
+		{
+			std::cout << "," << matrix[i][j];
+		}
+		std::cout << "},\n";
+	}
+	std::cout << "};\n" << ret[0];
+
+	//places everything into a neat old loop.
+	for (auto i = 0; i < matrix.size(); i++)
+	{
+		std::vector<double> cur = matrix[i];
+		ret[i] = (cur[cur.size() - 1]);
+	}
+	return ret;
+}
+
+ ///=================================================================================================
+ /// <summary>  A simple spline interpolation algorithm as described in
+ ///            http://www.geos.ed.ac.uk/~yliu23/docs/lect_spline.pdf. Makes the assumption that
+ ///            the second derivative at the boundaries is equal to 0. </summary>
+ ///
+ /// <remarks>  Phillip Kuznetsov, 4/29/2015. </remarks>
+ ///
+ /// <param name="data">    2D vector of input data points. Each row is a point. </param>
+ ///-------------------------------------------------------------------------------------------------
+
+ std::function<double(double)> fnn::Math::SSpline(std::vector<std::vector<double>> data)
+{
+    //make sure this actually sorts anything
+    fnn::Math::DataSort(data);
+
+    std::vector<std::vector<double>> matrix;
+    //the construction of the system of linear equations matrix
+    // This linear equation matrix is second derivatives of the system.
+    for (auto i = 1; i < data.size() - 1; i++)
     {
-        std::vector<double> cur = matrix[i];
-        if (cur[i] == 0)
+        
+        //the three coordinates that the current spline is working with.
+        std::vector<std::vector<double>> k;
+        for (auto j = i - 1; j <= i + 1; j++)
         {
-            for (auto kek = 0; kek < matrix.size(); kek++)
+            k.push_back(data[j]);
+        }
+        
+        std::vector<double> row(data.size() + 1);
+        std::fill(row.begin(), row.end(), 0);
+
+        
+        std::vector<double> coefs = { (k[1][0] - k[0][0]) / 6, (k[2][0] - k[0][0]) / 3, (k[2][0] - k[1][0]) / 6 };
+        auto ctr = 0;
+        for (auto l = (i - 1); l < (i - 1) + 3; l++, ctr++)
+        {
+            row[l] = coefs[ctr];
+        }
+        //this is the answer to the problem/
+        double d = (k[2][1] - k[1][1]) / (k[2][0] - k[1][0]) - (k[1][1] - k[0][1]) / (k[2][0] - k[1][0]);
+        row[row.size() - 1] = d;
+        matrix.push_back(row);
+    }
+    //Adds the known values as rows in the matrix.
+    for (auto i = 0; i < 2; i++)
+    {
+        std::vector<double> row(data.size() + 1);
+        std::fill(row.begin(), row.end(), 0);
+        row[0 + (row.size() - 2)*i] = 1;
+        row[row.size() - 1] = 0;
+        matrix.push_back(row);
+    }
+    //the array of the second derivatives at each point. Used to plug in the equation.
+    std::vector<double> secondDeriv = fnn::Math::GaussJordan(matrix);
+    
+    std::vector<std::function<double(double)>> functions;
+    std::vector<double> ranges{ data[0][0] };
+    for (auto i = 0; i < data.size() - 1; i++)
+    {
+        std::vector<double> pt1 = data[i];
+        std::vector<double> pt2 = data[i + 1];
+        double slope = (pt1[1] - pt2[1]) / (pt1[0] - pt2[0]);
+        double intercept = pt1[1] - slope*pt1[0];
+        functions.push_back([slope, intercept](double x){return x*slope + intercept; });
+        ranges.push_back(pt2[0]);
+    }
+    //the creation of the equations
+    auto func = [functions, ranges](double x){
+
+        if (x < ranges[0]){
+            std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
+            return -pow(2, 32);
+        }
+
+
+        for (auto i = 0; i < ranges.size() - 1; i++)
+        {
+            if (x >= ranges[i] && x <= ranges[i + 1])
             {
-                if (kek == i)
-                {
-                    continue;
-                }
-                if (matrix[kek][i] != 0 && cur[kek] != 0)
-                {
-                    matrix[i] = matrix[kek];
-                    matrix[kek] = cur;
-                }
+                return functions[i](x);
             }
         }
-    }
-    //comment this block out during regular run time.
-    std::cout << "The ordered matrix\n{";
-    for (auto i = 0; i < matrix.size(); i++)
-    {
-        std::cout << "{" << matrix[i][0];
-        for (auto j = 1; j < matrix[0].size(); j++)
-        {
-            std::cout << "," << matrix[i][j];
-        }
-        std::cout << "},\n";
-    }
-    std::cout << "};";
 
-    //This loop solves the row-echelon equations.
-    for (auto i = 0; i < matrix.size(); i++)
-    {
-        std::vector<double> cur = matrix[i];
-        //first reduce the specific vector component to one.
-        double scaler = cur[i];
-        for (auto j = 0; j < cur.size(); j++)
-        {
-            cur[j] = cur[j] / scaler;
-        }
-        matrix[i] = cur;
-        //then subtract from the other matrices
-        for (auto kek = 0; kek < matrix.size(); kek++)
-        {
-            if (kek == i)
-                continue;
+        std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
 
-            double scaler = -matrix[kek][i];
-            for (auto lol = 0; lol < cur.size(); lol++)
-            {
-                matrix[kek][lol] += cur[lol] * scaler;
-            }
-        }
-    }
-    //comment this block out during regular run time.
-    std::cout << "The ordered matrix\n{";
-    for (auto i = 0; i < matrix.size(); i++)
-    {
-        std::cout << "{" << matrix[i][0];
-        for (auto j = 1; j < matrix[0].size(); j++)
-        {
-            std::cout << "," << matrix[i][j];
-        }
-        std::cout << "},\n";
-    }
-    std::cout << "};\n"<<ret[0];
+        return -pow(2, 32);
+    };
+    return func;
+}
 
-    //places everything into a neat old loop.
-    for (auto i = 0; i < matrix.size(); i++)
-    {
-        std::vector<double> cur = matrix[i];
-        ret[i] = (cur[cur.size() - 1]);
-    }
-    return ret;
+///=================================================================================================
+/// <summary>   Data sort algorthim to sort by x-values of the data. Useful for the interpolation
+///             algorithms. </summary>
+///
+/// <remarks>   Phillip Kuznetsov, 4/29/2015. </remarks>
+///
+/// <param name="data"> 2D vector of input data points. Each row is a point. </param>
+///
+/// <returns>   A 2D vector of the same points sorted. </returns>
+///-------------------------------------------------------------------------------------------------
+
+void fnn::Math::DataSort(std::vector<std::vector<double>> &data)
+{
+    std::sort(data.begin(), data.end(), [](const std::vector<double>& a, const std::vector<double>& b){ return a[0] > b[0]; });
 }
 

@@ -66,7 +66,7 @@ int _tmain(int argc, _TCHAR* argv[])
     vector<vector<double>> matrix2 = { { 2, 1, -1, 8 }, { -3, -1, 2, -11 }, { -2, 1, 2, -3 } };
     vector < vector<double>> matrix4 = { { 1, 2, -3, 4, 12 }, { 2, 2, -2, 3, 10 }, { 0, 1, 1, 0, -1 }, { 1, -1, 1, -2, -4 } };
 
-    vector<double> variables = fnn::Math::GaussJordan(matrix2);
+    vector<double> variables = fnn::Math::GaussJordan(matrix4);
     cout << "\nVariables : {";
     for (auto var : variables)
     {
