@@ -33,7 +33,7 @@ fnn::Loggable::Loggable(string name)
 /// <param name="verbose">  Whether or not (upon creation of a new log the log is verbose) </param>
 ///-------------------------------------------------------------------------------------------------
 
-void fnn::Loggable::Log(string log, string message, bool verbose=false)
+void fnn::Loggable::Log(string log, string message, bool verbose)
 {
     if (logs.find(log) == logs.end())
         //if not found
