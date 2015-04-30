@@ -86,3 +86,16 @@ bool fnn::Log::IsVerbose(void)
     return this->verbose;
 }
 
+///=================================================================================================
+/// <summary>   Default constructor. </summary>
+///
+/// <remarks>   William, 4/29/2015. </remarks>
+///-------------------------------------------------------------------------------------------------
+
+fnn::Log::Log(void)
+{
+    this->content = list<string>();
+    this->name = "default_log";
+    this->verbose = false;
+}
+
