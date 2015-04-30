@@ -474,6 +474,6 @@ std::vector<double> fnn::Math::GaussJordan(std::vector<std::vector<double>> matr
 
 void fnn::Math::DataSort(std::vector<std::vector<double>> &data)
 {
-    std::sort(data.begin(), data.end(), [](const std::vector<double>& a, const std::vector<double>& b){ return a[0] > b[0]; });
+    std::sort(data.begin(), data.end(), [](const std::vector<double>& a, const std::vector<double>& b){ return a[0] < b[0]; });
 }
 
