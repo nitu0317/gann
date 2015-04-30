@@ -9,7 +9,12 @@
 #include <random>
 #include <iostream>
 #include <time.h>
+#include <vector>
+#include <iostream>
+#include <cmath>
 #include <algorithm>
+#include <iterator>
+
 ///=================================================================================================
 /// <summary>   Numerically integrates any integrable function using Simpson's rule with auto
 ///             scaling. </summary>
@@ -26,7 +31,7 @@
 double fnn::Math::NIntegrate(std::function<double(double)> f, double a, double b)
 {
 	
-	return(0.0);
+    return fnn::Math::NIntegrate(f, a, b, (a - b) * 10); //TODO: This is kinda arbitrary but,
 }
 
 ///=================================================================================================
@@ -95,6 +100,182 @@ double fnn::Math::GaussianReal(double mean, double dev)
 }
 
 ///=================================================================================================
+/// <summary>   A polynomial multiplication helper </summary>
+///
+/// <remarks>   Phillip Kuznetsov, 4/19/2015. </remarks>
+///
+/// <param name="poly1">A vector of the coefficients. Each index is the power which x is raised to</param>
+///
+/// <param name="poly2">A vector of the second polynomial coefficients./param>
+/// 
+/// <returns>   A vector of coefficients for hte polynomial </returns>
+///-------------------------------------------------------------------------------------------------
+
+std::vector<double> fnn::Math::PolyMult(std::vector<double> poly1, std::vector<double> poly2)
+{
+	std::vector<double> retPoly;
+	for (auto i = 0; i < poly1.size(); i++)
+	{
+		for (auto j = 0; j < poly2.size(); j++)
+		{
+			//The term  = : x^term of hte polynomial. Also the index of the output vector
+			int term = i+j;
+			std::cout << "Term " << term << "\t";
+			double coeff = poly1[i] * poly2[j];
+			std::cout <<poly1[i] << " " << poly2[j]<< " "<< coeff<< "\n";
+			
+			if (retPoly.size() == term)
+			{
+				retPoly.push_back(coeff);
+			}
+			else
+			{
+				retPoly[term] += coeff;
+			}
+		}
+	}
+	return retPoly;
+}
+
+///=================================================================================================
+/// <summary>   A linear interpolation algorithm </summary>
+///
+/// <remarks>   Phillip Kuznetsov, 4/18/2015. </remarks>
+///
+/// <param name="data"> 2D vector of input data points </param>
+///
+/// <returns>   A linear interpolation function </returns>
+///-------------------------------------------------------------------------------------------------
+
+std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> data)
+{
+    
+	//data has to be sorted first according to x values
+	std::sort(data.begin(), data.end(), [](const std::vector<double>& a, const std::vector<double>& b){ return a[0] > b[0]; });
+	//coded with the assumption it is already sorted.
+	std::vector<std::function<double(double)>> functions;
+	std::vector<double> ranges{ data[0][0] };
+	for (auto i = 0; i < data.size() - 1; i++)
+	{
+		std::vector<double> pt1 = data[i];
+		std::vector<double> pt2 = data[i+1];
+		double slope = (pt1[1] - pt2[1]) / (pt1[0] - pt2[0]);
+		double intercept = pt1[1] - slope*pt1[0];
+		functions.push_back([slope, intercept](double x){return x*slope + intercept; });
+		ranges.push_back(pt2[0]);
+	}
+
+	auto func = [functions, ranges](double x){
+		
+            if (x < ranges[0]){
+                std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
+                return -pow(2, 32);
+            }
+		
+		
+		for (auto i = 0; i < ranges.size()-1; i++)
+		{
+			if (x >= ranges[i] && x <= ranges[i + 1])
+			{
+				return functions[i](x);
+			}
+		}
+		
+			std::cout << x << " is outside of the bounds: ["<<ranges[0]<<","<<ranges[ranges.size()-1]<<"]. \n Returning -2^32.";
+		
+		return -pow(2, 32);
+	};
+	return func;
+}
+
+///=================================================================================================
+/// <summary>   A polynomial interpolation algorithm according to http://en.wikipedia.org/wiki/Polynomial_interpolation </summary>
+///
+/// <remarks>   Phillip Kuznetsov, 4/19/2015. </remarks>
+///
+/// <param name="data"> 2D vector of input data points. Each row is a point. </param>
+///
+/// <returns>   A polynomial interpolation function </returns>
+///-------------------------------------------------------------------------------------------------
+
+std::function<double(double)> fnn::Math::PERP(std::vector<std::vector<double>> data)
+{
+	//coefficient vector such that each num is a coefficient to x^index.
+	std::vector<double> coef;
+	
+	for (auto i = 0; i < data.size(); i++)
+	{
+		std::vector<double> pti = data[i];
+		std::vector<double> tempCf;
+		double denom = 1;
+		for (auto j = 0; j < data.size(); j++)
+		{
+			if (i == j) continue;
+			std::vector<double> ptj = data[j];
+			std::vector<double> poly{ -ptj[0], 1 };
+			if (tempCf.size() == 0)
+			{
+				tempCf = poly;
+				continue;
+			}
+			tempCf = fnn::Math::PolyMult(tempCf, poly);
+			denom *= pti[0] - ptj[0];
+		}
+		double mult = denom * pti[1];
+		for (auto i = 0; i < tempCf.size(); i++)
+		{
+				if (coef.size() == i)
+				{
+					coef.push_back(tempCf[i] * mult);
+				}
+				else if (coef.size() < i)
+				{
+
+                    std::cout << "Mismatch of tempCF and coef";
+				}
+				else
+				{
+					coef[i] += tempCf[i] * mult;
+				}
+			
+		}
+	}
+	std::cout << "Polynomial: " << coef[0];
+	for (auto i = 1; i < coef.size(); i++)
+	{
+		std::cout << " + " << coef[i] << "*x^" << i;
+	}
+	std::cout << "\n";
+	auto func = [coef](double x){
+		double output = 0;
+		for (auto i = 0; i < coef.size(); i++)
+		{
+			output += coef[i] * pow(x, i);
+			
+		}
+		
+		return output; };
+	return func;
+}
+
+///=================================================================================================
+/// <summary>   Factorial implementation. </summary>
+///
+/// <remarks>   William, 4/26/2015. </remarks>
+///
+/// <param name="n">    The int to process. </param>
+///
+/// <returns>   An int. </returns>
+///-------------------------------------------------------------------------------------------------
+
+int fnn::Math::Factorial(int n)
+{
+    if (n == 0) return 1;
+    
+    return n*fnn::Math::Factorial(n - 1);
+}
+
+///=================================================================================================
 /// <summary>   Gauss Jordan elimination for matrices. </summary>
 ///
 /// <remarks>   Phillip Kuznetsov, 4/29/2015. </remarks>
@@ -106,72 +287,85 @@ double fnn::Math::GaussianReal(double mean, double dev)
 
 std::vector<double> fnn::Math::GaussJordan(std::vector<std::vector<double>> matrix)
 {
-	//the return vector
-	std::vector<double> ret;
-	//This for loop reorders the matrix into row-echelon form.
-	for (auto i = 0; i < matrix.size(); i++)
-	{
-		std::vector<double> cur = matrix[i];
-		if (cur[i] == 0)
-		{
-			for (auto kek = 0; kek < matrix.size(); kek++)
-			{
-				if (kek == i)
-				{
-					continue;
-				}
-				if (matrix[kek][i] != 0 && cur[kek] != 0)
-				{
-					matrix[i] = matrix[kek];
-					matrix[kek] = cur;
-				}
-			}
-		}
-	}
-	//comment this block out during regular run time.
-	std::cout << "The ordered matrix\n{";
-	for (auto i = 0; i < matrix.size(); i++)
-	{
-		std::cout << "{"<<matrix[i][0];
-		for (auto j = 1; j < matrix[0].size(); j++)
-		{
-			std::cout << "," << matrix[i][j];
-		}
-		std::cout << "},\n";
-	}
-	std::cout << "};";
 
-	//This loop solves the row-echelon equastion.
-	for (auto i = 0; i < matrix.size(); i++)
-	{
-		std::vector<double> cur = matrix[i];
-		//first reduce the specific vector component to one.
-		for (auto j = 0; j < cur.size(); j++)
-		{
-			cur[j] /= cur[i];
-		}
-		//then subtract from the other matrices
-		for (auto kek = 0; kek < matrix.size(); kek++)
-		{
-			if (kek == i)
-			{
-				continue;
-			}
-			//copy the value of cur into a temp solver
-			std::vector<double> tempSol(cur.size());
-			std::copy(cur.begin(), cur.end(), tempSol);
-			double scaler = -matrix[kek][i];
-			for (auto lol = 0; lol < cur.size(); lol++)
-			{
-				matrix[kek][lol] += tempSol[lol] * scaler;
-			}
-		}
-	}
-	//places everything into a neat old loop.
-	for (auto i = 0; i < matrix.size(); i++)
-	{
-		ret.push_back(matrix[i][matrix.size() - 1]);
-	}
-	return ret;
+    //the return vector
+    std::vector<double> ret (matrix.size());
+    //This for loop reorders the matrix into row-echelon form.
+    for (auto i = 0; i < matrix.size(); i++)
+    {
+        std::vector<double> cur = matrix[i];
+        if (cur[i] == 0)
+        {
+            for (auto kek = 0; kek < matrix.size(); kek++)
+            {
+                if (kek == i)
+                {
+                    continue;
+                }
+                if (matrix[kek][i] != 0 && cur[kek] != 0)
+                {
+                    matrix[i] = matrix[kek];
+                    matrix[kek] = cur;
+                }
+            }
+        }
+    }
+    //comment this block out during regular run time.
+    std::cout << "The ordered matrix\n{";
+    for (auto i = 0; i < matrix.size(); i++)
+    {
+        std::cout << "{" << matrix[i][0];
+        for (auto j = 1; j < matrix[0].size(); j++)
+        {
+            std::cout << "," << matrix[i][j];
+        }
+        std::cout << "},\n";
+    }
+    std::cout << "};";
+
+    //This loop solves the row-echelon equations.
+    for (auto i = 0; i < matrix.size(); i++)
+    {
+        std::vector<double> cur = matrix[i];
+        //first reduce the specific vector component to one.
+        double scaler = cur[i];
+        for (auto j = 0; j < cur.size(); j++)
+        {
+            cur[j] = cur[j] / scaler;
+        }
+        matrix[i] = cur;
+        //then subtract from the other matrices
+        for (auto kek = 0; kek < matrix.size(); kek++)
+        {
+            if (kek == i)
+                continue;
+
+            double scaler = -matrix[kek][i];
+            for (auto lol = 0; lol < cur.size(); lol++)
+            {
+                matrix[kek][lol] += cur[lol] * scaler;
+            }
+        }
+    }
+    //comment this block out during regular run time.
+    std::cout << "The ordered matrix\n{";
+    for (auto i = 0; i < matrix.size(); i++)
+    {
+        std::cout << "{" << matrix[i][0];
+        for (auto j = 1; j < matrix[0].size(); j++)
+        {
+            std::cout << "," << matrix[i][j];
+        }
+        std::cout << "},\n";
+    }
+    std::cout << "};\n"<<ret[0];
+
+    //places everything into a neat old loop.
+    for (auto i = 0; i < matrix.size(); i++)
+    {
+        std::vector<double> cur = matrix[i];
+        ret[i] = (cur[cur.size() - 1]);
+    }
+    return ret;
 }
 

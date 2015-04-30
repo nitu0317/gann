@@ -92,8 +92,22 @@ fnn::Sigmoid fnn::Sigmoid::Tanh(void)
 /// <remarks>   William Guss, 4/12/2015. </remarks>
 ///-------------------------------------------------------------------------------------------------
 
-fnn::Sigmoid::Sigmoid(void)
+fnn::Sigmoid::Sigmoid(std::function<double(double)> g, std::function<double(double)> gprime)
 {
-    
+    this->fprime = gprime;
+    this->f = g;
+}
+
+
+///=================================================================================================
+/// <summary>   Default constructor. Do nothing.t </summary>
+///
+/// <remarks>   William Guss, 4/12/2015. </remarks>
+///-------------------------------------------------------------------------------------------------
+
+fnn::Sigmoid::Sigmoid()
+{
+    this->fprime = [](double x){ return 1;  };
+    this->f = [](double x){ return x;  };
 }
 

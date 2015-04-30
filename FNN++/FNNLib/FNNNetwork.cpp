@@ -53,7 +53,8 @@ std::function<double(double)> fnn::Network::FeedForward(std::function<double(dou
 
         for (int i = 0; i < I.size(); i++)
             I[i] = Math::NIntegrate([=](double j0){ return σ_cache[l](j0)*pow(j0, i); },
-            0, 1);
+                0, 1);
+         
 
         //    Push the calculated net to the integration cache.        
         I_cache.push_back(I);
@@ -65,6 +66,7 @@ std::function<double(double)> fnn::Network::FeedForward(std::function<double(dou
         //    the integration cache.
         //     
         //    Consider that σ[l+1] = g(
+        std::vector<double> σcoeff;
         for (int j = 0; j < weights[l].GetSizeY(); j++){
             double sum = 0;
             for (int i = 0; i < weights[l].GetSizeX(); i++)

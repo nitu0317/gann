@@ -44,7 +44,7 @@ void fnn::WeightSurface::Nudge(void)
 {
     for (int i = 0; i < sizex; i++)
         for (int j = 0; j < sizex; j++)
-            coef[i][j] = Math::GaussianReal();
+            coef[i][j] = Math::GaussianReal()/(double)Math::Factorial(i+j);
 }
 
 ///=================================================================================================
@@ -73,5 +73,22 @@ int fnn::WeightSurface::GetSizeY(void)
 {
     
     return sizey;
+}
+
+///=================================================================================================
+/// <summary>   Gets a coefficient. </summary>
+///
+/// <remarks>   William Guss, 4/11/2015. </remarks>
+///
+/// <param name="x">    The x coordinate. </param>
+/// <param name="y">    The y coordinate. </param>
+///
+/// <returns>   The coefficient. </returns>
+///-------------------------------------------------------------------------------------------------
+
+double fnn::WeightSurface::GetCoefficient(int x, int y)
+{
+	
+    return this->coef[x][y];
 }
 
