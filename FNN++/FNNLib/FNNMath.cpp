@@ -10,10 +10,10 @@
 #include <iostream>
 #include <time.h>
 #include <vector>
-#include <iostream>
 #include <cmath>
 #include <algorithm>
 #include <iterator>
+#include <string>
 
 ///=================================================================================================
 /// <summary>   Numerically integrates any integrable function using Simpson's rule with auto
@@ -151,20 +151,26 @@ std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> d
 {
 	
 	//data has to be sorted first according to x values
-	std::sort(data.begin(), data.end(), [](const std::vector<double>& a, const std::vector<double>& b){ return a[0] > b[0]; });
+	DataSort(data);
 	//coded with the assumption it is already sorted.
 	std::vector<std::function<double(double)>> functions;
 	std::vector<double> ranges{ data[0][0] };
+	//The mathematica statement used to displace this function
+	std::string mathematica = "\nPiecewise[{";
 	for (auto i = 0; i < data.size() - 1; i++)
 	{
 		std::vector<double> pt1 = data[i];
 		std::vector<double> pt2 = data[i+1];
 		double slope = (pt1[1] - pt2[1]) / (pt1[0] - pt2[0]);
 		double intercept = pt1[1] - slope*pt1[0];
+		mathematica += "{" + std::to_string(slope) + "x+" + std::to_string(intercept) + "," + std::to_string(pt1[0]) + "<=x<" + std::to_string(pt2[0]) + "},";
 		functions.push_back([slope, intercept](double x){return x*slope + intercept; });
 		ranges.push_back(pt2[0]);
 	}
-
+	mathematica = mathematica.substr(0, mathematica.size() - 1);
+	mathematica += "}, 2^32]";
+	//Print out the LERP piecewise
+	std::cout << mathematica;
 	auto func = [functions, ranges](double x){
 		
 			if (x < ranges[0]){
