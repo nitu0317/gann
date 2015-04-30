@@ -58,3 +58,31 @@ void fnn::Log::Push(string message)
     this->content.push_back(message);
 }
 
+///=================================================================================================
+/// <summary>   Gets the name. </summary>
+///
+/// <remarks>   William, 4/29/2015. </remarks>
+///
+/// <returns>   The name. </returns>
+///-------------------------------------------------------------------------------------------------
+
+string fnn::Log::GetName(void)
+{
+	
+    return this->name;
+}
+
+///=================================================================================================
+/// <summary>   Query if this object is verbose. </summary>
+///
+/// <remarks>   William, 4/29/2015. </remarks>
+///
+/// <returns>   true if verbose, false if not. </returns>
+///-------------------------------------------------------------------------------------------------
+
+bool fnn::Log::IsVerbose(void)
+{
+	
+    return this->verbose;
+}
+

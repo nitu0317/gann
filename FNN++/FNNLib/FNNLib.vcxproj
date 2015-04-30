@@ -79,6 +79,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FNNLog.h" />
+    <ClInclude Include="FNNLoggable.h" />
     <ClInclude Include="FNNMath.h" />
     <ClInclude Include="FNNNetwork.h" />
     <ClInclude Include="FNNSigmoid.h" />
@@ -95,6 +97,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="FNNLog.cpp" />
+    <ClCompile Include="FNNLoggable.cpp" />
     <ClCompile Include="FNNMath.cpp" />
     <ClCompile Include="FNNNetwork.cpp" />
     <ClCompile Include="FNNSigmoid.cpp" />

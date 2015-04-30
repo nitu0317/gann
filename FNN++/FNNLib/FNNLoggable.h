@@ -1,7 +1,7 @@
 ///=================================================================================================
-// file:	FNNLog.h
+// file:	FNNLoggable.h
 //
-// summary:	Declares the fnn log class
+// summary:	Declares the fnn loggable class
 ///-------------------------------------------------------------------------------------------------
 
 #pragma once //DONT LOOK AT ME 2 MANY TIMES ;)
@@ -17,62 +17,65 @@
 #endif
 
 #include<string>
+#include<vector>
+#include<map>
 #include<list>
+
+#include "FNNLog.h"
+
 using std::string;
-using std::list;
 
 namespace fnn{
 
     ///=================================================================================================
-    /// <summary>   A log. </summary>
+    /// <summary>   A loggable. </summary>
     ///
     /// <remarks>   William, 4/29/2015. </remarks>
     ///-------------------------------------------------------------------------------------------------
 
-    class Log
-    {
-    public: 
+    class Loggable{
+    public:
 
         ///=================================================================================================
-        /// <summary>   Constructs the log with a name and a vocality. </summary>
+        /// <summary>   Constructs the logger </summary>
         ///
         /// <remarks>   William, 4/29/2015. </remarks>
         ///
-        /// <param name="name">     The name. </param>
-        /// <param name="verbose">  true to vocal. </param>
+        /// <param name="name"> The name. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        Log(string name, bool verbose);
+        Loggable(string name);
 
         ///=================================================================================================
-        /// <summary>   Pushes an object onto this log. </summary>
+        /// <summary>   Logs a message to a specific log. </summary>
         ///
         /// <remarks>   William, 4/29/2015. </remarks>
         ///
-        /// <param name="message">  The message to push. </param>
+        /// <param name="log">      The log. </param>
+        /// <param name="message">  The message. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        void Push(string message);
+        void Log(string log, string message, bool verbose=false);
 
         ///=================================================================================================
-        /// <summary>   Gets the content of the log. </summary>
+        /// <summary>   Adds a log. </summary>
         ///
         /// <remarks>   William, 4/29/2015. </remarks>
         ///
-        /// <returns>   null if it fails, else the content. </returns>
+        /// <param name="name"> The name. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        list<string>* GetContent();
+        void AddLog(string name, bool verbose);
 
         ///=================================================================================================
-        /// <summary>   Gets the name. </summary>
+        /// <summary>   Sets a verbose. </summary>
         ///
         /// <remarks>   William, 4/29/2015. </remarks>
         ///
-        /// <returns>   The name. </returns>
+        /// <param name="verbose">  true to verbose. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        string GetName();
+        void SetVerbose(bool verbose);
 
         ///=================================================================================================
         /// <summary>   Query if this object is verbose. </summary>
@@ -84,18 +87,38 @@ namespace fnn{
 
         bool IsVerbose();
 
+        ///=================================================================================================
+        /// <summary>   Gets the logs. </summary>
+        ///
+        /// <remarks>   William, 4/29/2015. </remarks>
+        ///
+        /// <returns>   null if it fails, else the logs. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        std::vector<fnn::Log*> GetLogs();
+
+        ///=================================================================================================
+        /// <summary>   Gets the name. </summary>
+        ///
+        /// <remarks>   William, 4/29/2015. </remarks>
+        ///
+        /// <returns>   The name. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        string GetName();
+
 
 
     private:
+        /// <summary>   The logs. </summary>
+        std::map<string, fnn::Log> logs;
 
-        /// <summary>   The content of the log by line. </summary>
-        list<string> content;
 
-
-        /// <summary>   The name of the log. </summary>
+        /// <summary>   The name. </summary>
         string name;
 
+
         /// <summary>   true to verbose. </summary>
-        bool verbose;   
+        bool verbose;
     };
 }
