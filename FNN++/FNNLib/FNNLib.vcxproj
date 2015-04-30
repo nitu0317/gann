@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClInclude Include="FNNLog.h" />
     <ClInclude Include="FNNLoggable.h" />
+    <ClInclude Include="FNNLogManager.h" />
     <ClInclude Include="FNNMath.h" />
     <ClInclude Include="FNNNetwork.h" />
     <ClInclude Include="FNNSigmoid.h" />
