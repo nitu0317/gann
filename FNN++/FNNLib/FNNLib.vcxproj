@@ -100,6 +100,7 @@
     </ClCompile>
     <ClCompile Include="FNNLog.cpp" />
     <ClCompile Include="FNNLoggable.cpp" />
+    <ClCompile Include="FNNLogManager.cpp" />
     <ClCompile Include="FNNMath.cpp" />
     <ClCompile Include="FNNNetwork.cpp" />
     <ClCompile Include="FNNSigmoid.cpp" />

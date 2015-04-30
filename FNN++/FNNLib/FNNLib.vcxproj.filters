@@ -71,5 +71,8 @@
     <ClCompile Include="FNNLoggable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FNNLogManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
