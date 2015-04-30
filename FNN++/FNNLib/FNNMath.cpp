@@ -430,9 +430,11 @@ std::vector<double> fnn::Math::GaussJordan(std::vector<std::vector<double>> matr
     {
         std::vector<double> pt1 = data[i];
         std::vector<double> pt2 = data[i + 1];
-        double slope = (pt1[1] - pt2[1]) / (pt1[0] - pt2[0]);
-        double intercept = pt1[1] - slope*pt1[0];
-        functions.push_back([slope, intercept](double x){return x*slope + intercept; });
+		auto a = [pt1, pt2](double x){return (pt2[0] - x) / (pt2[0] - pt1[0]); };
+		auto b = [a](double x){return 1 - a(x); };
+		auto c = [a, pt1, pt2](double x){return (1 / 6)*(pow(a(x), 3) - a(x))*pow((pt2[0] - pt1[0]), 2); };
+		auto d = [b, pt1, pt2](double x){return (1 / 6)*(pow(b(x), 3) - b(x))*pow((pt2[0] - pt1[0]), 2); };
+		functions.push_back([a, b, c, d, secondDeriv, pt1, pt2, i](double x){return a(x)*pt1[0] + b(x)*pt2[0] + c(x)*secondDeriv[i] + d(x)*secondDeriv[i + 1]; });
         ranges.push_back(pt2[0]);
     }
     //the creation of the equations
