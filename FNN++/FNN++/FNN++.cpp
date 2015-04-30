@@ -41,19 +41,20 @@ int _tmain(int argc, _TCHAR* argv[])
     Network net = Network();
     net.Activator = Sigmoid::Tanh();
     net.AddLayer(10, 10);
+    //net
+    
     net.AddLayer(10, 10);
 
     //TODO: Fix a glitch with this paret.
 
-
-   
     auto f = [](double x) { return sin(x); };
 
-    auto output = net.FeedForward(f);
+    for (int x = 0; x < 1000000; x += 1){
+        if (x % 1000 == 0)
+            std::cout << x << std::endl;
+        net.FeedForward(f);
+    }
 
-    for (double x = 0; x < 10; x += 0.05)
-        cout << "" << x << "=>" << output(x) << "\n";
-    
     system("pause");
 
 
