@@ -120,9 +120,9 @@ std::vector<double> fnn::Math::PolyMult(std::vector<double> poly1, std::vector<d
 		{
 			//The term  = : x^term of hte polynomial. Also the index of the output vector
 			int term = i+j;
-			std::cout << "Term " << term << "\t";
+			//std::cout << "Term " << term << "\t";
 			double coeff = poly1[i] * poly2[j];
-			std::cout <<poly1[i] << " " << poly2[j]<< " "<< coeff<< "\n";
+			//std::cout <<poly1[i] << " " << poly2[j]<< " "<< coeff<< "\n";
 			
 			if (retPoly.size() == term)
 			{
@@ -195,7 +195,7 @@ std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> d
 }
 
 ///=================================================================================================
-/// <summary>   A polynomial interpolation algorithm according to http://en.wikipedia.org/wiki/Polynomial_interpolation </summary>
+/// <summary>   A polynomial interpolation algorithm using the Lagrange Interpolation Polynomial according to http://en.wikipedia.org/wiki/Polynomial_interpolation </summary>
 ///
 /// <remarks>   Phillip Kuznetsov, 4/19/2015. </remarks>
 ///
@@ -204,27 +204,30 @@ std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> d
 /// <returns>   A polynomial interpolation function </returns>
 ///-------------------------------------------------------------------------------------------------
 
-std::function<double(double)> fnn::Math::PERP(std::vector<std::vector<double>> data)
+std::function<double(double)> fnn::Math::LagrangeInterpolation(std::vector<std::vector<double>> data)
 {
 	//coefficient vector such that each num is a coefficient to x^index.
 	std::vector<double> coef;
-	
+	//i is the point being evaluated at the moment.
 	for (auto i = 0; i < data.size(); i++)
 	{
+		//setting the current point being evaluated
 		std::vector<double> pti = data[i];
-		std::vector<double> tempCf;
+		std::vector<double> tempCf{ 1 };
 		double denom = 1;
+		//js is the point being used to calculate the interpolatant coefficient.
+		// This loop creates the Lagrange 
 		for (auto j = 0; j < data.size(); j++)
 		{
+			//skips whenever the index is the same as the current one being operated on, otherwise we would be left with division by 0.
 			if (i == j) continue;
+			// ptj is the point being evaluated in conjunction with pti.
 			std::vector<double> ptj = data[j];
+			//creates the current polynomial => (x-x_j);
 			std::vector<double> poly{ -ptj[0], 1 };
-			if (tempCf.size() == 0)
-			{
-				tempCf = poly;
-				continue;
-			}
+			//multiplies this polynomial to what is currently in the system.
 			tempCf = fnn::Math::PolyMult(tempCf, poly);
+			//the denominator is then pi'd by (x_i-x_j)
 			denom *= pti[0] - ptj[0];
 		}
 		double mult = denom * pti[1];
@@ -246,12 +249,12 @@ std::function<double(double)> fnn::Math::PERP(std::vector<std::vector<double>> d
 			
 		}
 	}
-	std::cout << "Polynomial: " << coef[0];
+	std::string polynomial = std::to_string(coef[0]);
 	for (auto i = 1; i < coef.size(); i++)
 	{
-		std::cout << " + " << coef[i] << "*x^" << i;
+		polynomial+= "+" +std::to_string(coef[i]) +"*x^"+ std::to_string(i);
 	}
-	std::cout << "\n";
+	std::cout << "\nPolynomial Interpolation: " << polynomial;
 	auto func = [coef](double x){
 		double output = 0;
 		for (auto i = 0; i < coef.size(); i++)

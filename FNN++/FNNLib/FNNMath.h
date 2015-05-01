@@ -116,7 +116,7 @@ namespace fnn
 		static std::function<double(double)> LERP(std::vector<std::vector<double>> data);
 
 		///=================================================================================================
-		/// <summary>   A polynomial interpolation algorithm according to http://en.wikipedia.org/wiki/Polynomial_interpolation </summary>
+		/// <summary>  A polynomial interpolation algorithm using the Lagrange Interpolation Polynomial according to http://en.wikipedia.org/wiki/Polynomial_interpolation  </summary>
 		///
 		/// <remarks>   Phillip Kuznetsov, 4/19/2015. </remarks>
 		///
@@ -125,7 +125,7 @@ namespace fnn
 		/// <returns>   A polynomial interpolation function </returns>
 		///-------------------------------------------------------------------------------------------------
 
-		static std::function<double(double)> PERP(std::vector<std::vector<double>> data);
+		static std::function<double(double)> LagrangeInterpolation(std::vector<std::vector<double>> data);
 
         ///=================================================================================================
         /// <summary>   Factorial implementation. </summary>
