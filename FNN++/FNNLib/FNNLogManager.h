@@ -65,9 +65,20 @@ namespace fnn{
 
         void Save(string directory);
 
-        //TODO: Consider adding loading functionality.
+        ///=================================================================================================
+        /// <summary>   TODO: Consider adding loading functionality. </summary>
+        ///
+        /// <remarks>   William, 5/3/2015. </remarks>
+        ///
+        /// <param name="logger">   [in,out] If non-null, the logger. </param>
+        /// <param name="log">      The log. </param>
+        /// <param name="message">  The message. </param>
+        ///-------------------------------------------------------------------------------------------------
+
+        void Print(Loggable* logger, string log, string message);
 
     private:
         std::vector<fnn::Loggable*> loggers;
+        std::list<string> verboseLog;
     };
 }

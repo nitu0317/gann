@@ -16,11 +16,21 @@
 #include "FNNLoggable.h"
 #include <iostream>
 
-fnn::Loggable::Loggable(string name)
+///=================================================================================================
+/// <summary>   Initializes this object. </summary>
+///
+/// <remarks>   William, 5/2/2015. </remarks>
+///
+/// <param name="lm">       [in,out] If non-null, the lm. </param>
+/// <param name="name">     The name. </param>
+/// <param name="verbose">  true to verbose. </param>
+///-------------------------------------------------------------------------------------------------
+
+void fnn::Loggable::Initialize(LogManager* lm, string name, bool verbose)
 {
+    this->logManager = lm;
     this->name = name;
-    this->logs = std::map<string, fnn::Log>();
-    this->verbose = false;
+    this->verbose = verbose;
 }
 
 ///=================================================================================================
@@ -35,17 +45,20 @@ fnn::Loggable::Loggable(string name)
 
 void fnn::Loggable::Log(string log, string message, bool verbose)
 {
-    if (logs.find(log) == logs.end())
-        //if not found
-        logs[log] = fnn::Log(log, verbose);
-    
+    if (logManager != NULL){
+        if (logs.find(log) == logs.end())
+            //if not found
+            logs[log] = fnn::Log(log, verbose);
 
-    //Add the message to the log.
-    logs[log].Push(message);
+
+        //Add the message to the log.
+        logs[log].Push(message);
+
+        //Print the log.
+        if (this->verbose && logs[log].IsVerbose())
+            logManager.Print(this, log, message);
+    }
     
-    //Print the log.
-    if (this->verbose && logs[log].IsVerbose())
-        std::cout << this->name << "::" << log << ":: " << message;
 }
 
 ///=================================================================================================
@@ -118,5 +131,19 @@ string fnn::Loggable::GetName(void)
 void fnn::Loggable::AddLog(string name, bool verbose)
 {
     this->logs[name] = fnn::Log(name, verbose);
+}
+
+///=================================================================================================
+/// <summary>   Default constructor. </summary>
+///
+/// <remarks>   William, 5/2/2015. </remarks>
+///-------------------------------------------------------------------------------------------------
+
+fnn::Loggable::Loggable(void)
+{
+    this->name = "unregistered logger";
+    this->logs = std::map<string, fnn::Log>();
+    this->verbose = false;
+    this->logManager = NULL;
 }
 
