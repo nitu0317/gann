@@ -50,13 +50,44 @@ void fnn::LogManager::Register(Loggable* logger, string loggerName, bool verbose
 
 void fnn::LogManager::Save(string dir)
 {
-    //Save the maiun log.
+    //Save the main log.
+    std::ofstream mainL;
+    mainL.open(".\\" + dir + "\\" + "main.log");
+    
+    //Iterate over every line.
+    for (std::list<string>::const_iterator iterator = verboseLog.begin(),
+        end = verboseLog.end(); iterator != end; ++iterator) 
+        mainL << *iterator << "\n"; //Write each verbose entry out.
+    
+    mainL.close(); //Close the log after writing
+
 
     //Collect every logger.
     for (std::vector<fnn::Loggable*>::iterator it = loggers.begin();
         it != loggers.end(); it++)
     {
+        //Save all the logs of each logger to a sub directory.
+        auto logs = (*it)->GetLogs();
 
+        //For every log, save that log using a file.
+        for (std::vector<fnn::Log*>::iterator lit = logs.begin();
+            lit != logs.end(); lit++)
+        {
+            //Open a new log file for the specified log.
+            std::ofstream logFile;
+
+            //Open the dir/logger/log.log file
+            logFile.open(".\\" + dir + "\\" + (*it)->GetName() + "\\" + (*lit)->GetName() + ".log");
+
+            //Iterate over everyline and output.
+            for (std::list<string>::const_iterator iterator = verboseLog.begin(),
+                end = verboseLog.end(); iterator != end; ++iterator) 
+                logFile << *iterator << "\n"; //Write each verbose entry out.
+            
+            //Close the file
+            logFile.close();
+
+        }
     }
 }
 
