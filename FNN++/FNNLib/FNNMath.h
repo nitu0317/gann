@@ -89,18 +89,6 @@ namespace fnn
         ///-------------------------------------------------------------------------------------------------
 
         static double GaussianReal(double mean = 0.0, double dev = 1.0);
-
-        ///=================================================================================================
-        /// <summary>   Gauss Jordan elimination for matrices. </summary>
-        ///
-        /// <remarks>   Phillip Kuznetsov, 4/29/2015. </remarks>
-        ///
-        /// <param name="matrix">   The systems of equation augmented matrix. </param>
-        ///
-        /// <returns>   A vector of the variable values solved by completed Gauss-Jordan elimination. </returns>
-        ///-------------------------------------------------------------------------------------------------
-
-        static std::vector<double> GaussJordan(std::vector<std::vector<double>> matrix);
 		
 		///=================================================================================================
 		/// <summary>   A polynomial multiplication helper </summary>
@@ -128,7 +116,7 @@ namespace fnn
 		static std::function<double(double)> LERP(std::vector<std::vector<double>> data);
 
 		///=================================================================================================
-		/// <summary>   A polynomial interpolation algorithm according to http://en.wikipedia.org/wiki/Polynomial_interpolation </summary>
+		/// <summary>  A polynomial interpolation algorithm using the Lagrange Interpolation Polynomial according to http://en.wikipedia.org/wiki/Polynomial_interpolation  </summary>
 		///
 		/// <remarks>   Phillip Kuznetsov, 4/19/2015. </remarks>
 		///
@@ -137,7 +125,7 @@ namespace fnn
 		/// <returns>   A polynomial interpolation function </returns>
 		///-------------------------------------------------------------------------------------------------
 
-		static std::function<double(double)> PERP(std::vector<std::vector<double>> data);
+		static std::function<double(double)> LagrangeInterpolation(std::vector<std::vector<double>> data);
 
         ///=================================================================================================
         /// <summary>   Factorial implementation. </summary>
@@ -150,6 +138,42 @@ namespace fnn
         ///-------------------------------------------------------------------------------------------------
 
         static int Factorial(int n);
+
+        ///=================================================================================================
+        /// <summary>   Gauss Jordan elimination for matrices. </summary>
+        ///
+        /// <remarks>   Phillip Kuznetsov, 4/29/2015. </remarks>
+        ///
+        /// <param name="matrix">   The systems of equation augmented matrix. </param>
+        ///
+        /// <returns>   A vector of the variable values solved by completed Gauss-Jordan elimination. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        static std::vector<double> GaussJordan(std::vector<std::vector<double>> matrix);
+
+        ///=================================================================================================
+        /// <summary>   A simple spline interpolation algorithm as described in http://www.geos.ed.ac.uk/~yliu23/docs/lect_spline.pdf.
+        ///             Makes the assumption that the second derivative at the boundaries is equal to 0. </summary>
+		///
+		/// <remarks>   Phillip Kuznetsov, 4/29/2015. </remarks>
+		///
+		/// <param name="data"> 2D vector of input data points. Each row is a point. </param>
+		///
+		/// <returns>   A polynomial interpolation function </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        static std::function<double(double)> SSpline(std::vector<std::vector<double>> data);
+
+        ///=================================================================================================
+        /// <summary>   Data sort algorthim to sort by x-values of the data. Useful for the interpolation algorithms. </summary>
+        ///
+        /// <remarks>   Phillip Kuznetsov, 4/29/2015. </remarks>
+        ///
+        /// <param name="data"> 2D vector of input data points. Each row is a point. </param>
+        ///
+        ///-------------------------------------------------------------------------------------------------
+
+        static void DataSort(std::vector<std::vector<double>> &data);
 
     private:
 
