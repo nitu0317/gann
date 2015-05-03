@@ -22,11 +22,18 @@
 #include<list>
 
 #include "FNNLog.h"
-#include "FNNLogManager.h"
 
 using std::string;
 
 namespace fnn{
+
+    ///=================================================================================================
+    /// <summary>   Forward declaration of the log manager. </summary>
+    ///
+    /// <remarks>   William, 5/3/2015. </remarks>
+    ///-------------------------------------------------------------------------------------------------
+
+    class LogManager;
 
     ///=================================================================================================
     /// <summary>   A loggable. </summary>
@@ -133,6 +140,6 @@ namespace fnn{
         bool verbose;
 
         /// <summary>   Manager for log. </summary>
-        LogManager* logManager;
+        fnn::LogManager* logManager;
     };
 }

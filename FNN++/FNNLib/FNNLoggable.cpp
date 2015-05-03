@@ -13,6 +13,7 @@
 ///-------------------------------------------------------------------------------------------------
 
 #include "stdafx.h"
+#include "FNNLogManager.h"
 #include "FNNLoggable.h"
 #include <iostream>
 
@@ -56,7 +57,7 @@ void fnn::Loggable::Log(string log, string message, bool verbose)
 
         //Print the log.
         if (this->verbose && logs[log].IsVerbose())
-            logManager.Print(this, log, message);
+            this->logManager->Print(this, log, message);
     }
     
 }
