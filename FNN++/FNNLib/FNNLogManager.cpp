@@ -6,6 +6,10 @@
 
 #include "stdafx.h"
 #include "FNNLogManager.h"
+#include "FNNLoggable.h"
+
+#include <fstream>
+#include <iostream>
 
 ///=================================================================================================
 /// <summary>   Default constructor. </summary>
@@ -16,6 +20,7 @@
 fnn::LogManager::LogManager(void)
 {
     this->loggers = std::vector<fnn::Loggable*>();
+    this->verboseLog = std::list<string>();
 }
 
 ///=================================================================================================
@@ -23,14 +28,15 @@ fnn::LogManager::LogManager(void)
 ///
 /// <remarks>   William, 4/29/2015. </remarks>
 ///
-/// <param name="logger">   The logger. </param>
-/// <param name="verbose">  true to verbose. </param>
+/// <param name="logger">       [in,out] The logger. </param>
+/// <param name="loggerName">   Name of the logger. </param>
+/// <param name="verbose">      true to verbose. </param>
 ///-------------------------------------------------------------------------------------------------
 
-void fnn::LogManager::Register(Loggable* logger, bool verbose)
+void fnn::LogManager::Register(Loggable* logger, string loggerName, bool verbose)
 {
+    logger->Initialize(this, loggerName, verbose);
     this->loggers.push_back(logger);
-    logger->SetVerbose(verbose);
 }
 
 ///=================================================================================================
@@ -39,11 +45,66 @@ void fnn::LogManager::Register(Loggable* logger, bool verbose)
 ///
 /// <remarks>   William, 4/29/2015. </remarks>
 ///
-/// <param name="directory">    The directory to which to save. </param>
+/// <param name="dir">  The directory to which to save. </param>
 ///-------------------------------------------------------------------------------------------------
 
-void fnn::LogManager::Save(string directory)
+void fnn::LogManager::Save(string dir)
 {
-	
+    //Save the main log.
+    std::ofstream mainL;
+    mainL.open(".\\" + dir + "\\" + "main.log");
+    
+    //Iterate over every line.
+    for (std::list<string>::const_iterator iterator = verboseLog.begin(),
+        end = verboseLog.end(); iterator != end; ++iterator) 
+        mainL << *iterator << "\n"; //Write each verbose entry out.
+    
+    mainL.close(); //Close the log after writing
+
+
+    //Collect every logger.
+    for (std::vector<fnn::Loggable*>::iterator it = loggers.begin();
+        it != loggers.end(); it++)
+    {
+        //Save all the logs of each logger to a sub directory.
+        auto logs = (*it)->GetLogs();
+
+        //For every log, save that log using a file.
+        for (std::vector<fnn::Log*>::iterator lit = logs.begin();
+            lit != logs.end(); lit++)
+        {
+            //Open a new log file for the specified log.
+            std::ofstream logFile;
+
+            //Open the dir/logger/log.log file
+            logFile.open(".\\" + dir + "\\" + (*it)->GetName() + "\\" + (*lit)->GetName() + ".log");
+
+            //Iterate over everyline and output.
+            for (std::list<string>::const_iterator iterator = verboseLog.begin(),
+                end = verboseLog.end(); iterator != end; ++iterator) 
+                logFile << *iterator << "\n"; //Write each verbose entry out.
+            
+            //Close the file
+            logFile.close();
+
+        }
+    }
 }
 
+///=================================================================================================
+/// <summary>   Prints a message to the verbose log. </summary>
+///
+/// <remarks>   William, 5/3/2015. </remarks>
+///
+/// <param name="logger">   [in,out] If non-null, the logger. </param>
+/// <param name="log">      The log. </param>
+/// <param name="message">  The message. </param>
+///-------------------------------------------------------------------------------------------------
+
+void fnn::LogManager::Print(Loggable* logger, string log, string message)
+{
+    string out = logger->GetName() + "::" + log + "::" + message;
+    
+    std::cout << out << std::endl;
+    this->verboseLog.push_front(out);
+}
