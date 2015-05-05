@@ -399,29 +399,38 @@ std::vector<double> fnn::Math::GaussJordan(std::vector<std::vector<double>> matr
     for (auto i = 1; i < data.size() - 1; i++)
     {
         
-        //the three coordinates that the current spline is working with.
+        /// <summary>	k: the vector of three coordinates that the current spline is working with. Dimensions are (x,y)</summary>
         std::vector<std::vector<double>> k;
         for (auto j = i - 1; j <= i + 1; j++)
         {
             k.push_back(data[j]);
         }
-        
+		
+		//this is the current row being entered into the matrix. It starts at index i because we have an operatioin where i-1, which will onily fit if i >= 1;
+		// We fill this row with 0s entirely.
         std::vector<double> row(data.size() + 1);
         std::fill(row.begin(), row.end(), 0);
 
         
+        /// <summary>	The coefficents of the equation d^2f(k-1)/dx^2 coef[0] +d^2f(k)/dx^2 coef[1]
+        /// 								+d^2f(k+1)/dx^2 coef[2] </summary>
         std::vector<double> coefs = { (k[1][0] - k[0][0]) / 6, (k[2][0] - k[0][0]) / 3, (k[2][0] - k[1][0]) / 6 };
-        auto ctr = 0;
+        
+		/// <summary>	The coefs index counter. The for loop goes through the row and fills them with the three coefficients
+		/// 			of the equation set. </summary>
+		auto ctr = 0;
         for (auto l = (i - 1); l < (i - 1) + 3; l++, ctr++)
         {
             row[l] = coefs[ctr];
         }
         //this is the answer to the problem/
         double d = (k[2][1] - k[1][1]) / (k[2][0] - k[1][0]) - (k[1][1] - k[0][1]) / (k[2][0] - k[1][0]);
-        row[row.size() - 1] = d;
+		/// <summary>	This is why we initialized the size to data.size()+1. </summary>
+		row[row.size() - 1] = d;
         matrix.push_back(row);
     }
-    //Adds the known values as rows in the matrix.
+	// Adds the known values as rows in the matrix. http://www.geos.ed.ac.uk/~yliu23/docs/lect_spline.pdf ,
+	// makes the assumption that the second derivatives at the ends (indices 0 and N-1) will both be equal to 0
     for (auto i = 0; i < 2; i++)
     {
         std::vector<double> row(data.size() + 1);
@@ -435,17 +444,35 @@ std::vector<double> fnn::Math::GaussJordan(std::vector<std::vector<double>> matr
     
     std::vector<std::function<double(double)>> functions;
     std::vector<double> ranges{ data[0][0] };
-    for (auto i = 0; i < data.size() - 1; i++)
-    {
-        std::vector<double> pt1 = data[i];
-        std::vector<double> pt2 = data[i + 1];
+	std::string mathematica = "\nPiecewise[{";
+	
+	for (auto i = 0; i < data.size() - 1; i++)
+	{
+		mathematica += "{";
+		// COME BACK HERE
+		std::vector<double> pt1 = data[i];
+		std::vector<double> pt2 = data[i + 1];
 		auto a = [pt1, pt2](double x){return (pt2[0] - x) / (pt2[0] - pt1[0]); };
+		std::string aS = "(" + std::to_string(pt2[0]) + "-x)/(" + std::to_string(pt2[0] - pt1[0]) + ")";
 		auto b = [a](double x){return 1 - a(x); };
+		std::string bS = "(1" + aS + ")";
 		auto c = [a, pt1, pt2](double x){return (1 / 6)*(pow(a(x), 3) - a(x))*pow((pt2[0] - pt1[0]), 2); };
+		std::string cS = "(1/6)*(" + aS + ")^3-" + "(" + aS + "))*(" + std::to_string(pt2[0] - pt1[0]) + ")^2";
 		auto d = [b, pt1, pt2](double x){return (1 / 6)*(pow(b(x), 3) - b(x))*pow((pt2[0] - pt1[0]), 2); };
+		std::string dS = "(1/6)*(" + bS + ")^3-" + "(" + bS + "))*(" + std::to_string(pt2[0] - pt1[0]) + ")^2";
+
 		functions.push_back([a, b, c, d, secondDeriv, pt1, pt2, i](double x){return a(x)*pt1[0] + b(x)*pt2[0] + c(x)*secondDeriv[i] + d(x)*secondDeriv[i + 1]; });
-        ranges.push_back(pt2[0]);
+		mathematica +=  std::to_string(pt1[0]) + "(" + aS + ")+" + std::to_string(pt2[0]) + "(" + bS + ")+"
+			+ std::to_string(secondDeriv[i]) + "(" + cS + ")" + std::to_string(secondDeriv[i + 1]) + "(" + dS + ")," + std::to_string(pt1[0]) + "<=x<" + std::to_string(pt2[0]) + "},";
+		ranges.push_back(pt2[0]);
     }
+	//removes the trailing comma
+	mathematica = mathematica.substr(0, mathematica.size() - 1);
+	//states the value if it is out of any domain.
+	mathematica += "}, 2^32]";
+	//Print out the SSpline for observation
+	//  piecewise
+	std::cout << mathematica;
     //the creation of the equations
     auto func = [functions, ranges](double x){
 
