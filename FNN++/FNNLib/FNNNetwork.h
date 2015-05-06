@@ -59,6 +59,18 @@ namespace fnn{
         std::function<double(double)> FeedForward(std::function<double(double)> ξ);
 
         ///=================================================================================================
+        /// <summary>   Back propagate using the Super Pro Algo developed by William Guss and Patrick Chen. </summary>
+        ///
+        /// <remarks>   Madcow D, 5/6/2015. </remarks>
+        ///
+        /// <param name="δ">    The desired function delta δ. </param>
+        ///
+        /// <returns>   The total integrated error over the last interval. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        double BackPropagate(std::function<double(double)> δ);
+
+        ///=================================================================================================
         /// <summary>   Sets an activation. </summary>
         ///
         /// <remarks>   William Guss, 4/11/2015. </remarks>
@@ -87,15 +99,22 @@ namespace fnn{
         /// <summary>   The number of layers in the network. </summary>
         int layerCount;
 
-        
+        /// <summary>   The weights. </summary>
+        std::vector<WeightSurface> weights; 
+
+
+        ///======================
+        ///  CACHING
+        ///======================        
+
+        /// <summary>   The integration cache for I = NInt(σ[l]j_l^(i). </summary>
+        std::vector<std::vector<double>> I_cache;
 
         /// <summary>   The σ-cache for layers. </summary>
         std::vector<std::function<double(double)>> σ_cache;
 
-        /// <summary>   The weights. </summary>
-        std::vector<WeightSurface> weights;
-        
-        
+        /// <summary>   The Ψ_cache for layers. </summary>
+        std::vector<std::function<double(double)>> Ψ_cache;
 
 
     };
