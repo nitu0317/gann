@@ -439,37 +439,44 @@ std::vector<double> fnn::Math::GaussJordan(std::vector<std::vector<double>> matr
         row[row.size() - 1] = 0;
         matrix.push_back(row);
     }
-    //the array of the second derivatives at each point. Used to plug in the equation.
+    //the array of the second derivatives at each point. Used to plug in the equation. 
+    // d^2f_k/dx^2 where k is the index of the vector.
     std::vector<double> secondDeriv = fnn::Math::GaussJordan(matrix);
     
     std::vector<std::function<double(double)>> functions;
     std::vector<double> ranges{ data[0][0] };
-	std::string mathematica = "\nPiecewise[{";
+	std::string mathematica = "\nPiecewise[{";//open0
 	
 	for (auto i = 0; i < data.size() - 1; i++)
 	{
-		mathematica += "{";
+		mathematica += "{";//open1
 		// COME BACK HERE
+		// pt1 => {x_i, y_i}; pt2 => {x_(i+1), y_(i+1)}
 		std::vector<double> pt1 = data[i];
 		std::vector<double> pt2 = data[i + 1];
 		auto a = [pt1, pt2](double x){return (pt2[0] - x) / (pt2[0] - pt1[0]); };
-		std::string aS = "(" + std::to_string(pt2[0]) + "-x)/(" + std::to_string(pt2[0] - pt1[0]) + ")";
+		//A = (x_(i+1)-x)/(x_(i+1)-x_i)
+		std::string aS = "((" + std::to_string(pt2[0]) + "-x)/" + std::to_string(pt2[0] - pt1[0]) + ")";
 		auto b = [a](double x){return 1 - a(x); };
-		std::string bS = "(1" + aS + ")";
+		//B = 1-A
+		std::string bS = "(1-" + aS + ")";
 		auto c = [a, pt1, pt2](double x){return (1 / 6)*(pow(a(x), 3) - a(x))*pow((pt2[0] - pt1[0]), 2); };
-		std::string cS = "(1/6)*(" + aS + ")^3-" + "(" + aS + "))*(" + std::to_string(pt2[0] - pt1[0]) + ")^2";
+		//C = (1/6)*(A^3-A)(x_(i+1)-x_i)^2
+		std::string cS = "1/6*(" + aS + "^3-" + aS + ")*(" + std::to_string(pt2[0] - pt1[0]) + ")^2";
 		auto d = [b, pt1, pt2](double x){return (1 / 6)*(pow(b(x), 3) - b(x))*pow((pt2[0] - pt1[0]), 2); };
-		std::string dS = "(1/6)*(" + bS + ")^3-" + "(" + bS + "))*(" + std::to_string(pt2[0] - pt1[0]) + ")^2";
+		//D = (1/6)*(B^3-B)(x_(i+1)-x_i)^2
+		std::string dS = "1/6*(" + bS + "^3-" + bS + ")*(" + std::to_string(pt2[0] - pt1[0]) + ")^2";
 
 		functions.push_back([a, b, c, d, secondDeriv, pt1, pt2, i](double x){return a(x)*pt1[0] + b(x)*pt2[0] + c(x)*secondDeriv[i] + d(x)*secondDeriv[i + 1]; });
-		mathematica +=  std::to_string(pt1[0]) + "(" + aS + ")+" + std::to_string(pt2[0]) + "(" + bS + ")+"
-			+ std::to_string(secondDeriv[i]) + "(" + cS + ")" + std::to_string(secondDeriv[i + 1]) + "(" + dS + ")," + std::to_string(pt1[0]) + "<=x<" + std::to_string(pt2[0]) + "},";
+		//(y_i)A+(y_(i+1))B+(d^2f_i/dx^2)C+(d^2f_(i+1)/dx^2)D, x_i <=x< x_(i+1)}
+		mathematica +=  "("+ std::to_string(pt1[1])+")" + aS + "+(" + std::to_string(pt2[1]) +")"+ bS + "+("+ std::to_string(secondDeriv[i]) + ")" 
+			+ cS + "+(" +std::to_string(secondDeriv[i + 1]) +")"+ dS + "," + std::to_string(pt1[0]) + "<=x<" + std::to_string(pt2[0]) + "},";//close1
 		ranges.push_back(pt2[0]);
     }
 	//removes the trailing comma
 	mathematica = mathematica.substr(0, mathematica.size() - 1);
 	//states the value if it is out of any domain.
-	mathematica += "}, 2^32]";
+	mathematica += "}, 2^32]";//close0
 	//Print out the SSpline for observation
 	//  piecewise
 	std::cout << mathematica;

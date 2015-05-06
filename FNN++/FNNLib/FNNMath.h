@@ -162,7 +162,7 @@ namespace fnn
 		/// <returns>   A polynomial interpolation function </returns>
         ///-------------------------------------------------------------------------------------------------
 
-        static std::function<double(double)> SSpline(std::vector<std::vector<double>> data);
+		static std::function<double(double)> SSpline(std::vector<std::vector<double>> data);
 
         ///=================================================================================================
         /// <summary>   Data sort algorthim to sort by x-values of the data. Useful for the interpolation algorithms. </summary>

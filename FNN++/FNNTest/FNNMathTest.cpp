@@ -3,13 +3,15 @@
 #include "CppUnitTest.h"
 
 #include <vector>
-#include < functional >
+#include <functional>
 #include <iostream>
 using std::vector;
 using std::cout;
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace fnn;
+using namespace System;
+
 namespace FNNTest
 {
 	TEST_CLASS(FNNMathTest)
@@ -102,7 +104,7 @@ namespace FNNTest
 
         TEST_METHOD(SSplineTest){
             vector<vector<double>> tanhdata = { { -5, -0.9999092043 }, { -4, -0.9993292997 }, { -3.75, -0.998894 }, { -3.5, -0.998178 }, { -3.25, -0.996998 }, { -3., -0.995055 }, { -2.75, -0.99186 }, { -2.5, -0.986614 }, { -2.25, -0.978026 }, { -2., -0.964028 }, { -1.75, -0.941376 }, { -1.5, -0.905148 }, { -1.25, -0.848284 }, { -1., -0.761594 }, { -0.75, -0.635149 }, { -0.5, -0.462117 }, { -0.25, -0.244919 }, { 0., 0. }, { 0.25, 0.244919 }, { 0.5, 0.462117 }, { 0.75, 0.635149 }, { 1., 0.761594 }, { 1.25, 0.848284 }, { 1.5, 0.905148 }, { 1.75, 0.941376 }, { 2., 0.964028 }, { 2.25, 0.978026 }, { 2.5, 0.986614 }, { 2.75, 0.99186 }, { 3., 0.995055 }, { 3.25, 0.996998 }, { 3.5, 0.998178 }, { 3.75, 0.998894 } };
-            std::function<double(double)> perpTest = Math::SSpline(tanhdata);
+			std::function<double(double)> perpTest = Math::SSpline(tanhdata);
         }
 
 
