@@ -21,6 +21,7 @@
 #include "FNNMath.h"
 #include "FNNSigmoid.h"
 #include "FNNWeightSurface.h"
+#include "FNNLoggable.h"
 
 namespace fnn{
 
@@ -30,7 +31,8 @@ namespace fnn{
     /// <remarks>   William, 4/9/2015. </remarks>
     ///-------------------------------------------------------------------------------------------------
 
-    class FNNLIB Network{
+    class FNNLIB Network : Loggable
+    {
     public:
 
         ///=================================================================================================

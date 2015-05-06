@@ -8,35 +8,20 @@
 #include <stdlib.h>
 #include "FNNNetwork.h"
 
+
 using namespace fnn;
 using namespace std;
 
+
+
 int _tmain(int argc, _TCHAR* argv[])
 {
-    std::vector<double> poly1{ -1, 1 };
-    std::vector<double> poly2{ 1, -2, 1 };
-    std::vector<double> ya = fnn::Math::PolyMult(poly1, poly2);
-    std::cout << ya[0];
-
-
-    /*vector<vector<double>> dataset;
-    vector<double> range{ -50, 50 };
-    for (auto i = 0; i < 50; i++)
-    {
-    vector<double> point;
-    for (auto j = 0; j < 2; j++)
-    {
-    auto fRand = [range](){
-    double f = (double)rand() / RAND_MAX;
-    return range[0] + f *(range[1] - range[0]);
-    };
-    point.push_back(fRand());
-    }
-    dataset.push_back(point);
-    }
-    auto poly = Math::PERP(dataset);
-    */
-
+	char buffer[20];
+	int q;
+	double x = 24.3343;
+	q = sprintf_s(buffer, "%f", x);
+	cout << buffer;
+	system("pause");
     //Construct a network
     Network net = Network();
     net.Activator = Sigmoid::Tanh();
@@ -52,29 +37,13 @@ int _tmain(int argc, _TCHAR* argv[])
     auto output = net.FeedForward(f);
 
     for (double x = 0; x < 10; x += 0.05)
-        cout << "" << x << "=>" << output(x) << "\n";
-
-    system("pause");
+        cout << "" << x << "=>" << output(x) << "\n";  
 
 
-   
-
-
-
-    std::cout << "\nBeginning of matrix testing\n";
-    vector<vector<double>> matrix = { { 3.0, 3.0, 3.0, 9.0 }, { 2.0, 3.0, 7.0, 0.0 }, { 1.0, 3.0, -2.0, 17.0 } };
-    vector<vector<double>> matrix2 = { { 2, 1, -1, 8 }, { -3, -1, 2, -11 }, { -2, 1, 2, -3 } };
-    vector < vector<double>> matrix4 = { { 1, 2, -3, 4, 12 }, { 2, 2, -2, 3, 10 }, { 0, 1, 1, 0, -1 }, { 1, -1, 1, -2, -4 } };
-
-    vector<double> variables = fnn::Math::GaussJordan(matrix4);
-    cout << "\nVariables : {";
-    for (auto var : variables)
-    {
-        cout << "," << var;
-    }
-
-    cout << "}";
-    system("pause");
-    return 0;
+	system("pause");
+	vector<vector<double>> tanhdata = { { -5, -0.9999092043 }, { -4, -0.9993292997 }, { -3.75, -0.998894 }, { -3.5, -0.998178 }, { -3.25, -0.996998 }, { -3., -0.995055 }, { -2.75, -0.99186 }, { -2.5, -0.986614 }, { -2.25, -0.978026 }, { -2., -0.964028 }, { -1.75, -0.941376 }, { -1.5, -0.905148 }, { -1.25, -0.848284 }, { -1., -0.761594 }, { -0.75, -0.635149 }, { -0.5, -0.462117 }, { -0.25, -0.244919 }, { 0., 0. }, { 0.25, 0.244919 }, { 0.5, 0.462117 }, { 0.75, 0.635149 }, { 1., 0.761594 }, { 1.25, 0.848284 }, { 1.5, 0.905148 }, { 1.75, 0.941376 }, { 2., 0.964028 }, { 2.25, 0.978026 }, { 2.5, 0.986614 }, { 2.75, 0.99186 }, { 3., 0.995055 }, { 3.25, 0.996998 }, { 3.5, 0.998178 }, { 3.75, 0.998894 } };
+	std::function<double(double)> perpTest = Math::SSpline(tanhdata);
+	system("pause");
+	return 0;
 }
 

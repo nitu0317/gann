@@ -28,6 +28,14 @@ using std::string;
 namespace fnn{
 
     ///=================================================================================================
+    /// <summary>   Forward declaration of the log manager. </summary>
+    ///
+    /// <remarks>   William, 5/3/2015. </remarks>
+    ///-------------------------------------------------------------------------------------------------
+
+    class LogManager;
+
+    ///=================================================================================================
     /// <summary>   A loggable. </summary>
     ///
     /// <remarks>   William, 4/29/2015. </remarks>
@@ -37,14 +45,24 @@ namespace fnn{
     public:
 
         ///=================================================================================================
-        /// <summary>   Constructs the logger </summary>
+        /// <summary>   Default constructor. </summary>
+        ///
+        /// <remarks>   William, 5/2/2015. </remarks>
+        ///-------------------------------------------------------------------------------------------------
+
+        Loggable();
+
+        ///=================================================================================================
+        /// <summary>   Constructs the logger. </summary>
         ///
         /// <remarks>   William, 4/29/2015. </remarks>
         ///
-        /// <param name="name"> The name. </param>
+        /// <param name="lm">       [in,out] If non-null, the lm. </param>
+        /// <param name="name">     The name. </param>
+        /// <param name="verbose">  true to verbose. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        Loggable(string name);
+        void Initialize(LogManager* lm, string name, bool verbose);
 
         ///=================================================================================================
         /// <summary>   Logs a message to a specific log. </summary>
@@ -120,5 +138,8 @@ namespace fnn{
 
         /// <summary>   true to verbose. </summary>
         bool verbose;
+
+        /// <summary>   Manager for log. </summary>
+        fnn::LogManager* logManager;
     };
 }
