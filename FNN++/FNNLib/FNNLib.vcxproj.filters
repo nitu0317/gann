@@ -45,6 +45,15 @@
     <ClInclude Include="FNNLogManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FNNTrainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FNNDataSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FNNDataPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -72,6 +81,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FNNLogManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FNNTrainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FNNDataSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

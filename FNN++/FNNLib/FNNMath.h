@@ -19,7 +19,6 @@
 #include <random>
 #include <time.h>
 #include <vector>
-#include <time.h>
 
 namespace fnn
 {
@@ -171,6 +170,26 @@ namespace fnn
         ///-------------------------------------------------------------------------------------------------
 
         static void DataSort(std::vector<std::vector<double>> &data);
+
+		/// <summary>	Determines the mean of the input vector. </summary>
+		///
+		/// <remarks>	Phillip Kuznetsov, 5/6/2015. </remarks>
+		///
+		/// <param name="data">	The data. </param>
+		///
+		/// <returns>	The mean of the data </returns>
+
+		static double Mean(std::vector<double>& data);
+
+		/// <summary>	Standard deviation of the data. </summary>
+		///
+		/// <remarks>	Phillip Kuznetsov, 5/6/2015. </remarks>
+		///
+		/// <param name="data">	The data. </param>
+		///
+		/// <returns>	The standard deviation of the data </returns>
+
+		static double StdDev(std::vector<double>& data);
 
     private:
     };

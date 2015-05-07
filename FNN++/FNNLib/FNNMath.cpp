@@ -504,3 +504,44 @@ void fnn::Math::DataSort(std::vector<std::vector<double>> &data)
 {
     std::sort(data.begin(), data.end(), [](const std::vector<double>& a, const std::vector<double>& b){ return a[0] < b[0]; });
 }
+
+/// <summary>	Determines the mean of the input vector. </summary>
+///
+/// <remarks>	Phillip Kuznetsov, 5/6/2015. </remarks>
+///
+/// <param name="data">	The data. </param>
+///
+/// <returns>	The mean of the data. </returns>
+
+double fnn::Math::Mean(std::vector<double>& data)
+{
+	double sum = 0;
+	int size = data.size();
+	for (std::vector<double>::iterator it = data.begin(); it != data.end(); it++)
+	{
+		sum += *it;
+	}
+	return sum / size;
+}
+
+/// <summary>	The population standard deviation of the data. </summary>
+///
+/// <remarks>	Phillip Kuznetsov, 5/6/2015. </remarks>
+///
+/// <param name="data">	The data. </param>
+///
+/// <returns>	The standard deviation of the data. </returns>
+
+double fnn::Math::StdDev(std::vector<double>&data)
+{
+	double mean = Math::Mean(data);
+	int size = data.size();
+	//some of the individual deviations
+	double sum = 0;
+	for (std::vector<double>::iterator it = data.begin(); it != data.end(); it++)
+	{
+		sum += pow(*it-mean,2);
+	}
+	return pow(sum / size,1/2);
+}
+
