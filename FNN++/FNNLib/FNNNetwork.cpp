@@ -70,7 +70,7 @@ std::function<double(double)> fnn::Network::FeedForward(std::function<double(dou
         }
 
         //Create the functional.
-        σ_cache[l + 1] = [this, &polyCoeff, l](double x) //const σcoeff
+        σ_cache[l + 1] = [this, polyCoeff, l](double x) //const σcoeff
         {
             double sum = 0;
             for (int j = 0; j < this->weights[l].GetSizeY(); j++)
