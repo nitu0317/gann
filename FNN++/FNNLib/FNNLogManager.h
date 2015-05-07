@@ -20,12 +20,9 @@
 #include<vector>
 #include<list>
 
-
 using std::string;
 
-
 namespace fnn{
-
     ///=================================================================================================
     /// <summary>   Forward declaration of loggable. </summary>
     ///

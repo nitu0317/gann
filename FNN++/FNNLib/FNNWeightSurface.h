@@ -16,12 +16,9 @@
 #define FNNLIB
 #endif
 
-
 #include <vector>
 
-
 namespace fnn{
-
     class WeightSurface
     {
     public:
@@ -33,7 +30,6 @@ namespace fnn{
         ///-------------------------------------------------------------------------------------------------
 
         WeightSurface(int x, int y);
-
 
         ///=================================================================================================
         /// <summary>   Function call operator. </summary>
@@ -89,7 +85,6 @@ namespace fnn{
 
         int GetSizeY();
 
-
     private:
         /// <summary>   The coefficient matrix. </summary>
         std::vector<std::vector<double>> coef;
@@ -100,5 +95,4 @@ namespace fnn{
         /// <summary>   The sizey. </summary>
         int sizey;
     };
-
 }

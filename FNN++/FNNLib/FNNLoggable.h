@@ -26,7 +26,6 @@
 using std::string;
 
 namespace fnn{
-
     ///=================================================================================================
     /// <summary>   Forward declaration of the log manager. </summary>
     ///
@@ -73,7 +72,7 @@ namespace fnn{
         /// <param name="message">  The message. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        void Log(string log, string message, bool verbose=false);
+        void Log(string log, string message, bool verbose = false);
 
         ///=================================================================================================
         /// <summary>   Adds a log. </summary>
@@ -108,7 +107,7 @@ namespace fnn{
         ///=================================================================================================
         /// <summary>   Gets the logs. </summary>
         ///
-        /// <remarks>   William, 4/29/2015. </remarks> 
+        /// <remarks>   William, 4/29/2015. </remarks>
         ///
         /// <returns>   null if it fails, else the logs. </returns>
         ///-------------------------------------------------------------------------------------------------
@@ -125,16 +124,12 @@ namespace fnn{
 
         string GetName();
 
-
-
     private:
         /// <summary>   The logs. </summary>
         std::map<string, fnn::Log> logs;
 
-
         /// <summary>   The name. </summary>
         string name;
-
 
         /// <summary>   true to verbose. </summary>
         bool verbose;

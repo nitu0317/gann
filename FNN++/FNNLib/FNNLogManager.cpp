@@ -53,14 +53,13 @@ void fnn::LogManager::Save(string dir)
     //Save the main log.
     std::ofstream mainL;
     mainL.open(".\\" + dir + "\\" + "main.log");
-    
+
     //Iterate over every line.
     for (std::list<string>::const_iterator iterator = verboseLog.begin(),
-        end = verboseLog.end(); iterator != end; ++iterator) 
+        end = verboseLog.end(); iterator != end; ++iterator)
         mainL << *iterator << "\n"; //Write each verbose entry out.
-    
-    mainL.close(); //Close the log after writing
 
+    mainL.close(); //Close the log after writing
 
     //Collect every logger.
     for (std::vector<fnn::Loggable*>::iterator it = loggers.begin();
@@ -81,12 +80,11 @@ void fnn::LogManager::Save(string dir)
 
             //Iterate over everyline and output.
             for (std::list<string>::const_iterator iterator = verboseLog.begin(),
-                end = verboseLog.end(); iterator != end; ++iterator) 
+                end = verboseLog.end(); iterator != end; ++iterator)
                 logFile << *iterator << "\n"; //Write each verbose entry out.
-            
+
             //Close the file
             logFile.close();
-
         }
     }
 }
@@ -104,7 +102,7 @@ void fnn::LogManager::Save(string dir)
 void fnn::LogManager::Print(Loggable* logger, string log, string message)
 {
     string out = logger->GetName() + "::" + log + "::" + message;
-    
+
     std::cout << out << std::endl;
     this->verboseLog.push_front(out);
 }
