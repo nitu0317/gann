@@ -130,6 +130,9 @@ double fnn::Network::BackPropagate(std::function<double(double)> δ)
     //    We iterate over all the layers and define Ψ^(l+1).
     this->BuildΨ_cache();
 
+    // 2. Calculate dE/dk[0]
+        // a. Calculate and cache the first lambda cache.
+
     return(0.0);
 }
 
@@ -147,6 +150,9 @@ void fnn::Network::BuildΨ_cache(void)
         // Ψ[l+1] is defined in terms of each previous layer. See Lemma 4.1.
 
         std::vector<double> polyCoeff;
-        for (int i = 0; i < this->weights[i].GetSizeX(); i++);
+        for (int i = 0; i < this->weights[i].GetSizeX(); i++)
+        {
+
+        }
     }
 }

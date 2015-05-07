@@ -101,9 +101,8 @@ namespace fnn{
         /// <summary>   The weights. </summary>
         std::vector<WeightSurface> weights;
 
-        ///======================
-        ///  CACHING
-        ///======================
+        /// <summary>   The λ cache for error backpropagation.. </summary>
+        std::vector<std::vector<double>> λ_cache;
 
         /// <summary>   The integration cache for I = NInt(σ[l]j_l^(i). </summary>
         std::vector<std::vector<double>> I_cache;
