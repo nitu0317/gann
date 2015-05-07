@@ -24,15 +24,11 @@
 #include "FNNLoggable.h"
 
 namespace fnn{
-
     ///=================================================================================================
     /// <summary>   The main class of operation on the functional neural networks. </summary>
     ///
     /// <remarks>   William, 4/9/2015. </remarks>
     ///-------------------------------------------------------------------------------------------------
-
-
-    
 
     class FNNLIB Network : Loggable
     {
@@ -103,12 +99,11 @@ namespace fnn{
         int layerCount;
 
         /// <summary>   The weights. </summary>
-        std::vector<WeightSurface> weights; 
-
+        std::vector<WeightSurface> weights;
 
         ///======================
         ///  CACHING
-        ///======================        
+        ///======================
 
         /// <summary>   The integration cache for I = NInt(σ[l]j_l^(i). </summary>
         std::vector<std::vector<double>> I_cache;
@@ -126,9 +121,5 @@ namespace fnn{
         ///-------------------------------------------------------------------------------------------------
 
         void BuildΨ_cache();
-
-
     };
-
-
 }

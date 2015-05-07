@@ -19,13 +19,11 @@
 #include <functional>
 #include <iostream>
 
-
 ///=================================================================================================
 /// <summary>   Different sigmoid activation functions. </summary>
 ///
 /// <remarks>   William Guss, 4/6/2015. </remarks>
 ///-------------------------------------------------------------------------------------------------
-
 
 namespace fnn{
     class FNNLIB Sigmoid
@@ -76,7 +74,6 @@ namespace fnn{
 
         double operator()(double x);
 
-
         ///=================================================================================================
         /// <summary>   Gets the linear sigmoid activation. </summary>
         ///
@@ -111,7 +108,6 @@ namespace fnn{
 
         /// <summary>   The activation function. </summary>
         std::function<double(double)> f;
-
 
         /// <summary>   The derivative of the activation function.</summary>
         std::function<double(double)> fprime;

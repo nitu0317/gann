@@ -51,7 +51,6 @@ void fnn::Loggable::Log(string log, string message, bool verbose)
             //if not found
             logs[log] = fnn::Log(log, verbose);
 
-
         //Add the message to the log.
         logs[log].Push(message);
 
@@ -59,7 +58,6 @@ void fnn::Loggable::Log(string log, string message, bool verbose)
         if (this->verbose && logs[log].IsVerbose())
             this->logManager->Print(this, log, message);
     }
-    
 }
 
 ///=================================================================================================
@@ -103,7 +101,7 @@ std::vector<fnn::Log*> fnn::Loggable::GetLogs(void)
         it != logs.end(); it++)
         //Send the adress of the value.
         retList.push_back(&(it->second));
-    
+
     return retList;
 }
 
@@ -117,7 +115,6 @@ std::vector<fnn::Log*> fnn::Loggable::GetLogs(void)
 
 string fnn::Loggable::GetName(void)
 {
-	
     return this->name;
 }
 
@@ -147,4 +144,3 @@ fnn::Loggable::Loggable(void)
     this->verbose = false;
     this->logManager = NULL;
 }
-

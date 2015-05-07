@@ -22,7 +22,6 @@ using std::string;
 using std::list;
 
 namespace fnn{
-
     ///=================================================================================================
     /// <summary>   A log. </summary>
     ///
@@ -31,7 +30,7 @@ namespace fnn{
 
     class Log
     {
-    public: 
+    public:
 
         ///=================================================================================================
         /// <summary>   Default constructor. </summary>
@@ -92,18 +91,15 @@ namespace fnn{
 
         bool IsVerbose();
 
-
-
     private:
 
         /// <summary>   The content of the log by line. </summary>
         list<string> content;
 
-
         /// <summary>   The name of the log. </summary>
         string name;
 
         /// <summary>   true to verbose. </summary>
-        bool verbose;   
+        bool verbose;
     };
 }

@@ -68,7 +68,6 @@ void fnn::Log::Push(string message)
 
 string fnn::Log::GetName(void)
 {
-	
     return this->name;
 }
 
@@ -82,7 +81,6 @@ string fnn::Log::GetName(void)
 
 bool fnn::Log::IsVerbose(void)
 {
-	
     return this->verbose;
 }
 
@@ -98,4 +96,3 @@ fnn::Log::Log(void)
     this->name = "default_log";
     this->verbose = false;
 }
-
