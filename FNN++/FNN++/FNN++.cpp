@@ -22,10 +22,6 @@ int _tmain(int argc, _TCHAR* argv[])
     net.AddLayer(10, 10);
     net.AddLayer(10, 10);
 
-    //TODO: Fix a glitch with this paret.
-
-
-
     auto f = [](double x) { return sin(x); };
 
     auto output = net.FeedForward(f);
