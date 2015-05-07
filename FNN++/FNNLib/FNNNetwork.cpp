@@ -68,21 +68,21 @@ std::function<double(double)> fnn::Network::FeedForward(std::function<double(dou
         //    the integration cache.
         //     
         //    Consider that σ[l+1] = g(
-        std::vector<double> σcoeff;
+        std::vector<double> polyCoeff;
         for (int j = 0; j < weights[l].GetSizeY(); j++){
             double sum = 0;
             for (int i = 0; i < weights[l].GetSizeX(); i++)
                 sum += weights[l].GetCoefficient(i, j)*I[i]; //multiply by a member of the integration cache.
-            σcoeff.push_back(sum);
+            polyCoeff.push_back(sum);
 
         }
 
         //Create the functional.
-        σ_cache[l+1] = [this,&σcoeff,l](double x) //const σcoeff
+        σ_cache[l+1] = [this,&polyCoeff,l](double x) //const σcoeff
         {
             double sum = 0;
             for (int j = 0; j < this->weights[l].GetSizeY(); j++)
-                sum += σcoeff[j] * std::pow(x, j);
+                sum += polyCoeff[j] * std::pow(x, j);
 
             return this->Activator(sum);
         };
@@ -121,6 +121,7 @@ void fnn::Network::AddLayer(int x, int y)
 {
     this->layerCount++;
     this->weights.push_back(WeightSurface(x, y));
+    this->I_cache.push_back(std::vector<double>(x)); //TODO: Verify that this does not cause bugs.
     this->σ_cache.push_back([](double x){return x; });
 }
 
@@ -140,14 +141,29 @@ double fnn::Network::BackPropagate(std::function<double(double)> δ)
 {
     // 1. Calculate and cache all ψ^(n) for 1 \leq n \leq L
     //    We iterate over all the layers and define Ψ^(l+1). 
+    this->BuildΨ_cache();
+
+
+	return(0.0);
+}
+
+///=================================================================================================
+/// <summary>   Calculates the ψ cache. </summary>
+///
+/// <remarks>   Madcow D, 5/6/2015. </remarks>
+///-------------------------------------------------------------------------------------------------
+
+void fnn::Network::BuildΨ_cache(void)
+{
+    //    We iterate over all the layers and define Ψ^(l+1). 
     for (int l = 0; l < this->layerCount; l++){
         // By the definition presented in the paper we have that
         // Ψ[l+1] is defined in terms of each previous layer. See Lemma 4.1.
-        
+
+        std::vector<double> polyCoeff;
+        for (int i = 0; i < this->weights[i].GetSizeX())
 
 
     }
-
-	return(0.0);
 }
 

@@ -116,6 +116,14 @@ namespace fnn{
         /// <summary>   The Ψ_cache for layers. </summary>
         std::vector<std::function<double(double)>> Ψ_cache;
 
+        ///=================================================================================================
+        /// <summary>   Calculates the ψ cache. </summary>
+        ///
+        /// <remarks>   Madcow D, 5/6/2015. </remarks>
+        ///-------------------------------------------------------------------------------------------------
+
+        void BuildΨ_cache();
+
 
     };
 
