@@ -34,7 +34,6 @@ namespace fnn
 	{
 	public:
 
-		///=================================================================================================
 		/// <summary>	FNNTrainer that takes a 2D vector for the trainingSet and testingSet. </summary>
 		///
 		/// <remarks>	Phillip Kuznetsov, 5/6/2015. </remarks>
@@ -42,10 +41,9 @@ namespace fnn
 		/// <param name="network">	  	The Network being operated on. </param>
 		/// <param name="trainingSet">	The training dataset. </param>
 		/// <param name="testingSet"> 	The traiing dataset. </param>
-		/// <param name="online">	  	Boolean which tells if it's online or not. Defaulted to true. </param>
-		///-------------------------------------------------------------------------------------------------
+		///
 
-		FNNTrainer(Network network, fnn::DataSet& trainingSet, fnn::DataSet& testingSet, bool online = true);
+		FNNTrainer(Network& network, fnn::DataSet& trainingSet, fnn::DataSet& testingSet);
 
 		///=================================================================================================
 		/// <summary>	Trains the network according to the parameters </summary>
@@ -72,7 +70,7 @@ namespace fnn
 		///
 		/// <returns>	A double. </returns>
 
-		double Bound(double val, double min, double max);
+		static double Bound(double val, double min, double max);
 	private:
 		DataSet& testingSet;
 		DataSet& trainingSet;
@@ -81,10 +79,8 @@ namespace fnn
 		/// <summary>	The interpolated training function. </summary>
 		std::function<double(double)> trainingFunc;
 		/// <summary>	The currrent network </summary>
-		Network network;
+		Network* network;
 		/// <summary>	The error history. </summary>
 		std::vector<double> errorHistory;
-		/// <summary>	checks whether online </summary>
-		bool online;
 	};
 }

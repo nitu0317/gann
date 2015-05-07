@@ -8,15 +8,14 @@
 #include "FNNTrainer.h"
 #include "FNNMath.h"
 
-fnn::FNNTrainer::FNNTrainer(Network network, fnn::DataSet& trainingSet, fnn::DataSet& testingSet, bool online = true)
+fnn::FNNTrainer::FNNTrainer(Network& network, fnn::DataSet& trainingSet, fnn::DataSet& testingSet)
 {
 	this->trainingSet = trainingSet;
 	this->testingSet = testingSet;
 	/*this->trainingFunc = Math::SSpline(trainingSet);
 	this->testingFunc = Math::SSpline(testingSet);*/
-	this->network = network;
+	this->network = &network;
 	this->errorHistory = std::vector<double>(20);
-	this->online = online;
 }
 int fnn::FNNTrainer::Train(int epochs, double minError, std::vector<double> learningParameters, bool nudging = false)
 {
@@ -27,22 +26,12 @@ int fnn::FNNTrainer::Train(int epochs, double minError, std::vector<double> lear
 	do
 	{
 		epoch++;
-
-		//Train online or perform batch training
-		if (online)
-		{
-			error = 0;
-				for (int i = 0; i < this->trainingSet.size(); i++)
-				{
-					auto dp = trainingSet[i];
-					error+= network.Train(dp, learningParameters);
-				}
-		}
-		else
-		{
-			error = network.Train(trainingSet, learningParameters);
-		}
-
+		error = 0;
+			for (int i = 0; i < this->trainingSet.size(); i++)
+			{
+				auto dp = trainingSet[i];
+				error+= network.Train(dp, learningParameters);
+			}
 		this->errorHistory.push_back(error);
 		
 		//true if there has been a sugnificant change in the past two error histories.
