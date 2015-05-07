@@ -25,7 +25,7 @@ fnn::Network::Network()
     //Caching variables.
     this->σ_cache = std::vector<std::function<double(double)>>(1); //We add one sigmoid term for the output
     this->I_cache = std::vector <std::vector<double>>(1);
-    this->Ψ_cache = std::vector<std::function<double(double)>>(1); //We add one sigmoid term for the output layer.
+    this->ψ_cache = std::vector<std::function<double(double)>>(1); //We add one sigmoid term for the output layer.
 }
 
 ///=================================================================================================
@@ -102,7 +102,7 @@ void fnn::Network::SetActivation(Sigmoid activator)
 /// <remarks>   William Guss, 4/12/2015. </remarks>
 ///
 /// <param name="x">    The x coordinate. </param>
-/// <param name="y">    The y coordinate. </param>
+/// <param name="y">    The y coordinate. </param> 
 ///-------------------------------------------------------------------------------------------------
 
 void fnn::Network::AddLayer(int x, int y)
@@ -111,6 +111,8 @@ void fnn::Network::AddLayer(int x, int y)
     this->weights.push_back(WeightSurface(x, y));
     this->I_cache.push_back(std::vector<double>(x)); //TODO: Verify that this does not cause bugs.
     this->σ_cache.push_back([](double x){return x; });
+    this->ψ_cache.push_back([](double x){return x; } );
+    this->λ_cache.push_back(std::vector<double>(                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ));
 }
 
 ///=================================================================================================
@@ -128,7 +130,7 @@ double fnn::Network::BackPropagate(std::function<double(double)> δ)
 {
     // 1. Calculate and cache all ψ^(n) for 1 \leq n \leq L
     //    We iterate over all the layers and define Ψ^(l+1).
-    this->BuildΨ_cache();
+    this->Buildψ_cache();
 
     // 2. Calculate dE/dk[0]
         // a. Calculate and cache the first lambda cache.
@@ -142,17 +144,32 @@ double fnn::Network::BackPropagate(std::function<double(double)> δ)
 /// <remarks>   Madcow D, 5/6/2015. </remarks>
 ///-------------------------------------------------------------------------------------------------
 
-void fnn::Network::BuildΨ_cache(void)
+void fnn::Network::Buildψ_cache(void)
 {
     //    We iterate over all the layers and define Ψ^(l+1).
     for (int l = 0; l < this->layerCount; l++){
         // By the definition presented in the paper we have that
         // Ψ[l+1] is defined in terms of each previous layer. See Lemma 4.1.
-
+        
         std::vector<double> polyCoeff;
-        for (int i = 0; i < this->weights[i].GetSizeX(); i++)
+        //
+        for (int j = 0; j < this->weights[l].GetSizeY(); j++)
         {
+            double sum = 0;
+            for (int i = 0; i < this->weights[l].GetSizeX(); i++)
+                sum += weights[l].GetCoefficient(i, j)*this->I_cache[l][i];
+            polyCoeff.push_back(sum); 
 
         }
+
+        int lz = this->weights[l].GetSizeY();
+
+        ψ_cache[l] = [this, polyCoeff,l,lz](double j)
+        {
+            double sum = 0;
+            for (int j = 0; j < lz; j++);
+
+        };
+                   
     }
-}
+} 
