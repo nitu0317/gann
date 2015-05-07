@@ -19,7 +19,6 @@
 #include <random>
 #include <time.h>
 #include <vector>
-#include <time.h>
 
 namespace fnn
 {
