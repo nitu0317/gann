@@ -31,6 +31,9 @@ namespace fnn{
     /// <remarks>   William, 4/9/2015. </remarks>
     ///-------------------------------------------------------------------------------------------------
 
+
+    
+
     class FNNLIB Network : Loggable
     {
     public:

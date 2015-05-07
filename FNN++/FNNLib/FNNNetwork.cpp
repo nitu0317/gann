@@ -8,7 +8,6 @@
 #include "FNNNetwork.h"
 #include <math.h>
 
-
 ///=================================================================================================
 /// <summary>   Constructs a functional neural network. </summary>
 ///
@@ -24,13 +23,10 @@ fnn::Network::Network()
     this->weights = std::vector<WeightSurface>();
 
     //Caching variables.
-    this->σ_cache = std::vector<std::function<double(double)>> (1); //We add one sigmoid term for the output
-    this->I_cache = std::vector <std::vector<double>> (1);
+    this->σ_cache = std::vector<std::function<double(double)>>(1); //We add one sigmoid term for the output
+    this->I_cache = std::vector <std::vector<double>>(1);
     this->Ψ_cache = std::vector<std::function<double(double)>>(1); //We add one sigmoid term for the output layer.
 }
-
-
-
 
 ///=================================================================================================
 /// <summary>   Runs the network using the fast feedforward algorithm. The algorithm caches
@@ -49,24 +45,21 @@ std::function<double(double)> fnn::Network::FeedForward(std::function<double(dou
     σ_cache[0] = ξ;
 
     for (int l = 0; l < this->layerCount; l++){
-
         // 1. Calculate the main integration of the net input, I
         //    I = Int[σ[l-1]j^{x_2l}]
         std::vector<double> I(this->weights[l].GetSizeX());
 
-       
         for (int i = 0; i < I.size(); i++)
-            I[i] = Math::NIntegrate([this,l,i](double j0){ return this->σ_cache[l](j0)*pow(j0, i); },
-                0, 1);
-         
+            I[i] = Math::NIntegrate([this, l, i](double j0){ return this->σ_cache[l](j0)*pow(j0, i); },
+            0, 1);
 
-        //    Push the calculated net to the integration cache for use with error backpropagation.  
+        //    Push the calculated net to the integration cache for use with error backpropagation.
         this->I_cache[l] = I; //TODO: Consider making the integration cache point by reference.
 
         // 2. Calculate the coefficients for the polynomial representing σ[l+1]
         //    We do this by combining like terms from both the coefficients and
         //    the integration cache.
-        //     
+        //
         //    Consider that σ[l+1] = g(
         std::vector<double> polyCoeff;
         for (int j = 0; j < weights[l].GetSizeY(); j++){
@@ -74,11 +67,10 @@ std::function<double(double)> fnn::Network::FeedForward(std::function<double(dou
             for (int i = 0; i < weights[l].GetSizeX(); i++)
                 sum += weights[l].GetCoefficient(i, j)*I[i]; //multiply by a member of the integration cache.
             polyCoeff.push_back(sum);
-
         }
 
         //Create the functional.
-        σ_cache[l+1] = [this,&polyCoeff,l](double x) //const σcoeff
+        σ_cache[l + 1] = [this, &polyCoeff, l](double x) //const σcoeff
         {
             double sum = 0;
             for (int j = 0; j < this->weights[l].GetSizeY(); j++)
@@ -87,11 +79,7 @@ std::function<double(double)> fnn::Network::FeedForward(std::function<double(dou
             return this->Activator(sum);
         };
     }
-    
-    
 
-
-  
     return σ_cache[this->layerCount];
 }
 
@@ -125,7 +113,6 @@ void fnn::Network::AddLayer(int x, int y)
     this->σ_cache.push_back([](double x){return x; });
 }
 
-
 ///=================================================================================================
 /// <summary>   Back propagate using the Super Pro Algo developed by William Guss and Patrick
 ///             Chen. </summary>
@@ -140,11 +127,10 @@ void fnn::Network::AddLayer(int x, int y)
 double fnn::Network::BackPropagate(std::function<double(double)> δ)
 {
     // 1. Calculate and cache all ψ^(n) for 1 \leq n \leq L
-    //    We iterate over all the layers and define Ψ^(l+1). 
+    //    We iterate over all the layers and define Ψ^(l+1).
     this->BuildΨ_cache();
 
-
-	return(0.0);
+    return(0.0);
 }
 
 ///=================================================================================================
@@ -155,15 +141,12 @@ double fnn::Network::BackPropagate(std::function<double(double)> δ)
 
 void fnn::Network::BuildΨ_cache(void)
 {
-    //    We iterate over all the layers and define Ψ^(l+1). 
+    //    We iterate over all the layers and define Ψ^(l+1).
     for (int l = 0; l < this->layerCount; l++){
         // By the definition presented in the paper we have that
         // Ψ[l+1] is defined in terms of each previous layer. See Lemma 4.1.
 
         std::vector<double> polyCoeff;
-        for (int i = 0; i < this->weights[i].GetSizeX())
-
-
+        for (int i = 0; i < this->weights[i].GetSizeX(); i++);
     }
 }
-
