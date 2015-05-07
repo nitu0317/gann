@@ -10,8 +10,6 @@
 
 #include <random>
 
-
-
 ///=================================================================================================
 /// <summary>   Default constructor. </summary>
 ///
@@ -31,7 +29,6 @@ fnn::WeightSurface::WeightSurface(int x, int y)
         coef[i] = std::vector<double>(y);
 
     Nudge();
-    
 }
 
 ///=================================================================================================
@@ -44,7 +41,7 @@ void fnn::WeightSurface::Nudge(void)
 {
     for (int i = 0; i < sizex; i++)
         for (int j = 0; j < sizex; j++)
-            coef[i][j] = Math::GaussianReal()/(double)Math::Factorial(i+j);
+            coef[i][j] = Math::GaussianReal() / (double)Math::Factorial(i + j);
 }
 
 ///=================================================================================================
@@ -57,7 +54,6 @@ void fnn::WeightSurface::Nudge(void)
 
 int fnn::WeightSurface::GetSizeX(void)
 {
-    
     return sizex;
 }
 
@@ -71,7 +67,6 @@ int fnn::WeightSurface::GetSizeX(void)
 
 int fnn::WeightSurface::GetSizeY(void)
 {
-    
     return sizey;
 }
 
@@ -88,7 +83,5 @@ int fnn::WeightSurface::GetSizeY(void)
 
 double fnn::WeightSurface::GetCoefficient(int x, int y)
 {
-	
     return this->coef[x][y];
 }
-

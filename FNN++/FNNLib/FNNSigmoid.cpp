@@ -98,7 +98,6 @@ fnn::Sigmoid::Sigmoid(std::function<double(double)> g, std::function<double(doub
     this->f = g;
 }
 
-
 ///=================================================================================================
 /// <summary>   Default constructor. Do nothing.t </summary>
 ///
@@ -110,4 +109,3 @@ fnn::Sigmoid::Sigmoid()
     this->fprime = [](double x){ return 1;  };
     this->f = [](double x){ return x;  };
 }
-
