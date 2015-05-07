@@ -79,6 +79,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FNNDataPoint.h" />
+    <ClInclude Include="FNNDataSet.h" />
     <ClInclude Include="FNNLog.h" />
     <ClInclude Include="FNNLoggable.h" />
     <ClInclude Include="FNNLogManager.h" />
@@ -91,6 +93,7 @@
     <ClInclude Include="FNNWeightSurface.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FNNDataSet.cpp" />
     <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
