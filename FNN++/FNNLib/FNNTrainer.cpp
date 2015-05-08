@@ -8,17 +8,14 @@
 #include "FNNTrainer.h"
 #include "FNNMath.h"
 
-fnn::FNNTrainer::FNNTrainer(Network& network, fnn::DataSet& trainingSet, fnn::DataSet& testingSet)
-{
-	this->trainingSet = trainingSet;
-	this->testingSet = testingSet;
-	/*this->trainingFunc = Math::SSpline(trainingSet);
-	this->testingFunc = Math::SSpline(testingSet);*/
-	this->network = &network;
-	this->errorHistory = std::vector<double>(20);
+fnn::FNNTrainer::FNNTrainer(Network& network, fnn::DataSet& trainingSet, fnn::DataSet& testingSet) : _trainingSet(trainingSet), _testingSet(testingSet)
+{	
+	_network = &network;
+	errorHistory = std::vector<double>(20);
 }
-int fnn::FNNTrainer::Train(int epochs, double minError, std::vector<double> learningParameters, bool nudging = false)
+int fnn::FNNTrainer::Train(int epochs, double minError, std::vector<double>& learningParameters, bool nudging)
 {
+	
 	errorHistory.clear();
 	// current epoch and error
 	int epoch = 0;
@@ -27,10 +24,10 @@ int fnn::FNNTrainer::Train(int epochs, double minError, std::vector<double> lear
 	{
 		epoch++;
 		error = 0;
-			for (int i = 0; i < this->trainingSet.size(); i++)
+			for (int i = 0; i < _trainingSet.size(); i++)
 			{
-				auto dp = trainingSet[i];
-				error+= network.Train(dp, learningParameters);
+				auto dp = _trainingSet[i];
+				error+= (*_network).Train(dp, learningParameters);
 			}
 		this->errorHistory.push_back(error);
 		
@@ -46,7 +43,7 @@ int fnn::FNNTrainer::Train(int epochs, double minError, std::vector<double> lear
 		 
 		if (nudging && stdDev < .0000075)
 		{
-			network.NudgeWeights();
+			(*_network).NudgeWeights();
 		}
 
 #if DEBUG
@@ -66,7 +63,7 @@ int fnn::FNNTrainer::Train(int epochs, double minError, std::vector<double> lear
 ///
 /// <returns>	A double. </returns>
 
-static double fnn::FNNTrainer::Bound(double val, double min, double max)
+double fnn::FNNTrainer::Bound(double val, double min, double max)
 {
 	
 	return val > min && val < max ? val : (val < min ? min : max);

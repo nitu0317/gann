@@ -44,7 +44,7 @@ namespace fnn
         /// <returns>   The result. </returns>
         ///-------------------------------------------------------------------------------------------------
 
-        static double NIntegrate(std::function<double(double)> f, double a, double b, double eps);
+        static double NIntegrate(std::function<double(double)> &f, double a, double b, double eps);
 
         ///=================================================================================================
         /// <summary>   Numerically integrates any integrable function using Simpson's rule with auto
@@ -59,7 +59,7 @@ namespace fnn
         /// <returns>   The result. </returns>
         ///-------------------------------------------------------------------------------------------------
 
-        static double NIntegrate(std::function<double(double)> f, double a, double b);
+        static double NIntegrate(std::function<double(double)> &f, double a, double b);
 
         ///=================================================================================================
         /// <summary>   Uniform real. </summary>
@@ -98,7 +98,7 @@ namespace fnn
         /// <returns>   A vector of coefficients for hte polynomial </returns>
         ///-------------------------------------------------------------------------------------------------
 
-        static std::vector<double> PolyMult(std::vector<double> poly1, std::vector<double> poly2);
+        static std::vector<double> PolyMult(std::vector<double> &poly1, std::vector<double> &poly2);
         ///=================================================================================================
         /// <summary>   A linear interpolation algorithm </summary>
         ///
@@ -109,7 +109,7 @@ namespace fnn
         /// <returns>   A linear interpolation function </returns>
         ///-------------------------------------------------------------------------------------------------
 
-        static std::function<double(double)> LERP(std::vector<std::vector<double>> data);
+        static std::function<double(double)> LERP(std::vector<std::vector<double>> &data);
 
         ///=================================================================================================
         /// <summary>  A polynomial interpolation algorithm using the Lagrange Interpolation Polynomial according to http://en.wikipedia.org/wiki/Polynomial_interpolation  </summary>
@@ -121,7 +121,7 @@ namespace fnn
         /// <returns>   A polynomial interpolation function </returns>
         ///-------------------------------------------------------------------------------------------------
 
-        static std::function<double(double)> LagrangeInterpolation(std::vector<std::vector<double>> data);
+        static std::function<double(double)> LagrangeInterpolation(std::vector<std::vector<double>> &data);
 
         ///=================================================================================================
         /// <summary>   Factorial implementation. </summary>
@@ -145,7 +145,7 @@ namespace fnn
         /// <returns>   A vector of the variable values solved by completed Gauss-Jordan elimination. </returns>
         ///-------------------------------------------------------------------------------------------------
 
-        static std::vector<double> GaussJordan(std::vector<std::vector<double>> matrix);
+        static std::vector<double> GaussJordan(std::vector<std::vector<double>> &matrix);
 
         ///=================================================================================================
         /// <summary>   A simple spline interpolation algorithm as described in http://www.geos.ed.ac.uk/~yliu23/docs/lect_spline.pdf.
@@ -158,7 +158,7 @@ namespace fnn
         /// <returns>   A polynomial interpolation function </returns>
         ///-------------------------------------------------------------------------------------------------
 
-        static std::function<double(double)> SSpline(std::vector<std::vector<double>> data);
+        static std::function<double(double)> SSpline(std::vector<std::vector<double>> &data);
 
         ///=================================================================================================
         /// <summary>   Data sort algorthim to sort by x-values of the data. Useful for the interpolation algorithms. </summary>
@@ -179,7 +179,7 @@ namespace fnn
 		///
 		/// <returns>	The mean of the data </returns>
 
-		static double Mean(std::vector<double>& data);
+		static double Mean(std::vector<double> &data);
 
 		/// <summary>	Standard deviation of the data. </summary>
 		///
@@ -189,7 +189,7 @@ namespace fnn
 		///
 		/// <returns>	The standard deviation of the data </returns>
 
-		static double StdDev(std::vector<double>& data);
+		static double StdDev(std::vector<double> &data);
 
     private:
     };

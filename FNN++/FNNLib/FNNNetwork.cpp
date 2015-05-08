@@ -49,10 +49,10 @@ std::function<double(double)> fnn::Network::FeedForward(std::function<double(dou
         //    I = Int[σ[l-1]j^{x_2l}]
         std::vector<double> I(this->weights[l].GetSizeX());
 
-        for (int i = 0; i < I.size(); i++)
-            I[i] = Math::NIntegrate([this, l, i](double j0){ return this->σ_cache[l](j0)*pow(j0, i); },
-            0, 1);
-
+		for (int i = 0; i < I.size(); i++){
+			std::function<double(double)> input = [this, l, i](double j0){ return this->σ_cache[l](j0)*pow(j0, i); };
+			I[i] = Math::NIntegrate(input, 0, 1);
+		}
         //    Push the calculated net to the integration cache for use with error backpropagation.
         this->I_cache[l] = I; //TODO: Consider making the integration cache point by reference.
 
@@ -156,3 +156,28 @@ void fnn::Network::BuildΨ_cache(void)
         }
     }
 }
+
+/// <summary>	Nudge weights. </summary>
+///
+/// <remarks>	Phillip Kuznetsov, 5/8/2015. </remarks>
+
+void fnn::Network::NudgeWeights(void)
+{
+	
+}
+
+/// <summary>	Trains the network. </summary>
+///
+/// <remarks>	Phillip Kuznetsov, 5/8/2015. </remarks>
+///
+/// <param name="dp">				 	The current datapoint. </param>
+/// <param name="learningParameters">	Options for controlling the learning. </param>
+///
+/// <returns>	A double. </returns>
+
+double fnn::Network::Train(DataPoint&dp, std::vector<double> learningParameters)
+{
+	
+	return(0.0);
+}
+
