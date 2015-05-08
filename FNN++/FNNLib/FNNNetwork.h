@@ -61,7 +61,7 @@ namespace fnn{
         ///=================================================================================================
         /// <summary>   Back propagate using the Super Pro Algo developed by William Guss and Patrick Chen. </summary>
         ///
-        /// <remarks>   Madcow D, 5/6/2015. </remarks>
+        /// <remarks>   William Guss, 5/6/2015. </remarks>
         ///
         /// <param name="δ">    The desired function delta δ. </param>
         ///
@@ -134,7 +134,7 @@ namespace fnn{
         ///=================================================================================================
         /// <summary>   Calculates the ψ cache. </summary>
         ///
-        /// <remarks>   Madcow D, 5/6/2015. </remarks>
+        /// <remarks>   William Guss, 5/6/2015. </remarks>
         ///-------------------------------------------------------------------------------------------------
 
         void BuildΨ_cache();

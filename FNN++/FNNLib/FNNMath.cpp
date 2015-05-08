@@ -15,6 +15,7 @@
 #include <iterator>
 #include <string>
 
+using std::to_string;
 ///=================================================================================================
 /// <summary>   Numerically integrates any integrable function using Simpson's rule with auto
 ///             scaling. </summary>
@@ -443,20 +444,30 @@ std::function<double(double)> fnn::Math::SSpline(std::vector<std::vector<double>
         std::vector<double> pt1 = data[i];
         std::vector<double> pt2 = data[i + 1];
         auto a = [pt1, pt2](double x){return (pt2[0] - x) / (pt2[0] - pt1[0]); };
+
+
         //A = (x_(i+1)-x)/(x_(i+1)-x_i)
-        std::string aS = "((" + std::to_string(pt2[0]) + "-x)/" + std::to_string(pt2[0] - pt1[0]) + ")";
+        std::string aS = "((" + to_string(pt2[0]) + "-x)/" + to_string(pt2[0] - pt1[0]) + ")";
         auto b = [a](double x){return 1 - a(x); };
         //B = 1-A
+        
         std::string bS = "(1-" + aS + ")";
-        auto c = [a, pt1, pt2](double x){return (1 / 6)*(pow(a(x), 3) - a(x))*pow((pt2[0] - pt1[0]), 2); };
+        auto c = [a, pt1, pt2](double x)
+        {
+            return (1 / 6)
+                *(pow( a(x), 3 ) - a(x))
+                *(pow( (pt2[0] - pt1[0]), 2));
+        };
+
         //C = (1/6)*(A^3-A)(x_(i+1)-x_i)^2
         std::string cS = "1/6*(" + aS + "^3-" + aS + ")*(" + std::to_string(pt2[0] - pt1[0]) + ")^2";
         auto d = [b, pt1, pt2](double x){return (1 / 6)*(pow(b(x), 3) - b(x))*pow((pt2[0] - pt1[0]), 2); };
-        //D = (1/6)*(B^3-B)(x_(i+1)-x_i)^2
+        //D = (1/6)*(B^3-B)(x_(i+1)-x_i)^2 D is for this purpose
         std::string dS = "1/6*(" + bS + "^3-" + bS + ")*(" + std::to_string(pt2[0] - pt1[0]) + ")^2";
 
         functions.push_back([a, b, c, d, secondDeriv, pt1, pt2, i](double x){return a(x)*pt1[0] + b(x)*pt2[0] + c(x)*secondDeriv[i] + d(x)*secondDeriv[i + 1]; });
-        //(y_i)A+(y_(i+1))B+(d^2f_i/dx^2)C+(d^2f_(i+1)/dx^2)D, x_i <=x< x_(i+1)}
+      
+        
         mathematica += "(" + std::to_string(pt1[1]) + ")" + aS + "+(" + std::to_string(pt2[1]) + ")" + bS + "+(" + std::to_string(secondDeriv[i]) + ")"
             + cS + "+(" + std::to_string(secondDeriv[i + 1]) + ")" + dS + "," + std::to_string(pt1[0]) + "<=x<" + std::to_string(pt2[0]) + "},";//close1
         ranges.push_back(pt2[0]);
@@ -516,13 +527,13 @@ void fnn::Math::DataSort(std::vector<std::vector<double>> &data)
 
 double fnn::Math::Mean(std::vector<double> &data)
 {
-	double sum = 0;
-	int size = data.size();
-	for (std::vector<double>::iterator it = data.begin(); it != data.end(); it++)
-	{
-		sum += *it;
-	}
-	return sum / size;
+    double sum = 0;
+    int size = data.size();
+    for (std::vector<double>::iterator it = data.begin(); it != data.end(); it++)
+    {
+        sum += *it;
+    }
+    return sum / size;
 }
 
 /// <summary>	The population standard deviation of the data. </summary>
@@ -535,14 +546,14 @@ double fnn::Math::Mean(std::vector<double> &data)
 
 double fnn::Math::StdDev(std::vector<double> &data)
 {
-	double mean = Math::Mean(data);
-	int size = data.size();
-	//some of the individual deviations
-	double sum = 0;
-	for (std::vector<double>::iterator it = data.begin(); it != data.end(); it++)
-	{
-		sum += pow(*it-mean,2);
-	}
-	return pow(sum / size,1/2);
+    double mean = Math::Mean(data);
+    int size = data.size();
+    //some of the individual deviations
+    double sum = 0;
+    for (std::vector<double>::iterator it = data.begin(); it != data.end(); it++)
+    {
+        sum += pow(*it-mean,2);
+    }
+    return pow(sum / size,1/2);
 }
 
