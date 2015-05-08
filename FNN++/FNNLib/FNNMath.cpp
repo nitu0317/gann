@@ -166,7 +166,7 @@ std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> d
     mathematica += "}, 2^32]";
     //Print out the LERP piecewise
     std::cout << mathematica;
-    auto func = [&functions, &ranges](double x){
+    auto func = [functions, ranges](double x){
         if (x < ranges[0]){
             std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
             return -pow(2, 32);
@@ -246,7 +246,7 @@ std::function<double(double)> fnn::Math::LagrangeInterpolation(std::vector<std::
         polynomial += "+" + std::to_string(coef[i]) + "*x^" + std::to_string(i);
     }
     std::cout << "\nPolynomial Interpolation: " << polynomial;
-    auto func = [&coef](double x){
+    auto func = [coef](double x){
         double output = 0;
         for (auto i = 0; i < coef.size(); i++)
         {
@@ -468,7 +468,7 @@ std::function<double(double)> fnn::Math::SSpline(std::vector<std::vector<double>
     //  piecewise
     std::cout << mathematica;
     //the creation of the equations
-    auto func = [&functions, &ranges](double x){
+    auto func = [functions, ranges](double x){
         if (x < ranges[0]){
             std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
             return -pow(2, 32);
