@@ -28,7 +28,7 @@
 /// <returns>   The result. </returns>
 ///-------------------------------------------------------------------------------------------------
 
-double fnn::Math::NIntegrate(std::function<double(double)> f, double a, double b)
+double fnn::Math::NIntegrate(std::function<double(double)> &f, double a, double b)
 {
     return fnn::Math::NIntegrate(f, a, b, (a - b) * 10); //TODO: This is kinda arbitrary but,
 }
@@ -47,7 +47,7 @@ double fnn::Math::NIntegrate(std::function<double(double)> f, double a, double b
 /// <returns>   The result. </returns>
 ///-------------------------------------------------------------------------------------------------
 
-double fnn::Math::NIntegrate(std::function<double(double)> f, double a, double b, double eps)
+double fnn::Math::NIntegrate(std::function<double(double)> &f, double a, double b, double eps)
 {
     double h = (b - a) / eps;
     double s = f(a) + f(b);
@@ -107,7 +107,7 @@ double fnn::Math::GaussianReal(double mean, double dev)
 /// <returns>   A vector of coefficients for hte polynomial </returns>
 ///-------------------------------------------------------------------------------------------------
 
-std::vector<double> fnn::Math::PolyMult(std::vector<double> poly1, std::vector<double> poly2)
+std::vector<double> fnn::Math::PolyMult(std::vector<double> &poly1, std::vector<double> &poly2)
 {
     std::vector<double> retPoly;
     for (auto i = 0; i < poly1.size(); i++)
@@ -143,7 +143,7 @@ std::vector<double> fnn::Math::PolyMult(std::vector<double> poly1, std::vector<d
 /// <returns>   A linear interpolation function </returns>
 ///-------------------------------------------------------------------------------------------------
 
-std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> data)
+std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> &data)
 {
     //data has to be sorted first according to x values
     DataSort(data);
@@ -197,7 +197,7 @@ std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> d
 /// <returns>   A polynomial interpolation function </returns>
 ///-------------------------------------------------------------------------------------------------
 
-std::function<double(double)> fnn::Math::LagrangeInterpolation(std::vector<std::vector<double>> data)
+std::function<double(double)> fnn::Math::LagrangeInterpolation(std::vector<std::vector<double>> &data)
 {
     //coefficient vector such that each num is a coefficient to x^index.
     std::vector<double> coef;
@@ -279,12 +279,13 @@ int fnn::Math::Factorial(int n)
 ///
 /// <remarks>   Phillip Kuznetsov, 4/29/2015. </remarks>
 ///
-/// <param name="matrix">   The systems of equation augmented matrix. </param>
+/// <param name="matrix">   The systems of equation augmented matrix. 
+/// 						Passes by reference. </param>
 ///
 /// <returns>   A vector of the variable values solved by completed Gauss-Jordan elimination. </returns>
 ///-------------------------------------------------------------------------------------------------
 
-std::vector<double> fnn::Math::GaussJordan(std::vector<std::vector<double>> matrix)
+std::vector<double> fnn::Math::GaussJordan(std::vector<std::vector<double>> &matrix)
 {
     //the return vector
     std::vector<double> ret(matrix.size());
@@ -377,7 +378,7 @@ std::vector<double> fnn::Math::GaussJordan(std::vector<std::vector<double>> matr
 /// <param name="data">    2D vector of input data points. Each row is a point. </param>
 ///-------------------------------------------------------------------------------------------------
 
-std::function<double(double)> fnn::Math::SSpline(std::vector<std::vector<double>> data)
+std::function<double(double)> fnn::Math::SSpline(std::vector<std::vector<double>> &data)
 {
     //make sure this actually sorts anything
     fnn::Math::DataSort(data);
@@ -513,7 +514,7 @@ void fnn::Math::DataSort(std::vector<std::vector<double>> &data)
 ///
 /// <returns>	The mean of the data. </returns>
 
-double fnn::Math::Mean(std::vector<double>& data)
+double fnn::Math::Mean(std::vector<double> &data)
 {
 	double sum = 0;
 	int size = data.size();
@@ -532,7 +533,7 @@ double fnn::Math::Mean(std::vector<double>& data)
 ///
 /// <returns>	The standard deviation of the data. </returns>
 
-double fnn::Math::StdDev(std::vector<double>&data)
+double fnn::Math::StdDev(std::vector<double> &data)
 {
 	double mean = Math::Mean(data);
 	int size = data.size();
