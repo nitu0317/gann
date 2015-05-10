@@ -22,6 +22,7 @@
 #include "FNNSigmoid.h"
 #include "FNNWeightSurface.h"
 #include "FNNLoggable.h"
+#include "FNNDataPoint.h"
 
 namespace fnn{
     ///=================================================================================================
@@ -60,7 +61,7 @@ namespace fnn{
         ///=================================================================================================
         /// <summary>   Back propagate using the Super Pro Algo developed by William Guss and Patrick Chen. </summary>
         ///
-        /// <remarks>   Madcow D, 5/6/2015. </remarks>
+        /// <remarks>   William Guss, 5/6/2015. </remarks>
         ///
         /// <param name="δ">    The desired function delta δ. </param>
         ///
@@ -90,6 +91,23 @@ namespace fnn{
 
         void AddLayer(int x, int y);
 
+		/// <summary>	Trains the network </summary>
+		///
+		/// <remarks>	Phillip Kuznetsov, 5/8/2015. </remarks>
+		///
+		/// <param name="ds">				 	The current datapoint </param>
+		/// <param name="learningParameters">	Options for controlling the learning. </param>
+		///
+		/// <returns>	A double. </returns>
+
+		double Train(DataPoint& dp, std::vector<double> learningParameters);
+
+		/// <summary>	Nudge weights. </summary>
+		///
+		/// <remarks>	Phillip Kuznetsov, 5/8/2015. </remarks>
+
+		void NudgeWeights();
+
         /// <summary>   The primary activator type for the neural network. </summary>
         Sigmoid Activator;
 
@@ -116,7 +134,7 @@ namespace fnn{
         ///=================================================================================================
         /// <summary>   Calculates the ψ cache. </summary>
         ///
-        /// <remarks>   Madcow D, 5/6/2015. </remarks>
+        /// <remarks>   William Guss, 5/6/2015. </remarks>
         ///-------------------------------------------------------------------------------------------------
 
         void Buildψ_cache();

@@ -15,6 +15,7 @@
 #include <iterator>
 #include <string>
 
+using std::to_string;
 ///=================================================================================================
 /// <summary>   Numerically integrates any integrable function using Simpson's rule with auto
 ///             scaling. </summary>
@@ -28,7 +29,7 @@
 /// <returns>   The result. </returns>
 ///-------------------------------------------------------------------------------------------------
 
-double fnn::Math::NIntegrate(std::function<double(double)> f, double a, double b)
+double fnn::Math::NIntegrate(std::function<double(double)> &f, double a, double b)
 {
     return fnn::Math::NIntegrate(f, a, b, (a - b) * 10); //TODO: This is kinda arbitrary but,
 }
@@ -47,7 +48,7 @@ double fnn::Math::NIntegrate(std::function<double(double)> f, double a, double b
 /// <returns>   The result. </returns>
 ///-------------------------------------------------------------------------------------------------
 
-double fnn::Math::NIntegrate(std::function<double(double)> f, double a, double b, double eps)
+double fnn::Math::NIntegrate(std::function<double(double)> &f, double a, double b, double eps)
 {
     double h = (b - a) / eps;
     double s = f(a) + f(b);
@@ -107,7 +108,7 @@ double fnn::Math::GaussianReal(double mean, double dev)
 /// <returns>   A vector of coefficients for hte polynomial </returns>
 ///-------------------------------------------------------------------------------------------------
 
-std::vector<double> fnn::Math::PolyMult(std::vector<double> poly1, std::vector<double> poly2)
+std::vector<double> fnn::Math::PolyMult(std::vector<double> &poly1, std::vector<double> &poly2)
 {
     std::vector<double> retPoly;
     for (auto i = 0; i < poly1.size(); i++)
@@ -143,7 +144,7 @@ std::vector<double> fnn::Math::PolyMult(std::vector<double> poly1, std::vector<d
 /// <returns>   A linear interpolation function </returns>
 ///-------------------------------------------------------------------------------------------------
 
-std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> data)
+std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> &data)
 {
     //data has to be sorted first according to x values
     DataSort(data);
@@ -166,7 +167,7 @@ std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> d
     mathematica += "}, 2^32]";
     //Print out the LERP piecewise
     std::cout << mathematica;
-    auto func = [&functions, &ranges](double x){
+    auto func = [functions, ranges](double x){
         if (x < ranges[0]){
             std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
             return -pow(2, 32);
@@ -197,7 +198,7 @@ std::function<double(double)> fnn::Math::LERP(std::vector<std::vector<double>> d
 /// <returns>   A polynomial interpolation function </returns>
 ///-------------------------------------------------------------------------------------------------
 
-std::function<double(double)> fnn::Math::LagrangeInterpolation(std::vector<std::vector<double>> data)
+std::function<double(double)> fnn::Math::LagrangeInterpolation(std::vector<std::vector<double>> &data)
 {
     //coefficient vector such that each num is a coefficient to x^index.
     std::vector<double> coef;
@@ -246,7 +247,7 @@ std::function<double(double)> fnn::Math::LagrangeInterpolation(std::vector<std::
         polynomial += "+" + std::to_string(coef[i]) + "*x^" + std::to_string(i);
     }
     std::cout << "\nPolynomial Interpolation: " << polynomial;
-    auto func = [&coef](double x){
+    auto func = [coef](double x){
         double output = 0;
         for (auto i = 0; i < coef.size(); i++)
         {
@@ -279,12 +280,13 @@ int fnn::Math::Factorial(int n)
 ///
 /// <remarks>   Phillip Kuznetsov, 4/29/2015. </remarks>
 ///
-/// <param name="matrix">   The systems of equation augmented matrix. </param>
+/// <param name="matrix">   The systems of equation augmented matrix. 
+/// 						Passes by reference. </param>
 ///
 /// <returns>   A vector of the variable values solved by completed Gauss-Jordan elimination. </returns>
 ///-------------------------------------------------------------------------------------------------
 
-std::vector<double> fnn::Math::GaussJordan(std::vector<std::vector<double>> matrix)
+std::vector<double> fnn::Math::GaussJordan(std::vector<std::vector<double>> &matrix)
 {
     //the return vector
     std::vector<double> ret(matrix.size());
@@ -377,7 +379,7 @@ std::vector<double> fnn::Math::GaussJordan(std::vector<std::vector<double>> matr
 /// <param name="data">    2D vector of input data points. Each row is a point. </param>
 ///-------------------------------------------------------------------------------------------------
 
-std::function<double(double)> fnn::Math::SSpline(std::vector<std::vector<double>> data)
+std::function<double(double)> fnn::Math::SSpline(std::vector<std::vector<double>> &data)
 {
     //make sure this actually sorts anything
     fnn::Math::DataSort(data);
@@ -442,20 +444,30 @@ std::function<double(double)> fnn::Math::SSpline(std::vector<std::vector<double>
         std::vector<double> pt1 = data[i];
         std::vector<double> pt2 = data[i + 1];
         auto a = [pt1, pt2](double x){return (pt2[0] - x) / (pt2[0] - pt1[0]); };
+
+
         //A = (x_(i+1)-x)/(x_(i+1)-x_i)
-        std::string aS = "((" + std::to_string(pt2[0]) + "-x)/" + std::to_string(pt2[0] - pt1[0]) + ")";
+        std::string aS = "((" + to_string(pt2[0]) + "-x)/" + to_string(pt2[0] - pt1[0]) + ")";
         auto b = [a](double x){return 1 - a(x); };
         //B = 1-A
+        
         std::string bS = "(1-" + aS + ")";
-        auto c = [a, pt1, pt2](double x){return (1 / 6)*(pow(a(x), 3) - a(x))*pow((pt2[0] - pt1[0]), 2); };
+        auto c = [a, pt1, pt2](double x)
+        {
+            return (1 / 6)
+                *(pow( a(x), 3 ) - a(x))
+                *(pow( (pt2[0] - pt1[0]), 2));
+        };
+
         //C = (1/6)*(A^3-A)(x_(i+1)-x_i)^2
         std::string cS = "1/6*(" + aS + "^3-" + aS + ")*(" + std::to_string(pt2[0] - pt1[0]) + ")^2";
         auto d = [b, pt1, pt2](double x){return (1 / 6)*(pow(b(x), 3) - b(x))*pow((pt2[0] - pt1[0]), 2); };
-        //D = (1/6)*(B^3-B)(x_(i+1)-x_i)^2
+        //D = (1/6)*(B^3-B)(x_(i+1)-x_i)^2 D is for this purpose
         std::string dS = "1/6*(" + bS + "^3-" + bS + ")*(" + std::to_string(pt2[0] - pt1[0]) + ")^2";
 
         functions.push_back([a, b, c, d, secondDeriv, pt1, pt2, i](double x){return a(x)*pt1[0] + b(x)*pt2[0] + c(x)*secondDeriv[i] + d(x)*secondDeriv[i + 1]; });
-        //(y_i)A+(y_(i+1))B+(d^2f_i/dx^2)C+(d^2f_(i+1)/dx^2)D, x_i <=x< x_(i+1)}
+      
+        
         mathematica += "(" + std::to_string(pt1[1]) + ")" + aS + "+(" + std::to_string(pt2[1]) + ")" + bS + "+(" + std::to_string(secondDeriv[i]) + ")"
             + cS + "+(" + std::to_string(secondDeriv[i + 1]) + ")" + dS + "," + std::to_string(pt1[0]) + "<=x<" + std::to_string(pt2[0]) + "},";//close1
         ranges.push_back(pt2[0]);
@@ -468,7 +480,7 @@ std::function<double(double)> fnn::Math::SSpline(std::vector<std::vector<double>
     //  piecewise
     std::cout << mathematica;
     //the creation of the equations
-    auto func = [&functions, &ranges](double x){
+    auto func = [functions, ranges](double x){
         if (x < ranges[0]){
             std::cout << x << " is outside of the bounds: [" << ranges[0] << "," << ranges[ranges.size() - 1] << "]. \n Returning -2^32.";
             return -pow(2, 32);
@@ -513,15 +525,15 @@ void fnn::Math::DataSort(std::vector<std::vector<double>> &data)
 ///
 /// <returns>	The mean of the data. </returns>
 
-double fnn::Math::Mean(std::vector<double>& data)
+double fnn::Math::Mean(std::vector<double> &data)
 {
-	double sum = 0;
-	int size = data.size();
-	for (std::vector<double>::iterator it = data.begin(); it != data.end(); it++)
-	{
-		sum += *it;
-	}
-	return sum / size;
+    double sum = 0;
+    int size = data.size();
+    for (std::vector<double>::iterator it = data.begin(); it != data.end(); it++)
+    {
+        sum += *it;
+    }
+    return sum / size;
 }
 
 /// <summary>	The population standard deviation of the data. </summary>
@@ -532,16 +544,16 @@ double fnn::Math::Mean(std::vector<double>& data)
 ///
 /// <returns>	The standard deviation of the data. </returns>
 
-double fnn::Math::StdDev(std::vector<double>&data)
+double fnn::Math::StdDev(std::vector<double> &data)
 {
-	double mean = Math::Mean(data);
-	int size = data.size();
-	//some of the individual deviations
-	double sum = 0;
-	for (std::vector<double>::iterator it = data.begin(); it != data.end(); it++)
-	{
-		sum += pow(*it-mean,2);
-	}
-	return pow(sum / size,1/2);
+    double mean = Math::Mean(data);
+    int size = data.size();
+    //some of the individual deviations
+    double sum = 0;
+    for (std::vector<double>::iterator it = data.begin(); it != data.end(); it++)
+    {
+        sum += pow(*it-mean,2);
+    }
+    return pow(sum / size,1/2);
 }
 

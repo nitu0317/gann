@@ -58,7 +58,7 @@ namespace fnn
 		/// <returns>	An int. </returns>
 		///-------------------------------------------------------------------------------------------------
 
-		int Train(int epochs, double minError, std::vector<double> learningParameters, bool nudging = false);
+		int Train(int epochs, double minError, std::vector<double>& learningParameters, bool nudging = false);
 
 		/// <summary>	Bounds a double to a range of min and max </summary>
 		///
@@ -70,16 +70,12 @@ namespace fnn
 		///
 		/// <returns>	A double. </returns>
 
-		static double Bound(double val, double min, double max);
+		double Bound(double val, double min, double max);
 	private:
-		DataSet& testingSet;
-		DataSet& trainingSet;
-		/// <summary>	The interpolated testing function. </summary>
-		std::function<double(double)> testingFunc;
-		/// <summary>	The interpolated training function. </summary>
-		std::function<double(double)> trainingFunc;
+		DataSet& _testingSet;
+		DataSet& _trainingSet;
 		/// <summary>	The currrent network </summary>
-		Network* network;
+		Network* _network;
 		/// <summary>	The error history. </summary>
 		std::vector<double> errorHistory;
 	};

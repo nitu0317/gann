@@ -50,7 +50,7 @@ namespace fnn
 		///
 		/// <returns>	The calculated errors. </returns>
 
-		std::vector<double(double)> calculateErrors(Network n, double step = -1);
+		std::vector<double(double)> calculateErrors(Network &nn, double step = -1);
 
 		/// <summary>	Calculates the error. </summary>
 		///
@@ -61,7 +61,7 @@ namespace fnn
 		///
 		/// <returns>	The calculated error. </returns>
 
-		double calcError(Network nn, double step = -1);
+		double calcError(Network &nn, double step = -1);
 
 		/// <summary>	Gets the size. </summary>
 		///
