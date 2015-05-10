@@ -25,7 +25,7 @@ fnn::Network::Network()
     //Caching variables.
     this->σ_cache = std::vector<std::function<double(double)>>(1); //We add one sigmoid term for the output
     this->I_cache = std::vector <std::vector<double>>(1);
-    this->Ψ_cache = std::vector<std::function<double(double)>>(1); //We add one sigmoid term for the output layer.
+    this->ψ_cache = std::vector<std::function<double(double)>>(1); //We add one sigmoid term for the output layer.
 }
 
 ///=================================================================================================
@@ -110,7 +110,7 @@ void fnn::Network::AddLayer(int x, int y)
     this->layerCount++;
     this->weights.push_back(WeightSurface(x, y));
     this->I_cache.push_back(std::vector<double>(x));
-    this->Ψ_cache.push_back([](double x){return x; });
+    this->ψ_cache.push_back([](double x){return x; });
     this->σ_cache.push_back([](double x){return x; });
 }
 
@@ -129,10 +129,11 @@ double fnn::Network::BackPropagate(std::function<double(double)> δ)
 {
     // 1. Calculate and cache all ψ^(n) for 1 \leq n \leq L
     //    We iterate over all the layers and define Ψ^(l+1).
-    this->BuildΨ_cache();
+    this->Buildψ_cache();
 
     // 2. Calculate dE/dk[0]
         // a. Calculate and cache the first lambda cache.
+        
 
     return(0.0);
 }
