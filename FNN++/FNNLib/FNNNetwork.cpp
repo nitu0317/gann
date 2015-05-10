@@ -143,7 +143,7 @@ double fnn::Network::BackPropagate(std::function<double(double)> δ)
 /// <remarks>   William Guss, 5/6/2015. </remarks>
 ///-------------------------------------------------------------------------------------------------
 
-void fnn::Network::BuildΨ_cache(void)
+void fnn::Network::Buildψ_cache(void)
 {
     //    We iterate over all the layers and define Ψ^(l+1).
     for (int l = 0; l < this->layerCount; l++){
@@ -165,7 +165,7 @@ void fnn::Network::BuildΨ_cache(void)
         int sizey = this->weights[l].GetSizeY();
 
         // Combine like terms and build the functional.
-        Ψ_cache[l+1] = ([this, polyCoeff, sizey](double x)
+        ψ_cache[l + 1] = [this, polyCoeff, sizey](double x)
         {
             double output = 0;
             for (int j = 0; j < sizey; j++)
@@ -173,7 +173,7 @@ void fnn::Network::BuildΨ_cache(void)
 
             return this->Activator.prime(output);
 
-        });
+        };
     }
 }
 
