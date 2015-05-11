@@ -1,0 +1,226 @@
+\hypertarget{classfnn_1_1_loggable}{}\section{fnn\+:\+:Loggable Class Reference}
+\label{classfnn_1_1_loggable}\index{fnn\+::\+Loggable@{fnn\+::\+Loggable}}
+
+
+A loggable.  
+
+
+
+
+{\ttfamily \#include $<$F\+N\+N\+Loggable.\+h$>$}
+
+Inheritance diagram for fnn\+:\+:Loggable\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classfnn_1_1_loggable}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classfnn_1_1_loggable_a81f34c1fc8476ac4219c2ddb01c222d0}{Loggable} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+void \hyperlink{classfnn_1_1_loggable_a28a792b13dc2e4537bab2dbe7ff8a307}{Initialize} (\hyperlink{classfnn_1_1_log_manager}{Log\+Manager} $\ast$lm, string name, bool verbose)
+\begin{DoxyCompactList}\small\item\em Constructs the logger. \end{DoxyCompactList}\item 
+void \hyperlink{classfnn_1_1_loggable_a2e3828f6cf6e21652b12968bf44a78c5}{Log} (string log, string message, bool verbose=false)
+\begin{DoxyCompactList}\small\item\em Logs a message to a specific log. \end{DoxyCompactList}\item 
+void \hyperlink{classfnn_1_1_loggable_a117c6293cf156586db28af4c5d2515d1}{Add\+Log} (string name, bool verbose)
+\begin{DoxyCompactList}\small\item\em Adds a log. \end{DoxyCompactList}\item 
+void \hyperlink{classfnn_1_1_loggable_a01d0d53a2d3ae448050b0e1b1c159d65}{Set\+Verbose} (bool verbose)
+\begin{DoxyCompactList}\small\item\em Sets a verbose. \end{DoxyCompactList}\item 
+bool \hyperlink{classfnn_1_1_loggable_a6d86a105bbc849acbfc43955b224af06}{Is\+Verbose} ()
+\begin{DoxyCompactList}\small\item\em Query if this object is verbose. \end{DoxyCompactList}\item 
+std\+::vector$<$ \hyperlink{classfnn_1_1_log}{fnn\+::\+Log} $\ast$ $>$ \hyperlink{classfnn_1_1_loggable_ac067f3c5dcae780333636567844e0533}{Get\+Logs} ()
+\begin{DoxyCompactList}\small\item\em Gets the logs. \end{DoxyCompactList}\item 
+string \hyperlink{classfnn_1_1_loggable_a9b478a42733f406508f6ef47c4fffdf7}{Get\+Name} ()
+\begin{DoxyCompactList}\small\item\em Gets the name. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A loggable. 
+
+=================================================================================================
+
+\subsubsection*{William, 4/29/2015.  }
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classfnn_1_1_loggable_a81f34c1fc8476ac4219c2ddb01c222d0}{}\index{fnn\+::\+Loggable@{fnn\+::\+Loggable}!Loggable@{Loggable}}
+\index{Loggable@{Loggable}!fnn\+::\+Loggable@{fnn\+::\+Loggable}}
+\subsubsection[{Loggable}]{\setlength{\rightskip}{0pt plus 5cm}fnn\+::\+Loggable\+::\+Loggable (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_loggable_a81f34c1fc8476ac4219c2ddb01c222d0}
+
+
+Default constructor. 
+
+=================================================================================================
+
+\subsubsection*{William, 5/2/2015.  }
+
+\subsection{Member Function Documentation}
+\hypertarget{classfnn_1_1_loggable_a117c6293cf156586db28af4c5d2515d1}{}\index{fnn\+::\+Loggable@{fnn\+::\+Loggable}!Add\+Log@{Add\+Log}}
+\index{Add\+Log@{Add\+Log}!fnn\+::\+Loggable@{fnn\+::\+Loggable}}
+\subsubsection[{Add\+Log}]{\setlength{\rightskip}{0pt plus 5cm}void fnn\+::\+Loggable\+::\+Add\+Log (
+\begin{DoxyParamCaption}
+\item[{string}]{name, }
+\item[{bool}]{verbose}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_loggable_a117c6293cf156586db28af4c5d2515d1}
+
+
+Adds a log. 
+
+=================================================================================================
+
+William, 4/29/2015. 
+
+\subsubsection*{The name.  }\hypertarget{classfnn_1_1_loggable_ac067f3c5dcae780333636567844e0533}{}\index{fnn\+::\+Loggable@{fnn\+::\+Loggable}!Get\+Logs@{Get\+Logs}}
+\index{Get\+Logs@{Get\+Logs}!fnn\+::\+Loggable@{fnn\+::\+Loggable}}
+\subsubsection[{Get\+Logs}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ {\bf fnn\+::\+Log} $\ast$ $>$ fnn\+::\+Loggable\+::\+Get\+Logs (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_loggable_ac067f3c5dcae780333636567844e0533}
+
+
+Gets the logs. 
+
+=================================================================================================
+
+William, 4/29/2015. 
+
+\subsubsection*{null if it fails, else the logs.  }\hypertarget{classfnn_1_1_loggable_a9b478a42733f406508f6ef47c4fffdf7}{}\index{fnn\+::\+Loggable@{fnn\+::\+Loggable}!Get\+Name@{Get\+Name}}
+\index{Get\+Name@{Get\+Name}!fnn\+::\+Loggable@{fnn\+::\+Loggable}}
+\subsubsection[{Get\+Name}]{\setlength{\rightskip}{0pt plus 5cm}string fnn\+::\+Loggable\+::\+Get\+Name (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_loggable_a9b478a42733f406508f6ef47c4fffdf7}
+
+
+Gets the name. 
+
+=================================================================================================
+
+William, 4/29/2015. 
+
+\subsubsection*{The name.  }\hypertarget{classfnn_1_1_loggable_a28a792b13dc2e4537bab2dbe7ff8a307}{}\index{fnn\+::\+Loggable@{fnn\+::\+Loggable}!Initialize@{Initialize}}
+\index{Initialize@{Initialize}!fnn\+::\+Loggable@{fnn\+::\+Loggable}}
+\subsubsection[{Initialize}]{\setlength{\rightskip}{0pt plus 5cm}void fnn\+::\+Loggable\+::\+Initialize (
+\begin{DoxyParamCaption}
+\item[{{\bf Log\+Manager} $\ast$}]{lm, }
+\item[{string}]{name, }
+\item[{bool}]{verbose}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_loggable_a28a792b13dc2e4537bab2dbe7ff8a307}
+
+
+Constructs the logger. 
+
+=================================================================================================
+
+=================================================================================================
+
+William, 4/29/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lm} & \mbox{[}in,out\mbox{]} If non-\/null, the lm. \\
+\hline
+{\em name} & The name. \\
+\hline
+\end{DoxyParams}
+\subsubsection*{true to verbose.  }
+
+\subsection*{}
+
+Constructs the logger. 
+
+William, 4/29/2015. 
+
+\subsubsection*{The name.  }
+
+Initializes this object. 
+
+William, 5/2/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lm} & \mbox{[}in,out\mbox{]} If non-\/null, the lm. \\
+\hline
+{\em name} & The name. \\
+\hline
+\end{DoxyParams}
+\subsubsection*{true to verbose.  }\hypertarget{classfnn_1_1_loggable_a6d86a105bbc849acbfc43955b224af06}{}\index{fnn\+::\+Loggable@{fnn\+::\+Loggable}!Is\+Verbose@{Is\+Verbose}}
+\index{Is\+Verbose@{Is\+Verbose}!fnn\+::\+Loggable@{fnn\+::\+Loggable}}
+\subsubsection[{Is\+Verbose}]{\setlength{\rightskip}{0pt plus 5cm}bool fnn\+::\+Loggable\+::\+Is\+Verbose (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_loggable_a6d86a105bbc849acbfc43955b224af06}
+
+
+Query if this object is verbose. 
+
+=================================================================================================
+
+William, 4/29/2015. 
+
+\subsubsection*{true if verbose, false if not.  }\hypertarget{classfnn_1_1_loggable_a2e3828f6cf6e21652b12968bf44a78c5}{}\index{fnn\+::\+Loggable@{fnn\+::\+Loggable}!Log@{Log}}
+\index{Log@{Log}!fnn\+::\+Loggable@{fnn\+::\+Loggable}}
+\subsubsection[{Log}]{\setlength{\rightskip}{0pt plus 5cm}void fnn\+::\+Loggable\+::\+Log (
+\begin{DoxyParamCaption}
+\item[{string}]{log, }
+\item[{string}]{message, }
+\item[{bool}]{verbose = {\ttfamily false}}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_loggable_a2e3828f6cf6e21652b12968bf44a78c5}
+
+
+Logs a message to a specific log. 
+
+=================================================================================================
+
+William, 4/29/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em log} & The log. \\
+\hline
+\end{DoxyParams}
+\subsubsection*{The message.  }
+
+=================================================================================================
+
+William, 4/29/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em log} & The log. \\
+\hline
+{\em message} & The message. \\
+\hline
+\end{DoxyParams}
+\subsubsection*{Whether or not (upon creation of a new log the log is verbose)  }\hypertarget{classfnn_1_1_loggable_a01d0d53a2d3ae448050b0e1b1c159d65}{}\index{fnn\+::\+Loggable@{fnn\+::\+Loggable}!Set\+Verbose@{Set\+Verbose}}
+\index{Set\+Verbose@{Set\+Verbose}!fnn\+::\+Loggable@{fnn\+::\+Loggable}}
+\subsubsection[{Set\+Verbose}]{\setlength{\rightskip}{0pt plus 5cm}void fnn\+::\+Loggable\+::\+Set\+Verbose (
+\begin{DoxyParamCaption}
+\item[{bool}]{verbose}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_loggable_a01d0d53a2d3ae448050b0e1b1c159d65}
+
+
+Sets a verbose. 
+
+=================================================================================================
+
+William, 4/29/2015. 
+
+\subsubsection*{true to verbose.  }
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+F\+N\+N++/\+F\+N\+N\+Lib/F\+N\+N\+Loggable.\+h\item 
+F\+N\+N++/\+F\+N\+N\+Lib/F\+N\+N\+Loggable.\+cpp\end{DoxyCompactItemize}
