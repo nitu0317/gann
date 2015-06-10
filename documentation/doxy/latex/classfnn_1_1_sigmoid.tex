@@ -1,0 +1,188 @@
+\hypertarget{classfnn_1_1_sigmoid}{}\section{fnn\+:\+:Sigmoid Class Reference}
+\label{classfnn_1_1_sigmoid}\index{fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classfnn_1_1_sigmoid_a3ea6f3057765aaf64000c87601b4dedb}{Sigmoid} (std\+::function$<$ double(double)$>$ f, std\+::function$<$ double(double)$>$ fprime)
+\begin{DoxyCompactList}\small\item\em Constructs a sigmoid function \end{DoxyCompactList}\item 
+\hyperlink{classfnn_1_1_sigmoid_a67b28b32d36e6e831051677234b0e2a4}{Sigmoid} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+double \hyperlink{classfnn_1_1_sigmoid_a90bd1a37bd4ad4f5a4074f364430b85d}{prime} (double x)
+\begin{DoxyCompactList}\small\item\em Evaluates the derivative of the activation function. \end{DoxyCompactList}\item 
+double \hyperlink{classfnn_1_1_sigmoid_afc3a732e3ab0e5b00601564d4e220283}{operator()} (double x)
+\begin{DoxyCompactList}\small\item\em Evaluates the sigmoid. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classfnn_1_1_sigmoid}{Sigmoid} \hyperlink{classfnn_1_1_sigmoid_a15cba16e03aeb3bca3429640e513bbc8}{Linear} ()
+\begin{DoxyCompactList}\small\item\em Gets the linear sigmoid activation. \end{DoxyCompactList}\item 
+static \hyperlink{classfnn_1_1_sigmoid}{Sigmoid} \hyperlink{classfnn_1_1_sigmoid_a67434428fa6cc846ea4c7cb9a5d04983}{Logistic} ()
+\begin{DoxyCompactList}\small\item\em The logistic activation function. \end{DoxyCompactList}\item 
+static \hyperlink{classfnn_1_1_sigmoid}{Sigmoid} \hyperlink{classfnn_1_1_sigmoid_a616038ee95650af8b0a14c8b5ee20799}{Tanh} ()
+\begin{DoxyCompactList}\small\item\em Gets the hyperbolic tangent activation function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classfnn_1_1_sigmoid_a3ea6f3057765aaf64000c87601b4dedb}{}\index{fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}!Sigmoid@{Sigmoid}}
+\index{Sigmoid@{Sigmoid}!fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}}
+\subsubsection[{Sigmoid}]{\setlength{\rightskip}{0pt plus 5cm}fnn\+::\+Sigmoid\+::\+Sigmoid (
+\begin{DoxyParamCaption}
+\item[{std\+::function$<$ double(double)$>$}]{g, }
+\item[{std\+::function$<$ double(double)$>$}]{gprime}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_sigmoid_a3ea6f3057765aaf64000c87601b4dedb}
+
+
+Constructs a sigmoid function 
+
+Default constructor. Do nothing.\+t 
+
+=================================================================================================
+
+William, 4/10/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & The std\+::function$<$double(double)$>$ to process. \\
+\hline
+\end{DoxyParams}
+\subsubsection*{The fprime.  }
+
+=================================================================================================
+
+\subsubsection*{William Guss, 4/12/2015.  }\hypertarget{classfnn_1_1_sigmoid_a67b28b32d36e6e831051677234b0e2a4}{}\index{fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}!Sigmoid@{Sigmoid}}
+\index{Sigmoid@{Sigmoid}!fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}}
+\subsubsection[{Sigmoid}]{\setlength{\rightskip}{0pt plus 5cm}fnn\+::\+Sigmoid\+::\+Sigmoid (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_sigmoid_a67b28b32d36e6e831051677234b0e2a4}
+
+
+Default constructor. 
+
+Default constructor. Do nothing.\+t 
+
+=================================================================================================
+
+\subsubsection*{William Guss, 4/12/2015.  }
+
+\subsection{Member Function Documentation}
+\hypertarget{classfnn_1_1_sigmoid_a15cba16e03aeb3bca3429640e513bbc8}{}\index{fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}!Linear@{Linear}}
+\index{Linear@{Linear}!fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}}
+\subsubsection[{Linear}]{\setlength{\rightskip}{0pt plus 5cm}{\bf fnn\+::\+Sigmoid} fnn\+::\+Sigmoid\+::\+Linear (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_sigmoid_a15cba16e03aeb3bca3429640e513bbc8}
+
+
+Gets the linear sigmoid activation. 
+
+=================================================================================================
+
+William, 4/10/2015. 
+
+\subsubsection*{A \hyperlink{classfnn_1_1_sigmoid}{Sigmoid}.  }\hypertarget{classfnn_1_1_sigmoid_a67434428fa6cc846ea4c7cb9a5d04983}{}\index{fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}!Logistic@{Logistic}}
+\index{Logistic@{Logistic}!fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}}
+\subsubsection[{Logistic}]{\setlength{\rightskip}{0pt plus 5cm}{\bf fnn\+::\+Sigmoid} fnn\+::\+Sigmoid\+::\+Logistic (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_sigmoid_a67434428fa6cc846ea4c7cb9a5d04983}
+
+
+The logistic activation function. 
+
+=================================================================================================
+
+William, 4/10/2015. 
+
+\subsubsection*{A \hyperlink{classfnn_1_1_sigmoid}{Sigmoid}.  }\hypertarget{classfnn_1_1_sigmoid_afc3a732e3ab0e5b00601564d4e220283}{}\index{fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}!operator()@{operator()}}
+\index{operator()@{operator()}!fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}}
+\subsubsection[{operator()}]{\setlength{\rightskip}{0pt plus 5cm}double fnn\+::\+Sigmoid\+::operator() (
+\begin{DoxyParamCaption}
+\item[{double}]{x}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_sigmoid_afc3a732e3ab0e5b00601564d4e220283}
+
+
+Evaluates the sigmoid. 
+
+=================================================================================================
+
+William, 4/10/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The x coordinate. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{The result of the operation.  }\hypertarget{classfnn_1_1_sigmoid_a90bd1a37bd4ad4f5a4074f364430b85d}{}\index{fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}!prime@{prime}}
+\index{prime@{prime}!fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}}
+\subsubsection[{prime}]{\setlength{\rightskip}{0pt plus 5cm}double fnn\+::\+Sigmoid\+::prime (
+\begin{DoxyParamCaption}
+\item[{double}]{x}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_sigmoid_a90bd1a37bd4ad4f5a4074f364430b85d}
+
+
+Evaluates the derivative of the activation function. 
+
+=================================================================================================
+
+=================================================================================================
+
+William, 4/10/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The x coordinate. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{A double.  }
+
+\subsection*{}
+
+Evaluates the derivative of the activation function. 
+
+William, 4/10/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The x coordinate. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{A double.  }\hypertarget{classfnn_1_1_sigmoid_a616038ee95650af8b0a14c8b5ee20799}{}\index{fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}!Tanh@{Tanh}}
+\index{Tanh@{Tanh}!fnn\+::\+Sigmoid@{fnn\+::\+Sigmoid}}
+\subsubsection[{Tanh}]{\setlength{\rightskip}{0pt plus 5cm}{\bf fnn\+::\+Sigmoid} fnn\+::\+Sigmoid\+::\+Tanh (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_sigmoid_a616038ee95650af8b0a14c8b5ee20799}
+
+
+Gets the hyperbolic tangent activation function. 
+
+=================================================================================================
+
+William, 4/10/2015. 
+
+\subsubsection*{A \hyperlink{classfnn_1_1_sigmoid}{Sigmoid}.  }
+
+=================================================================================================
+
+William, 4/10/2015. $<$/remaqrks$>$
+
+\subsubsection*{A \hyperlink{classfnn_1_1_sigmoid}{Sigmoid}.  }
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+F\+N\+N++/\+F\+N\+N\+Lib/F\+N\+N\+Sigmoid.\+h\item 
+F\+N\+N++/\+F\+N\+N\+Lib/F\+N\+N\+Sigmoid.\+cpp\end{DoxyCompactItemize}

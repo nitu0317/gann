@@ -1,0 +1,228 @@
+\hypertarget{classfnn_1_1_network}{}\section{fnn\+:\+:Network Class Reference}
+\label{classfnn_1_1_network}\index{fnn\+::\+Network@{fnn\+::\+Network}}
+
+
+The main class of operation on the functional neural networks.  
+
+
+
+
+{\ttfamily \#include $<$F\+N\+N\+Network.\+h$>$}
+
+Inheritance diagram for fnn\+:\+:Network\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classfnn_1_1_network}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classfnn_1_1_network_a5dd4695e1ce543dafc188d86cd691465}{Network} ()
+\begin{DoxyCompactList}\small\item\em Constructs a functional neural network.. \end{DoxyCompactList}\item 
+std\+::function$<$ double(double)$>$ \hyperlink{classfnn_1_1_network_a9e3f194d0b23fbdd92873b202798e1f9}{Feed\+Forward} (std\+::function$<$ double(double)$>$ ξ)
+\begin{DoxyCompactList}\small\item\em Runs the network using the fast feedforward algorithm. The algorithm caches following that described in the paper. \end{DoxyCompactList}\item 
+double \hyperlink{classfnn_1_1_network_a46144de037977a237b058db79bdb5cad}{Back\+Propagate} (std\+::function$<$ double(double)$>$ δ)
+\begin{DoxyCompactList}\small\item\em Back propagate using the Super Pro Algo developed by William Guss and Patrick Chen. \end{DoxyCompactList}\item 
+void \hyperlink{classfnn_1_1_network_a16e2878c6cc2dcb053c8c9ead48cd021}{Set\+Activation} (\hyperlink{classfnn_1_1_sigmoid}{Sigmoid} activator)
+\begin{DoxyCompactList}\small\item\em Sets an activation. \end{DoxyCompactList}\item 
+void \hyperlink{classfnn_1_1_network_a96ecfd11618f4abb26df9495bb904725}{Add\+Layer} (int x, int y)
+\begin{DoxyCompactList}\small\item\em Adds a layer to \textquotesingle{}y\textquotesingle{}. \end{DoxyCompactList}\item 
+double \hyperlink{classfnn_1_1_network_a38ed0637972cb29a3a0bc2b55a52979a}{Train} (\hyperlink{structfnn_1_1_data_point}{Data\+Point} \&dp, std\+::vector$<$ double $>$ learning\+Parameters)
+\begin{DoxyCompactList}\small\item\em Trains the network \end{DoxyCompactList}\item 
+void \hyperlink{classfnn_1_1_network_a8d794dcaf3949c7363950b61f572b78b}{Nudge\+Weights} ()
+\begin{DoxyCompactList}\small\item\em Nudge weights. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classfnn_1_1_sigmoid}{Sigmoid} \hyperlink{classfnn_1_1_network_a28a1473ecd20a30d85e4a256dc2cf12a}{Activator}
+\begin{DoxyCompactList}\small\item\em The primary activator type for the neural network. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The main class of operation on the functional neural networks. 
+
+=================================================================================================
+
+\subsubsection*{William, 4/9/2015.  }
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classfnn_1_1_network_a5dd4695e1ce543dafc188d86cd691465}{}\index{fnn\+::\+Network@{fnn\+::\+Network}!Network@{Network}}
+\index{Network@{Network}!fnn\+::\+Network@{fnn\+::\+Network}}
+\subsubsection[{Network}]{\setlength{\rightskip}{0pt plus 5cm}fnn\+::\+Network\+::\+Network (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_network_a5dd4695e1ce543dafc188d86cd691465}
+
+
+Constructs a functional neural network.. 
+
+=================================================================================================
+
+=================================================================================================
+
+William, 4/10/2015. 
+
+\subsubsection*{The layer count.  }
+
+\subsection*{}
+
+Constructs a functional neural network. 
+
+William, 4/10/2015. 
+
+\subsubsection*{The layer count.  }
+
+\subsection{Member Function Documentation}
+\hypertarget{classfnn_1_1_network_a96ecfd11618f4abb26df9495bb904725}{}\index{fnn\+::\+Network@{fnn\+::\+Network}!Add\+Layer@{Add\+Layer}}
+\index{Add\+Layer@{Add\+Layer}!fnn\+::\+Network@{fnn\+::\+Network}}
+\subsubsection[{Add\+Layer}]{\setlength{\rightskip}{0pt plus 5cm}void fnn\+::\+Network\+::\+Add\+Layer (
+\begin{DoxyParamCaption}
+\item[{int}]{x, }
+\item[{int}]{y}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_network_a96ecfd11618f4abb26df9495bb904725}
+
+
+Adds a layer to \textquotesingle{}y\textquotesingle{}. 
+
+=================================================================================================
+
+William Guss, 4/12/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The x coordinate. \\
+\hline
+\end{DoxyParams}
+\subsubsection*{The y coordinate.  }\hypertarget{classfnn_1_1_network_a46144de037977a237b058db79bdb5cad}{}\index{fnn\+::\+Network@{fnn\+::\+Network}!Back\+Propagate@{Back\+Propagate}}
+\index{Back\+Propagate@{Back\+Propagate}!fnn\+::\+Network@{fnn\+::\+Network}}
+\subsubsection[{Back\+Propagate}]{\setlength{\rightskip}{0pt plus 5cm}double fnn\+::\+Network\+::\+Back\+Propagate (
+\begin{DoxyParamCaption}
+\item[{std\+::function$<$ double(double)$>$}]{δ}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_network_a46144de037977a237b058db79bdb5cad}
+
+
+Back propagate using the Super Pro Algo developed by William Guss and Patrick Chen. 
+
+=================================================================================================
+
+William Guss, 5/6/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em δ} & The desired function delta δ. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{The total integrated error over the last interval.  }\hypertarget{classfnn_1_1_network_a9e3f194d0b23fbdd92873b202798e1f9}{}\index{fnn\+::\+Network@{fnn\+::\+Network}!Feed\+Forward@{Feed\+Forward}}
+\index{Feed\+Forward@{Feed\+Forward}!fnn\+::\+Network@{fnn\+::\+Network}}
+\subsubsection[{Feed\+Forward}]{\setlength{\rightskip}{0pt plus 5cm}std\+::function$<$ double(double)$>$ fnn\+::\+Network\+::\+Feed\+Forward (
+\begin{DoxyParamCaption}
+\item[{std\+::function$<$ double(double)$>$}]{ξ}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_network_a9e3f194d0b23fbdd92873b202798e1f9}
+
+
+Runs the network using the fast feedforward algorithm. The algorithm caches following that described in the paper. 
+
+=================================================================================================
+
+William, 4/10/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ξ} & The input, ξ. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{The ouput, F\mbox{[}ξ\mbox{]}.  }\hypertarget{classfnn_1_1_network_a8d794dcaf3949c7363950b61f572b78b}{}\index{fnn\+::\+Network@{fnn\+::\+Network}!Nudge\+Weights@{Nudge\+Weights}}
+\index{Nudge\+Weights@{Nudge\+Weights}!fnn\+::\+Network@{fnn\+::\+Network}}
+\subsubsection[{Nudge\+Weights}]{\setlength{\rightskip}{0pt plus 5cm}void fnn\+::\+Network\+::\+Nudge\+Weights (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_network_a8d794dcaf3949c7363950b61f572b78b}
+
+
+Nudge weights. 
+
+Phillip Kuznetsov, 5/8/2015. \hypertarget{classfnn_1_1_network_a16e2878c6cc2dcb053c8c9ead48cd021}{}\index{fnn\+::\+Network@{fnn\+::\+Network}!Set\+Activation@{Set\+Activation}}
+\index{Set\+Activation@{Set\+Activation}!fnn\+::\+Network@{fnn\+::\+Network}}
+\subsubsection[{Set\+Activation}]{\setlength{\rightskip}{0pt plus 5cm}void fnn\+::\+Network\+::\+Set\+Activation (
+\begin{DoxyParamCaption}
+\item[{{\bf Sigmoid}}]{activator}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_network_a16e2878c6cc2dcb053c8c9ead48cd021}
+
+
+Sets an activation. 
+
+=================================================================================================
+
+William Guss, 4/11/2015. 
+
+\subsubsection*{The activator.  }\hypertarget{classfnn_1_1_network_a38ed0637972cb29a3a0bc2b55a52979a}{}\index{fnn\+::\+Network@{fnn\+::\+Network}!Train@{Train}}
+\index{Train@{Train}!fnn\+::\+Network@{fnn\+::\+Network}}
+\subsubsection[{Train}]{\setlength{\rightskip}{0pt plus 5cm}double fnn\+::\+Network\+::\+Train (
+\begin{DoxyParamCaption}
+\item[{{\bf Data\+Point} \&}]{dp, }
+\item[{std\+::vector$<$ double $>$}]{learning\+Parameters}
+\end{DoxyParamCaption}
+)}\label{classfnn_1_1_network_a38ed0637972cb29a3a0bc2b55a52979a}
+
+
+Trains the network 
+
+Trains the network. 
+
+Phillip Kuznetsov, 5/8/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ds} & The current datapoint \\
+\hline
+{\em learning\+Parameters} & Options for controlling the learning. \\
+\hline
+\end{DoxyParams}
+
+
+\begin{DoxyReturn}{Returns}
+A double. 
+\end{DoxyReturn}
+
+
+Phillip Kuznetsov, 5/8/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dp} & The current datapoint. \\
+\hline
+{\em learning\+Parameters} & Options for controlling the learning. \\
+\hline
+\end{DoxyParams}
+
+
+\begin{DoxyReturn}{Returns}
+A double. 
+\end{DoxyReturn}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classfnn_1_1_network_a28a1473ecd20a30d85e4a256dc2cf12a}{}\index{fnn\+::\+Network@{fnn\+::\+Network}!Activator@{Activator}}
+\index{Activator@{Activator}!fnn\+::\+Network@{fnn\+::\+Network}}
+\subsubsection[{Activator}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Sigmoid} fnn\+::\+Network\+::\+Activator}\label{classfnn_1_1_network_a28a1473ecd20a30d85e4a256dc2cf12a}
+
+
+The primary activator type for the neural network. 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+F\+N\+N++/\+F\+N\+N\+Lib/F\+N\+N\+Network.\+h\item 
+F\+N\+N++/\+F\+N\+N\+Lib/F\+N\+N\+Network.\+cpp\end{DoxyCompactItemize}

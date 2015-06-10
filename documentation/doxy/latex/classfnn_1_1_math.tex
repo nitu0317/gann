@@ -1,0 +1,456 @@
+\hypertarget{classfnn_1_1_math}{}\section{fnn\+:\+:Math Class Reference}
+\label{classfnn_1_1_math}\index{fnn\+::\+Math@{fnn\+::\+Math}}
+
+
+The main mathematics helper class for F\+N\+N\+L\+I\+B  
+
+
+
+
+{\ttfamily \#include $<$F\+N\+N\+Math.\+h$>$}
+
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static double \hyperlink{classfnn_1_1_math_a22635237c10b30c61d0eadc944f0bd29}{N\+Integrate} (std\+::function$<$ double(double)$>$ \&f, double a, double b, double eps)
+\begin{DoxyCompactList}\small\item\em Numerically integrates any integrable function on a compact Hausdorff space. Integration occurs using Simpson\textquotesingle{}s rule. \end{DoxyCompactList}\item 
+static double \hyperlink{classfnn_1_1_math_a2480fe29e114e12d9927b3f79ac6fc43}{N\+Integrate} (std\+::function$<$ double(double)$>$ \&f, double a, double b)
+\begin{DoxyCompactList}\small\item\em Numerically integrates any integrable function using Simpson\textquotesingle{}s rule with auto scaling. \end{DoxyCompactList}\item 
+static double \hyperlink{classfnn_1_1_math_a4e6ce151aa117f06b758fd37b76bb7de}{Uniform\+Real} (double min=0.\+0, double max=0.\+0)
+\begin{DoxyCompactList}\small\item\em Uniform real. \end{DoxyCompactList}\item 
+static double \hyperlink{classfnn_1_1_math_ad27de3d10960c2fd07ad68bccfffb192}{Gaussian\+Real} (double mean=0.\+0, double dev=1.\+0)
+\begin{DoxyCompactList}\small\item\em Gaussian real. \end{DoxyCompactList}\item 
+static std\+::vector$<$ double $>$ \hyperlink{classfnn_1_1_math_adad1b0610a61cf1f547902c63ac8f5f7}{Poly\+Mult} (std\+::vector$<$ double $>$ \&poly1, std\+::vector$<$ double $>$ \&poly2)
+\begin{DoxyCompactList}\small\item\em A polynomial multiplication helper \end{DoxyCompactList}\item 
+static std\+::function$<$ double(double)$>$ \hyperlink{classfnn_1_1_math_a14cd337326da37fa8e6943f868e5eace}{L\+E\+R\+P} (std\+::vector$<$ std\+::vector$<$ double $>$$>$ \&data)
+\begin{DoxyCompactList}\small\item\em A linear interpolation algorithm \end{DoxyCompactList}\item 
+static std\+::function$<$ double(double)$>$ \hyperlink{classfnn_1_1_math_a7f538718ad625d83a574b338a32d143e}{Lagrange\+Interpolation} (std\+::vector$<$ std\+::vector$<$ double $>$$>$ \&data)
+\begin{DoxyCompactList}\small\item\em A polynomial interpolation algorithm using the Lagrange Interpolation Polynomial according to \href{http://en.wikipedia.org/wiki/Polynomial_interpolation}{\tt http\+://en.\+wikipedia.\+org/wiki/\+Polynomial\+\_\+interpolation} \end{DoxyCompactList}\item 
+static int \hyperlink{classfnn_1_1_math_ad4998cc7ea2c63175d926eafedefd8c2}{Factorial} (int n)
+\begin{DoxyCompactList}\small\item\em Factorial implementation. \end{DoxyCompactList}\item 
+static std\+::vector$<$ double $>$ \hyperlink{classfnn_1_1_math_ac1d0f387a23294e585489c34dfccd2e4}{Gauss\+Jordan} (std\+::vector$<$ std\+::vector$<$ double $>$$>$ \&matrix)
+\begin{DoxyCompactList}\small\item\em Gauss Jordan elimination for matrices. \end{DoxyCompactList}\item 
+static std\+::function$<$ double(double)$>$ \hyperlink{classfnn_1_1_math_a6ae76ac184b97909719434da6081cc9c}{S\+Spline} (std\+::vector$<$ std\+::vector$<$ double $>$$>$ \&data)
+\begin{DoxyCompactList}\small\item\em A simple spline interpolation algorithm as described in \href{http://www.geos.ed.ac.uk/~yliu23/docs/lect_spline.pdf}{\tt http\+://www.\+geos.\+ed.\+ac.\+uk/$\sim$yliu23/docs/lect\+\_\+spline.\+pdf}. Makes the assumption that the second derivative at the boundaries is equal to 0. \end{DoxyCompactList}\item 
+static void \hyperlink{classfnn_1_1_math_a01efb86617a91478a89b94f83935234c}{Data\+Sort} (std\+::vector$<$ std\+::vector$<$ double $>$$>$ \&data)
+\begin{DoxyCompactList}\small\item\em Data sort algorthim to sort by x-\/values of the data. Useful for the interpolation algorithms. \end{DoxyCompactList}\item 
+static double \hyperlink{classfnn_1_1_math_ad08136c5ea2f35f1195d20781378ef76}{Mean} (std\+::vector$<$ double $>$ \&data)
+\begin{DoxyCompactList}\small\item\em Determines the mean of the input vector. \end{DoxyCompactList}\item 
+static double \hyperlink{classfnn_1_1_math_a51cadf575a006e30fcb43845a010f5bd}{Std\+Dev} (std\+::vector$<$ double $>$ \&data)
+\begin{DoxyCompactList}\small\item\em Standard deviation of the data. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The main mathematics helper class for F\+N\+N\+L\+I\+B 
+
+=================================================================================================
+
+\subsubsection*{William Guss, 4/6/2015.  }
+
+\subsection{Member Function Documentation}
+\hypertarget{classfnn_1_1_math_a01efb86617a91478a89b94f83935234c}{}\index{fnn\+::\+Math@{fnn\+::\+Math}!Data\+Sort@{Data\+Sort}}
+\index{Data\+Sort@{Data\+Sort}!fnn\+::\+Math@{fnn\+::\+Math}}
+\subsubsection[{Data\+Sort}]{\setlength{\rightskip}{0pt plus 5cm}void fnn\+::\+Math\+::\+Data\+Sort (
+\begin{DoxyParamCaption}
+\item[{std\+::vector$<$ std\+::vector$<$ double $>$$>$ \&}]{data}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_math_a01efb86617a91478a89b94f83935234c}
+
+
+Data sort algorthim to sort by x-\/values of the data. Useful for the interpolation algorithms. 
+
+=================================================================================================
+
+Phillip Kuznetsov, 4/29/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & 2\+D vector of input data points. Each row is a point. \\
+\hline
+\end{DoxyParams}
+
+
+
+
+=================================================================================================
+
+Phillip Kuznetsov, 4/29/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & 2\+D vector of input data points. Each row is a point. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{A 2\+D vector of the same points sorted.  }\hypertarget{classfnn_1_1_math_ad4998cc7ea2c63175d926eafedefd8c2}{}\index{fnn\+::\+Math@{fnn\+::\+Math}!Factorial@{Factorial}}
+\index{Factorial@{Factorial}!fnn\+::\+Math@{fnn\+::\+Math}}
+\subsubsection[{Factorial}]{\setlength{\rightskip}{0pt plus 5cm}int fnn\+::\+Math\+::\+Factorial (
+\begin{DoxyParamCaption}
+\item[{int}]{n}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_math_ad4998cc7ea2c63175d926eafedefd8c2}
+
+
+Factorial implementation. 
+
+=================================================================================================
+
+William, 4/26/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & The int to process. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{An int.  }\hypertarget{classfnn_1_1_math_ad27de3d10960c2fd07ad68bccfffb192}{}\index{fnn\+::\+Math@{fnn\+::\+Math}!Gaussian\+Real@{Gaussian\+Real}}
+\index{Gaussian\+Real@{Gaussian\+Real}!fnn\+::\+Math@{fnn\+::\+Math}}
+\subsubsection[{Gaussian\+Real}]{\setlength{\rightskip}{0pt plus 5cm}double fnn\+::\+Math\+::\+Gaussian\+Real (
+\begin{DoxyParamCaption}
+\item[{double}]{mean = {\ttfamily 0.0}, }
+\item[{double}]{dev = {\ttfamily 1.0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_math_ad27de3d10960c2fd07ad68bccfffb192}
+
+
+Gaussian real. 
+
+=================================================================================================
+
+William Guss, 4/11/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mean} & The mean. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{A double.  }\hypertarget{classfnn_1_1_math_ac1d0f387a23294e585489c34dfccd2e4}{}\index{fnn\+::\+Math@{fnn\+::\+Math}!Gauss\+Jordan@{Gauss\+Jordan}}
+\index{Gauss\+Jordan@{Gauss\+Jordan}!fnn\+::\+Math@{fnn\+::\+Math}}
+\subsubsection[{Gauss\+Jordan}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ double $>$ fnn\+::\+Math\+::\+Gauss\+Jordan (
+\begin{DoxyParamCaption}
+\item[{std\+::vector$<$ std\+::vector$<$ double $>$$>$ \&}]{matrix}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_math_ac1d0f387a23294e585489c34dfccd2e4}
+
+
+Gauss Jordan elimination for matrices. 
+
+=================================================================================================
+
+Phillip Kuznetsov, 4/29/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em matrix} & The systems of equation augmented matrix. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{A vector of the variable values solved by completed Gauss-\/\+Jordan elimination.  }
+
+=================================================================================================
+
+Phillip Kuznetsov, 4/29/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em matrix} & The systems of equation augmented matrix. Passes by reference. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{A vector of the variable values solved by completed Gauss-\/\+Jordan elimination.  }\hypertarget{classfnn_1_1_math_a7f538718ad625d83a574b338a32d143e}{}\index{fnn\+::\+Math@{fnn\+::\+Math}!Lagrange\+Interpolation@{Lagrange\+Interpolation}}
+\index{Lagrange\+Interpolation@{Lagrange\+Interpolation}!fnn\+::\+Math@{fnn\+::\+Math}}
+\subsubsection[{Lagrange\+Interpolation}]{\setlength{\rightskip}{0pt plus 5cm}std\+::function$<$ double(double)$>$ fnn\+::\+Math\+::\+Lagrange\+Interpolation (
+\begin{DoxyParamCaption}
+\item[{std\+::vector$<$ std\+::vector$<$ double $>$$>$ \&}]{data}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_math_a7f538718ad625d83a574b338a32d143e}
+
+
+A polynomial interpolation algorithm using the Lagrange Interpolation Polynomial according to \href{http://en.wikipedia.org/wiki/Polynomial_interpolation}{\tt http\+://en.\+wikipedia.\+org/wiki/\+Polynomial\+\_\+interpolation} 
+
+=================================================================================================
+
+Phillip Kuznetsov, 4/19/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & 2\+D vector of input data points. Each row is a point. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{A polynomial interpolation function  }\hypertarget{classfnn_1_1_math_a14cd337326da37fa8e6943f868e5eace}{}\index{fnn\+::\+Math@{fnn\+::\+Math}!L\+E\+R\+P@{L\+E\+R\+P}}
+\index{L\+E\+R\+P@{L\+E\+R\+P}!fnn\+::\+Math@{fnn\+::\+Math}}
+\subsubsection[{L\+E\+R\+P}]{\setlength{\rightskip}{0pt plus 5cm}std\+::function$<$ double(double)$>$ fnn\+::\+Math\+::\+L\+E\+R\+P (
+\begin{DoxyParamCaption}
+\item[{std\+::vector$<$ std\+::vector$<$ double $>$$>$ \&}]{data}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_math_a14cd337326da37fa8e6943f868e5eace}
+
+
+A linear interpolation algorithm 
+
+=================================================================================================
+
+Phillip Kuznetsov, 4/18/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & 2\+D vector of input data points \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{A linear interpolation function  }\hypertarget{classfnn_1_1_math_ad08136c5ea2f35f1195d20781378ef76}{}\index{fnn\+::\+Math@{fnn\+::\+Math}!Mean@{Mean}}
+\index{Mean@{Mean}!fnn\+::\+Math@{fnn\+::\+Math}}
+\subsubsection[{Mean}]{\setlength{\rightskip}{0pt plus 5cm}double fnn\+::\+Math\+::\+Mean (
+\begin{DoxyParamCaption}
+\item[{std\+::vector$<$ double $>$ \&}]{data}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_math_ad08136c5ea2f35f1195d20781378ef76}
+
+
+Determines the mean of the input vector. 
+
+Phillip Kuznetsov, 5/6/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & The data. \\
+\hline
+\end{DoxyParams}
+
+
+\begin{DoxyReturn}{Returns}
+The mean of the data 
+\end{DoxyReturn}
+
+
+Phillip Kuznetsov, 5/6/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & The data. \\
+\hline
+\end{DoxyParams}
+
+
+\begin{DoxyReturn}{Returns}
+The mean of the data. 
+\end{DoxyReturn}
+\hypertarget{classfnn_1_1_math_a22635237c10b30c61d0eadc944f0bd29}{}\index{fnn\+::\+Math@{fnn\+::\+Math}!N\+Integrate@{N\+Integrate}}
+\index{N\+Integrate@{N\+Integrate}!fnn\+::\+Math@{fnn\+::\+Math}}
+\subsubsection[{N\+Integrate}]{\setlength{\rightskip}{0pt plus 5cm}double fnn\+::\+Math\+::\+N\+Integrate (
+\begin{DoxyParamCaption}
+\item[{std\+::function$<$ double(double)$>$ \&}]{f, }
+\item[{double}]{a, }
+\item[{double}]{b, }
+\item[{double}]{eps}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_math_a22635237c10b30c61d0eadc944f0bd29}
+
+
+Numerically integrates any integrable function on a compact Hausdorff space. Integration occurs using Simpson\textquotesingle{}s rule. 
+
+=================================================================================================
+
+William Guss, 4/6/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & The function to integrate. \\
+\hline
+{\em a} & The lower bound of integration. \\
+\hline
+{\em b} & The upper bound of integration. \\
+\hline
+{\em eps} & The step-\/size of integration using Simpson\textquotesingle{}s rule.\\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{The result.  }
+
+=================================================================================================
+
+William Guss, 4/6/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & The function to integrate. \\
+\hline
+{\em a} & The lower bound of integration. \\
+\hline
+{\em b} & The upper bound of integration. \\
+\hline
+{\em eps} & The step-\/size of integration using Simpson\textquotesingle{}s rule. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{The result.  }\hypertarget{classfnn_1_1_math_a2480fe29e114e12d9927b3f79ac6fc43}{}\index{fnn\+::\+Math@{fnn\+::\+Math}!N\+Integrate@{N\+Integrate}}
+\index{N\+Integrate@{N\+Integrate}!fnn\+::\+Math@{fnn\+::\+Math}}
+\subsubsection[{N\+Integrate}]{\setlength{\rightskip}{0pt plus 5cm}double fnn\+::\+Math\+::\+N\+Integrate (
+\begin{DoxyParamCaption}
+\item[{std\+::function$<$ double(double)$>$ \&}]{f, }
+\item[{double}]{a, }
+\item[{double}]{b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_math_a2480fe29e114e12d9927b3f79ac6fc43}
+
+
+Numerically integrates any integrable function using Simpson\textquotesingle{}s rule with auto scaling. 
+
+=================================================================================================
+
+William Guss, 4/6/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & The function to integrate. \\
+\hline
+{\em a} & The lower bound of integration. \\
+\hline
+{\em b} & The upper bound of integration. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{The result.  }\hypertarget{classfnn_1_1_math_adad1b0610a61cf1f547902c63ac8f5f7}{}\index{fnn\+::\+Math@{fnn\+::\+Math}!Poly\+Mult@{Poly\+Mult}}
+\index{Poly\+Mult@{Poly\+Mult}!fnn\+::\+Math@{fnn\+::\+Math}}
+\subsubsection[{Poly\+Mult}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ double $>$ fnn\+::\+Math\+::\+Poly\+Mult (
+\begin{DoxyParamCaption}
+\item[{std\+::vector$<$ double $>$ \&}]{poly1, }
+\item[{std\+::vector$<$ double $>$ \&}]{poly2}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_math_adad1b0610a61cf1f547902c63ac8f5f7}
+
+
+A polynomial multiplication helper 
+
+=================================================================================================
+
+Phillip Kuznetsov, 4/19/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em poly1} & A vector of the coefficients. Each index is the power which x is raised to\\
+\hline
+\end{DoxyParams}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em poly2} & A vector of the second polynomial coefficients./param$>$\\
+\hline
+\end{DoxyParams}
+\subsubsection*{A vector of coefficients for hte polynomial  }\hypertarget{classfnn_1_1_math_a6ae76ac184b97909719434da6081cc9c}{}\index{fnn\+::\+Math@{fnn\+::\+Math}!S\+Spline@{S\+Spline}}
+\index{S\+Spline@{S\+Spline}!fnn\+::\+Math@{fnn\+::\+Math}}
+\subsubsection[{S\+Spline}]{\setlength{\rightskip}{0pt plus 5cm}std\+::function$<$ double(double)$>$ fnn\+::\+Math\+::\+S\+Spline (
+\begin{DoxyParamCaption}
+\item[{std\+::vector$<$ std\+::vector$<$ double $>$$>$ \&}]{data}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_math_a6ae76ac184b97909719434da6081cc9c}
+
+
+A simple spline interpolation algorithm as described in \href{http://www.geos.ed.ac.uk/~yliu23/docs/lect_spline.pdf}{\tt http\+://www.\+geos.\+ed.\+ac.\+uk/$\sim$yliu23/docs/lect\+\_\+spline.\+pdf}. Makes the assumption that the second derivative at the boundaries is equal to 0. 
+
+=================================================================================================
+
+Phillip Kuznetsov, 4/29/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & 2\+D vector of input data points. Each row is a point. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{A polynomial interpolation function  }
+
+=================================================================================================
+
+Phillip Kuznetsov, 4/29/2015. 
+
+\subsubsection*{2\+D vector of input data points. Each row is a point.  }k\+: the vector of three coordinates that the current spline is working with. Dimensions are (x,y)
+
+The coefficents of the equation d$^\wedge$2f(k-\/1)/dx$^\wedge$2 coef\mbox{[}0\mbox{]} +d$^\wedge$2f(k)/dx$^\wedge$2 coef\mbox{[}1\mbox{]} +d$^\wedge$2f(k+1)/dx$^\wedge$2 coef\mbox{[}2\mbox{]} 
+
+The coefs index counter. The for loop goes through the row and fills them with the three coefficients of the equation set. 
+
+This is why we initialized the size to data.\+size()+1. \hypertarget{classfnn_1_1_math_a51cadf575a006e30fcb43845a010f5bd}{}\index{fnn\+::\+Math@{fnn\+::\+Math}!Std\+Dev@{Std\+Dev}}
+\index{Std\+Dev@{Std\+Dev}!fnn\+::\+Math@{fnn\+::\+Math}}
+\subsubsection[{Std\+Dev}]{\setlength{\rightskip}{0pt plus 5cm}double fnn\+::\+Math\+::\+Std\+Dev (
+\begin{DoxyParamCaption}
+\item[{std\+::vector$<$ double $>$ \&}]{data}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_math_a51cadf575a006e30fcb43845a010f5bd}
+
+
+Standard deviation of the data. 
+
+The population standard deviation of the data. 
+
+Phillip Kuznetsov, 5/6/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & The data. \\
+\hline
+\end{DoxyParams}
+
+
+\begin{DoxyReturn}{Returns}
+The standard deviation of the data 
+\end{DoxyReturn}
+
+
+Phillip Kuznetsov, 5/6/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & The data. \\
+\hline
+\end{DoxyParams}
+
+
+\begin{DoxyReturn}{Returns}
+The standard deviation of the data. 
+\end{DoxyReturn}
+\hypertarget{classfnn_1_1_math_a4e6ce151aa117f06b758fd37b76bb7de}{}\index{fnn\+::\+Math@{fnn\+::\+Math}!Uniform\+Real@{Uniform\+Real}}
+\index{Uniform\+Real@{Uniform\+Real}!fnn\+::\+Math@{fnn\+::\+Math}}
+\subsubsection[{Uniform\+Real}]{\setlength{\rightskip}{0pt plus 5cm}double fnn\+::\+Math\+::\+Uniform\+Real (
+\begin{DoxyParamCaption}
+\item[{double}]{min = {\ttfamily 0.0}, }
+\item[{double}]{max = {\ttfamily 0.0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classfnn_1_1_math_a4e6ce151aa117f06b758fd37b76bb7de}
+
+
+Uniform real. 
+
+=================================================================================================
+
+William Guss, 4/11/2015. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em min} & The minimum. \\
+\hline
+{\em max} & The maximum. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection*{A double.  }
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+F\+N\+N++/\+F\+N\+N\+Lib/F\+N\+N\+Math.\+h\item 
+F\+N\+N++/\+F\+N\+N\+Lib/F\+N\+N\+Math.\+cpp\end{DoxyCompactItemize}
