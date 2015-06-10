@@ -2,37 +2,43 @@
 //
 
 #include "stdafx.h"
-#include "FNNMath.h"
-#include <iostream>
-#include <random>
-#include <stdlib.h>
 #include "FNNNetwork.h"
+#include "FNNDataSet.h"
+#include "FNNLaplaceDataSet.h"
+#include "FNNLogManager.h"
+#include "FNNTrainer.h"
 
+#include<iostream>
 using namespace fnn;
-using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-    char buffer[20];
-    int q;
-    double x = 24.3343;
-    q = sprintf_s(buffer, "%f", x);
-    cout << buffer;
-    system("pause");
-    //Construct a network
-    Network net = Network();
-    net.Activator = Sigmoid::Tanh();
-    net.AddLayer(10, 10);
-    net.AddLayer(10, 10);
+    LogManager lm = LogManager();
+  
 
-    //TODO: Fix a glitch with this paret.
-
-    auto f = [](double x) { return sin(x); };
-
-    auto output = net.FeedForward(f);
-
-    for (double x = 0; x < 10; x += 0.05)
-        cout << "" << x << "=>" << output(x) << "\n";
-
-    system("pause");
+    LaplaceDataSet ds = LaplaceDataSet();
+    ds.Load();
+        
+    Network nn = Network();
+    lm.Register(&nn, "fnn", true);
+        
+    lm.Register(nn.AddLayer(10, 10), "ws1", false);
+    lm.Register(nn.AddLayer(10, 10), "ws2", false);
+        
+    Trainer t = Trainer(nn, ds, ds);
+    lm.Register(&t, "trainer", true);
+        
+        
+    //Register the logs
+        
+        
+    t.Train(10000, 0.1, false);
+        
+        
+    lm.Save("LaplaceTrainingSession1.exe");
+        
+        
+        
+	return 0;
 }
+

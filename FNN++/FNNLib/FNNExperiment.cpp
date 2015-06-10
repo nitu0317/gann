@@ -26,16 +26,16 @@ fnn::Experiment::Experiment(DataSet&trainingSet, DataSet&testingSet)
 
 bool fnn::Experiment::RunAsThread()
 {
-	if (&worker == NULL)
-	{
-		worker = thread([this](){this->toggleThread(); this->Run(); this->toggleThread; });
-		worker.join();
+	//if (&worker == NULL)
+	//{
+	//	worker = thread([this](){this->ToggleThread(); this->Run(); this->ToggleThread; });
+	//	worker.join();
 
-	}
-	else if (done)
-		return false;
-	else
-		worker.join();
+	//}
+	//else if (done)
+	//	return false;
+	//else
+	//	worker.join();
 	return true;
 }
 
@@ -43,7 +43,7 @@ bool fnn::Experiment::RunAsThread()
 ///
 /// <remarks>	Phillip Kuznetsov, 5/8/2015. </remarks>
 
-void fnn::Experiment::toggleThread()
+void fnn::Experiment::ToggleThread()
 {
 	if (done)
 		done = false;

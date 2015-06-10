@@ -16,10 +16,12 @@
 #define FNNLIB
 #endif
 
+#include "FNNLoggable.h"
+
 #include <vector>
 
 namespace fnn{
-    class WeightSurface
+    class WeightSurface : public Loggable
     {
     public:
 
@@ -84,6 +86,29 @@ namespace fnn{
         ///-------------------------------------------------------------------------------------------------
 
         int GetSizeY();
+
+        ///=================================================================================================
+        /// <summary>   Sets a coefficient. </summary>
+        ///
+        /// <remarks>   William, 5/10/2015. </remarks>
+        ///
+        /// <param name="x">    The x coordinate. </param>
+        /// <param name="y">    The y coordinate. </param>
+        ///
+        /// <returns>   A double. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        double SetCoefficient(int x, int y, double val);
+
+        ///=================================================================================================
+        /// <summary>   Wolfram string. </summary>
+        ///
+        /// <remarks>   William, 5/10/2015. </remarks>
+        ///
+        /// <returns>   A string. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        string WolframString();
 
     private:
         /// <summary>   The coefficient matrix. </summary>

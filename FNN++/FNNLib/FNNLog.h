@@ -38,7 +38,7 @@ namespace fnn{
         /// <remarks>   William, 4/29/2015. </remarks>
         ///-------------------------------------------------------------------------------------------------
 
-        Log();
+        FNNLIB Log();
 
         ///=================================================================================================
         /// <summary>   Constructs the log with a name and a vocality. </summary>
@@ -49,7 +49,7 @@ namespace fnn{
         /// <param name="verbose">  true to vocal. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        Log(string name, bool verbose);
+        FNNLIB Log(string name, bool verbose);
 
         ///=================================================================================================
         /// <summary>   Pushes an object onto this log. </summary>
@@ -59,7 +59,7 @@ namespace fnn{
         /// <param name="message">  The message to push. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        void Push(string message);
+        void FNNLIB Push(string message);
 
         ///=================================================================================================
         /// <summary>   Gets the content of the log. </summary>
@@ -71,6 +71,7 @@ namespace fnn{
 
         list<string>* GetContent();
 
+
         ///=================================================================================================
         /// <summary>   Gets the name. </summary>
         ///
@@ -79,7 +80,7 @@ namespace fnn{
         /// <returns>   The name. </returns>
         ///-------------------------------------------------------------------------------------------------
 
-        string GetName();
+        string FNNLIB GetName();
 
         ///=================================================================================================
         /// <summary>   Query if this object is verbose. </summary>
@@ -89,7 +90,7 @@ namespace fnn{
         /// <returns>   true if verbose, false if not. </returns>
         ///-------------------------------------------------------------------------------------------------
 
-        bool IsVerbose();
+        bool FNNLIB IsVerbose();
 
     private:
 

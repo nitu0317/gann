@@ -557,3 +557,19 @@ double fnn::Math::StdDev(std::vector<double> &data)
     return pow(sum / size,1/2);
 }
 
+///=================================================================================================
+/// <summary>   Bounds. </summary>
+///
+/// <remarks>   William, 5/10/2015. </remarks>
+///
+/// <param name="val">  The value. </param>
+/// <param name="min">  The minimum. </param>
+/// <param name="max">  The maximum. </param>
+///
+/// <returns>   A double. </returns>
+///-------------------------------------------------------------------------------------------------
+
+double fnn::Math::Bound(double val, double min, double max)
+{
+    return val > min && val < max ? val : (val < min ? min : max);
+}

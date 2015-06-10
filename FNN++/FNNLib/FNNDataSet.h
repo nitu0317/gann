@@ -18,7 +18,7 @@
 
 namespace fnn
 {
-	class FNNLIB DataSet
+    class FNNLIB DataSet
 	{
 	public:
 
@@ -39,29 +39,7 @@ namespace fnn
 		///
 		/// <remarks>	Phillip Kuznetsov, 5/6/2015. </remarks>
 
-		void Shuffle();
-
-		/// <summary>	Calculates the errors. </summary>
-		///
-		/// <remarks>	Phillip Kuznetsov, 5/6/2015. </remarks>
-		///
-		/// <param name="n">   	The Network to process. </param>
-		/// <param name="step">	Amount to increment by. </param>
-		///
-		/// <returns>	The calculated errors. </returns>
-
-		std::vector<double(double)> calculateErrors(Network &nn, double step = -1);
-
-		/// <summary>	Calculates the error. </summary>
-		///
-		/// <remarks>	Phillip Kuznetsov, 5/6/2015. </remarks>
-		///
-		/// <param name="nn">  	The nn. </param>
-		/// <param name="step">	Amount to increment by. </param>
-		///
-		/// <returns>	The calculated error. </returns>
-
-		double calcError(Network &nn, double step = -1);
+        void Shuffle();
 
 		/// <summary>	Gets the size. </summary>
 		///
@@ -69,7 +47,7 @@ namespace fnn
 		///
 		/// <returns>	An int size of the DataSet </returns>
 
-		int size();
+		int Size();
 
 		/// <summary>	Array indexer operator. </summary>
 		///
@@ -79,9 +57,9 @@ namespace fnn
 		///
 		/// <returns>	The indexed value from DataPoints. </returns>
 
-		DataPoint& DataSet::operator[](int index);
+        DataPoint& DataSet::operator[](int index);
 
-	private:
+	protected:
 		std::vector<DataPoint> dataPoints;
 		
 	};

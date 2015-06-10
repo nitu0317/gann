@@ -1,4 +1,4 @@
-// file:	FNNExperiment.h
+﻿// file:	FNNExperiment.h
 //
 // summary:	Declares the fnn experiment class
 
@@ -46,7 +46,7 @@ namespace fnn
 		///
 		/// <remarks>	Phillip Kuznetsov, 5/8/2015. </remarks>
 
-		virtual void Run() = 0;
+		virtual void Run() = 0; //TODO: Implemnent
 
 		/// <summary>	Executes as thread operation. </summary>
 		///
@@ -54,13 +54,13 @@ namespace fnn
 		///
 		/// <returns>	true if it succeeds, false if it fails. </returns>
 
-		bool RunAsThread();
+		bool RunAsThread(); //TODO: Implement
 
 		/// <summary>	Toggles whether the thread is running or not</summary>
 		///
 		/// <remarks>	Phillip Kuznetsov, 5/8/2015. </remarks>
 
-		void toggleThread();
+		void ToggleThread();
 	private:
 		string DATASTORE;
 		string PERSIST;

@@ -95,5 +95,8 @@
     <ClCompile Include="FNNExperiment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FNNDataPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

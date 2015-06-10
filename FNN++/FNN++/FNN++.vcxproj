@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{0F141654-195E-4C66-84B7-CB82940F18AF}</ProjectGuid>
+    <ProjectGuid>{597D9BDD-8C0E-4699-9314-2F6C890BD3CC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>FNN</RootNamespace>
   </PropertyGroup>
@@ -68,7 +68,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)FNNLib</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,15 +77,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="randomDataset.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FNNLaplaceDataSet.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FNN++.cpp" />
+    <ClCompile Include="FNNLaplaceDataSet.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -95,11 +95,6 @@
   <ItemGroup>
     <ProjectReference Include="..\FNNLib\FNNLib.vcxproj">
       <Project>{e67056b7-ffe4-4992-8653-434637042372}</Project>
-      <Private>true</Private>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

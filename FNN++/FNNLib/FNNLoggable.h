@@ -49,7 +49,7 @@ namespace fnn{
         /// <remarks>   William, 5/2/2015. </remarks>
         ///-------------------------------------------------------------------------------------------------
 
-        Loggable();
+        FNNLIB Loggable();
 
         ///=================================================================================================
         /// <summary>   Constructs the logger. </summary>
@@ -61,7 +61,7 @@ namespace fnn{
         /// <param name="verbose">  true to verbose. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        void Initialize(LogManager* lm, string name, bool verbose);
+        void FNNLIB Initialize(LogManager* lm, string name, bool verbose);
 
         ///=================================================================================================
         /// <summary>   Logs a message to a specific log. </summary>
@@ -72,7 +72,7 @@ namespace fnn{
         /// <param name="message">  The message. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        void Log(string log, string message, bool verbose = false);
+        void FNNLIB Log(string log, string message, bool verbose = false);
 
         ///=================================================================================================
         /// <summary>   Adds a log. </summary>
@@ -82,7 +82,7 @@ namespace fnn{
         /// <param name="name"> The name. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        void AddLog(string name, bool verbose);
+        void FNNLIB AddLog(string name, bool verbose);
 
         ///=================================================================================================
         /// <summary>   Sets a verbose. </summary>
@@ -92,7 +92,7 @@ namespace fnn{
         /// <param name="verbose">  true to verbose. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        void SetVerbose(bool verbose);
+        void FNNLIB SetVerbose(bool verbose);
 
         ///=================================================================================================
         /// <summary>   Query if this object is verbose. </summary>
@@ -102,7 +102,7 @@ namespace fnn{
         /// <returns>   true if verbose, false if not. </returns>
         ///-------------------------------------------------------------------------------------------------
 
-        bool IsVerbose();
+        bool FNNLIB IsVerbose();
 
         ///=================================================================================================
         /// <summary>   Gets the logs. </summary>
@@ -122,7 +122,7 @@ namespace fnn{
         /// <returns>   The name. </returns>
         ///-------------------------------------------------------------------------------------------------
 
-        string GetName();
+        string FNNLIB GetName();
 
     private:
         /// <summary>   The logs. </summary>

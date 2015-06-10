@@ -59,7 +59,7 @@ namespace fnn{
         /// <param name="verbose">      true to verbose. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        void Register(Loggable* logger, string loggerName, bool verbose);
+        void FNNLIB Register(Loggable* logger, string loggerName, bool verbose);
 
         ///=================================================================================================
         /// <summary>   Saves the set of all loggers under a directory and a sub directory. Consider is
@@ -70,7 +70,7 @@ namespace fnn{
         /// <param name="directory">    The directory to which to save. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        void Save(string directory);
+        void FNNLIB Save(string directory);
 
         ///=================================================================================================
         /// <summary>   TODO: Consider adding loading functionality. </summary>
@@ -82,7 +82,8 @@ namespace fnn{
         /// <param name="message">  The message. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        void Print(Loggable* logger, string log, string message);
+        void FNNLIB Print(Loggable* logger, string log, string message);
+
 
     private:
         std::vector<Loggable*> loggers;

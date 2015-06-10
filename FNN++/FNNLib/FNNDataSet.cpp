@@ -13,7 +13,7 @@
 
 fnn::DataSet::DataSet(void)
 {
-	
+    dataPoints = std::vector < DataPoint >();
 }
 
 /// <summary>	Array indexer operator. </summary>
@@ -35,8 +35,19 @@ fnn::DataPoint& fnn::DataSet::operator[](int index)
 ///
 /// <returns>	An int size of the DataSet. </returns>
 
-int fnn::DataSet::size(void)
+int fnn::DataSet::Size(void)
 {
 	return dataPoints.size();
+}
+
+///=================================================================================================
+/// <summary>   Shuffles this DataSet. </summary>
+///
+/// <remarks>   Phillip Kuznetsov, 5/6/2015. </remarks>
+///-------------------------------------------------------------------------------------------------
+
+void fnn::DataSet::Shuffle(void)
+{
+	//TODO: Implement shuffling.
 }
 
