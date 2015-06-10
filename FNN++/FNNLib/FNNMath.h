@@ -191,6 +191,20 @@ namespace fnn
 
 		static double StdDev(std::vector<double> &data);
 
+        ///=================================================================================================
+        /// <summary>   Bounds. </summary>
+        ///
+        /// <remarks>   William, 5/10/2015. </remarks>
+        ///
+        /// <param name="val">  The value. </param>
+        /// <param name="min">  The minimum. </param>
+        /// <param name="max">  The maximum. </param>
+        ///
+        /// <returns>   A double. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        static double Bound(double val, double min, double max);
+
     private:
     };
 }

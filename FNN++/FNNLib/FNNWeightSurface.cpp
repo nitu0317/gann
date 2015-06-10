@@ -85,3 +85,35 @@ double fnn::WeightSurface::GetCoefficient(int x, int y)
 {
     return this->coef[x][y];
 }
+
+///=================================================================================================
+/// <summary>   Sets a coefficient. </summary>
+///
+/// <remarks>   William, 5/10/2015. </remarks>
+///
+/// <param name="x">    The x coordinate. </param>
+/// <param name="y">    The y coordinate. </param>
+///
+/// <returns>   A double. </returns>
+///-------------------------------------------------------------------------------------------------
+
+double fnn::WeightSurface::SetCoefficient(int x, int y, double val)
+{
+    this->coef[x][y] = val;
+    return val;
+}
+
+///=================================================================================================
+/// <summary>   Wolfram string. </summary>
+///
+/// <remarks>   William, 5/10/2015. </remarks>
+///
+/// <returns>   A string. </returns>
+///-------------------------------------------------------------------------------------------------
+
+string fnn::WeightSurface::WolframString(void)
+{
+	
+	return("");
+}
+

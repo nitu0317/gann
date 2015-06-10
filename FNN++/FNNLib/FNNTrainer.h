@@ -30,7 +30,7 @@ namespace fnn
 	/// <remarks>	Phillip Kuznetsov, 5/6/2015. </remarks>
 	///-------------------------------------------------------------------------------------------------
 
-	class FNNLIB FNNTrainer
+	class FNNLIB Trainer : public Loggable
 	{
 	public:
 
@@ -43,7 +43,7 @@ namespace fnn
 		/// <param name="testingSet"> 	The traiing dataset. </param>
 		///
 
-		FNNTrainer(Network& network, fnn::DataSet& trainingSet, fnn::DataSet& testingSet);
+		Trainer(Network& network, fnn::DataSet& trainingSet, fnn::DataSet& testingSet);
 
 		///=================================================================================================
 		/// <summary>	Trains the network according to the parameters </summary>
@@ -58,19 +58,8 @@ namespace fnn
 		/// <returns>	An int. </returns>
 		///-------------------------------------------------------------------------------------------------
 
-		int Train(int epochs, double minError, std::vector<double>& learningParameters, bool nudging = false);
+		int Train(int epochs, double minError, bool nudging = false);
 
-		/// <summary>	Bounds a double to a range of min and max </summary>
-		///
-		/// <remarks>	Phillip Kuznetsov, 5/6/2015. </remarks>
-		///
-		/// <param name="val">	The value. </param>
-		/// <param name="min">	The minimum. </param>
-		/// <param name="max">	The maximum. </param>
-		///
-		/// <returns>	A double. </returns>
-
-		double Bound(double val, double min, double max);
 	private:
 		DataSet& _testingSet;
 		DataSet& _trainingSet;

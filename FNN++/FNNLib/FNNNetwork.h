@@ -31,7 +31,7 @@ namespace fnn{
     /// <remarks>   William, 4/9/2015. </remarks>
     ///-------------------------------------------------------------------------------------------------
 
-    class FNNLIB Network : Loggable
+    class Network : public Loggable
     {
     public:
 
@@ -43,7 +43,7 @@ namespace fnn{
         /// <param name="lc">   The layer count. </param>
         ///-------------------------------------------------------------------------------------------------
 
-        Network();
+        FNNLIB Network();
 
         ///=================================================================================================
         /// <summary>   Runs the network using the fast feedforward algorithm. The algorithm caches
@@ -57,6 +57,16 @@ namespace fnn{
         ///-------------------------------------------------------------------------------------------------
 
         std::function<double(double)> FeedForward(std::function<double(double)> ξ);
+
+        ///=================================================================================================
+        /// <summary>   Feed forward a unique datapoint. </summary>
+        ///
+        /// <remarks>   William, 5/10/2015. </remarks>
+        ///
+        /// <param name="dp">   [in,out] The dp. </param>
+        ///-------------------------------------------------------------------------------------------------
+
+        void FNNLIB FeedForward(fnn::DataPoint& dp);
 
         ///=================================================================================================
         /// <summary>   Back propagate using the Super Pro Algo developed by William Guss and Patrick Chen. </summary>
@@ -83,13 +93,15 @@ namespace fnn{
         ///=================================================================================================
         /// <summary>   Adds a layer to 'y'. </summary>
         ///
-        /// <remarks>   William Guss, 4/12/2015. </remarks>
+        /// <remarks>   William Guss 4/12/2015. </remarks>
         ///
         /// <param name="x">    The x coordinate. </param>
         /// <param name="y">    The y coordinate. </param>
+        ///
+        /// <returns>   null if it fails, else a WeightSurface*. </returns>
         ///-------------------------------------------------------------------------------------------------
 
-        void AddLayer(int x, int y);
+        WeightSurface* AddLayer(int x, int y);
 
 		/// <summary>	Trains the network </summary>
 		///
@@ -100,16 +112,28 @@ namespace fnn{
 		///
 		/// <returns>	A double. </returns>
 
-		double Train(DataPoint& dp, std::vector<double> learningParameters);
+        double FNNLIB Train(DataPoint& dp);
 
 		/// <summary>	Nudge weights. </summary>
 		///
 		/// <remarks>	Phillip Kuznetsov, 5/8/2015. </remarks>
 
-		void NudgeWeights();
+        void FNNLIB NudgeWeights();
 
         /// <summary>   The primary activator type for the neural network. </summary>
         Sigmoid Activator;
+
+        ///=================================================================================================
+        /// <summary>   Gets a layer based on a number. </summary>
+        ///
+        /// <remarks>   William, 5/10/2015. </remarks>
+        ///
+        /// <param name="l">    The int to process. </param>
+        ///
+        /// <returns>   The layer. </returns>
+        ///-------------------------------------------------------------------------------------------------
+
+        WeightSurface* GetLayer (int l);
 
     private:
 

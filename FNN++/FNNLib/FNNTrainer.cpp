@@ -8,12 +8,12 @@
 #include "FNNTrainer.h"
 #include "FNNMath.h"
 
-fnn::FNNTrainer::FNNTrainer(Network& network, fnn::DataSet& trainingSet, fnn::DataSet& testingSet) : _trainingSet(trainingSet), _testingSet(testingSet)
+fnn::Trainer::Trainer(Network& network, fnn::DataSet& trainingSet, fnn::DataSet& testingSet) : _trainingSet(trainingSet), _testingSet(testingSet)
 {	
 	_network = &network;
 	errorHistory = std::vector<double>(20);
 }
-int fnn::FNNTrainer::Train(int epochs, double minError, std::vector<double>& learningParameters, bool nudging)
+int fnn::Trainer::Train(int epochs, double minError, bool nudging)
 {
 	
 	errorHistory.clear();
@@ -24,10 +24,10 @@ int fnn::FNNTrainer::Train(int epochs, double minError, std::vector<double>& lea
 	{
 		epoch++;
 		error = 0;
-			for (int i = 0; i < _trainingSet.size(); i++)
+			for (int i = 0; i < _trainingSet.Size(); i++)
 			{
 				auto dp = _trainingSet[i];
-				error+= (*_network).Train(dp, learningParameters);
+				error+= (*_network).Train(dp);
 			}
 		this->errorHistory.push_back(error);
 		
@@ -46,26 +46,6 @@ int fnn::FNNTrainer::Train(int epochs, double minError, std::vector<double>& lea
 			(*_network).NudgeWeights();
 		}
 
-#if DEBUG
-		Console.WriteLine("Epoch {0}: Error = {1};", epoch, error);
-#endif
 	} while (epoch < epochs && error > minError);
 	return epoch;
 }
-
-/// <summary>	Bounds a double to a range of min and max. </summary>
-///
-/// <remarks>	Phillip Kuznetsov, 5/6/2015. </remarks>
-///
-/// <param name="val">	The value. </param>
-/// <param name="min">	The minimum. </param>
-/// <param name="max">	The maximum. </param>
-///
-/// <returns>	A double. </returns>
-
-double fnn::FNNTrainer::Bound(double val, double min, double max)
-{
-	
-	return val > min && val < max ? val : (val < min ? min : max);
-}
-
