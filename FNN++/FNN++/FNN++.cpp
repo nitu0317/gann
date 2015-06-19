@@ -20,7 +20,7 @@ int _tmain(int argc, _TCHAR* argv[])
     ds.Load();
         
     Network nn = Network();
-    lm.Register(&nn, "fnn", true);
+    lm.Register(&nn, "fnn", true); 
         
     lm.Register(nn.AddLayer(10, 10), "ws1", false);
     lm.Register(nn.AddLayer(10, 10), "ws2", false);
