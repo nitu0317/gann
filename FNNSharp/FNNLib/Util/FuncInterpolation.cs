@@ -27,6 +27,34 @@ namespace FNNLib.Util
 
 
         /// <summary>
+        /// Defines a functional interepolation with only a procedure ]
+        /// and no integratrion/differentiation capabilities.
+        /// </summary>
+        /// <param name="proc">The function representing the interpolation</param>
+        /// <param name="deriv">The derivative of the procedure.</param>
+        public FuncInterpolation(Func<double, double> proc, Func<double, double> deriv)
+        {
+            this.proc = proc;
+            this.deriv = deriv;
+        }
+
+        /// <summary>
+        /// Defines a functional interepolation with only a procedure ]
+        /// and no integratrion/differentiation capabilities.
+        /// </summary>
+        /// <param name="proc">The function representing the interpolation</param>
+        /// <param name="deriv">The derivative of the procedure.</param>
+        /// <param name="integ">The indefinite integral of the procedure.</param>
+        public FuncInterpolation(Func<double, double> proc, Func<double, double> deriv,
+            Func<double, double> integ)
+        {
+            this.proc = proc;
+            this.deriv = deriv;
+            this.integ = integ;
+        }
+
+
+        /// <summary>
         /// Checks to see if a derivative is specified and returns its evaluation at t.
         /// </summary>
         /// <param name="t">The value at which to evaluate the derivative.</param>
