@@ -1,5 +1,6 @@
 ﻿using MathNet.Numerics.Integration;
 using MathNet.Numerics.Interpolation;
+using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -201,6 +202,65 @@ namespace FNNLib.Util
 
         #endregion
 
+        #region Basic Types
+
+
+        /// <summary>
+        /// A easily construct4ed cosntant func interpolation.
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static FuncInterpolation Constant(double b)
+        {
+            return new FuncInterpolation(
+                (x) => b, //f
+                (x) => 0, //f'
+                (x) => b * x //int f
+                    );
+        }
+
+        /// <summary>
+        /// Creates a linear function
+        /// </summary>
+        /// <param name="m">The slope</param>
+        /// <param name="b">The y intercept</param>
+        /// <returns></returns>
+        public static FuncInterpolation Linear(double m, double b){
+            return m * new FuncInterpolation(
+                (x) => x,
+                (x) => 1,
+                (x) => 0.5 * x * x
+                    ) + Constant(b);
+        }
+
+        /// <summary>
+        /// Constructs a mononomial of degree p.
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public static FuncInterpolation Mononomial(double p)
+        {
+            return new FuncInterpolation(
+                (x) => Math.Pow(x, p),
+                (x) => (p)*Math.Pow(x,p-1),
+                (x) => p == -1 ? //If some crazy ln stuff is occurring here.
+                        Math.Log(x) :
+                        1.0/(p+1)*Math.Pow(x, p+1)
+                    );
+        }
+
+        public static FuncInterpolation Polynomial(params double[] args)
+        {
+            if (args == null || args.Count() == 0)
+                return Constant(0);
+            else
+                return args.Select((k, i) => k * Mononomial(i))
+                    .Aggregate((a, b) => a + b);
+        }
+        
+
+        #endregion
+
         #region IInterpolation Explicit
 
         /// <summary>
@@ -280,5 +340,139 @@ namespace FNNLib.Util
         }
 
         #endregion
+
+        #region IInterpolation Extensions
+
+        #region IEnumerable
+        /// <summary>
+        /// Integrates a given vector over a set of vector ranges.
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <param name="inv"></param>
+        /// <returns></returns>
+        public IEnumerable<double> Integrate(IEnumerable<double> inv)
+        {
+            return inv.Select((x) => this.Integrate(x));
+        }
+
+        /// <summary>
+        /// Interpolates a function applied to a given vector.
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <returns></returns>
+        public IEnumerable<double> Interpolate(IEnumerable<double> inv)
+        {
+            return inv.Select(this.Interpolate);
+        }
+
+        /// <summary>
+        /// Differentiates a function with respect to a given vector.
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <returns></returns>
+        public IEnumerable<double> Differentiate(IEnumerable<double> inv)
+        {
+            return inv.Select(this.Differentiate);
+        }
+
+        #endregion
+
+
+        #region Vector<double>
+        /// <summary>
+        /// Integrates a given vector over a set of vector ranges.
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <param name="inv"></param>
+        /// <returns></returns>
+        public Vector<double> Integrate(Vector<double> inv)
+        {
+            return ApplyFuncToVector((x) => this.Integrate(x), inv);
+        }
+
+        /// <summary>
+        /// Interpolates a function applied to a given vector.
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <returns></returns>
+        public Vector<double> Interpolate(Vector<double> inv)
+        {
+            return ApplyFuncToVector(this.Interpolate, inv);
+        }
+
+        /// <summary>
+        /// Differentiates a function with respect to a given vector.
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <returns></returns>
+        public Vector<double> Differentiate(Vector<double> inv)
+        {
+            return ApplyFuncToVector(this.Differentiate, inv);
+        }
+
+        #endregion 
+
+
+        #region Functional Composition
+
+        /// <summary>
+        /// Integrates a given vector over a set of vector ranges.
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <param name="inv"></param>
+        /// <returns></returns>
+        public FuncInterpolation Integrate(FuncInterpolation inv)
+        {
+            return new FuncInterpolation(
+                (x) =>
+                    this.Integrate(inv.Interpolate(x)));
+        }
+
+        /// <summary>
+        /// Interpolates a function applied to a given function.
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <returns></returns>
+        public FuncInterpolation Interpolate(FuncInterpolation inv)
+        {
+            return new FuncInterpolation(
+                (x) =>
+                    this.Interpolate(inv.Interpolate(x)));
+        }
+
+        /// <summary>
+        /// Differentiates a function with respect to a given function.
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <returns></returns>
+        public FuncInterpolation Differentiate(FuncInterpolation inv)
+        {
+            return new FuncInterpolation(
+                (x) =>
+                    this.Differentiate(inv.Interpolate(x)));
+        }
+
+        #endregion
+
+
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Applies funcs of double to vectors
+        /// </summary>
+        /// <param name="f"></param>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public static Vector<double> ApplyFuncToVector(Func<double,double> f, Vector<double> v)
+        {
+            return Vector<double>.Build
+                .DenseOfEnumerable(v.Select(f)); //Project the function on to the vector.
+        }
+
+   
+
+        #endregion 
     }
 }

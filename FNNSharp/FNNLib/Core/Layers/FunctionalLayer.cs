@@ -42,7 +42,7 @@ namespace FNNLib.Core.Layers
             Sigmoid.HyperbolicTangent)
         { }
 
-        public override IInterpolation FeedForward(IInterpolation input)
+        protected override IInterpolation ForwardAction(IInterpolation input)
         {
             //As per (2.3.6)
             I = Vector<double>.Build.Dense(Z_X, (t) =>
@@ -63,7 +63,7 @@ namespace FNNLib.Core.Layers
                     //Construct a j power vector.
                     var J = Vector<double>.Build.Dense(Z_Y, (y) => Math.Pow(j, y));
                     //Return the dot product.
-                    return Activation.Interpolate(J*C);
+                    return J * C;
                 }
             );
 
