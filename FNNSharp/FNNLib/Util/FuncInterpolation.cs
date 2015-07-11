@@ -1,4 +1,5 @@
-﻿using MathNet.Numerics.Interpolation;
+﻿using MathNet.Numerics.Integration;
+using MathNet.Numerics.Interpolation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace FNNLib.Util
         private Func<double, double> integ = null;
         #endregion
 
+        #region Constructors
         /// <summary>
         /// Defines a functional interepolation with only a procedure ]
         /// and no integratrion/differentiation capabilities.
@@ -53,6 +55,153 @@ namespace FNNLib.Util
             this.integ = integ;
         }
 
+        #endregion
+
+        #region Operators
+
+        /// <summary>
+        /// Constructs a pointwise construction of the addition operator along interpolation.
+        /// </summary>
+        /// <param name="f"></param>
+        /// <param name="g"></param>
+        /// <returns></returns>
+        public static FuncInterpolation operator +(FuncInterpolation f, FuncInterpolation g)
+        {
+            Func<double,double> hproc = (x) => f.proc(x) + g.proc(x),
+                hderiv = null , hinteg = null;
+
+            if (f.SupportsDifferentiation && g.SupportsDifferentiation)
+                hderiv = (x) => f.deriv(x) + g.deriv(x); //by linearity of differentiation.
+            if (f.SupportsIntegration && g.SupportsIntegration)
+                hinteg = (x) => f.integ(x) + g.integ(x); //by linearity of integration.
+
+            return new FuncInterpolation(hproc, hderiv, hinteg);
+        }
+
+        /// <summary>
+        /// The pointwise scalar multiplication of function interpolations.
+        /// </summary>
+        /// <param name="a">A scalar by which to multiply</param>
+        /// <param name="f">The function being scaled.</param>
+        /// <returns></returns>
+        public static FuncInterpolation operator *(double a, FuncInterpolation f)
+        {
+            Func<double, double> hproc = (x) => f.proc(x) * a,
+                hderiv = null, hinteg = null;
+
+
+            if (f.SupportsDifferentiation)
+                hderiv = (x) => f.deriv(x) * a; //by linearity of differentiation.
+            if (f.SupportsIntegration)
+                hinteg = (x) => f.integ(x) * a; //by linearity of integration.
+
+            return new FuncInterpolation(hproc, hderiv, hinteg);
+        }
+
+        /// <summary>
+        /// The pointwise scalar multiplication of function interpolations.
+        /// </summary>
+        /// <param name="a">A scalar by which to multiply</param>
+        /// <param name="f">The function being scaled.</param>
+        /// <returns></returns>
+        public static FuncInterpolation operator *(FuncInterpolation f, double a)
+        {
+            return a * f;
+        }
+
+        /// <summary>
+        /// The pointwise addition operator of function interpolations. 
+        /// Defined using + and *.
+        /// </summary>
+        /// <param name="f"></param>
+        /// <param name="g"></param>
+        /// <returns></returns>
+        public static FuncInterpolation operator -(FuncInterpolation f, FuncInterpolation g)
+        {
+            return f + (-1.0 * g);
+        }
+
+        /// <summary>
+        /// The pointwise scalar division of function interpolations.
+        /// </summary>
+        /// <param name="a">A scalar by which to multiply</param>
+        /// <param name="f">The function being scaled.</param>
+        /// <returns></returns>
+        public static FuncInterpolation operator /(FuncInterpolation f, double a)
+        {
+            if (a != 0)
+                return (1.0 / a) * f;
+            else
+                throw new DivideByZeroException();
+        }
+
+        /// <summary>
+        /// The pointwise scalar division of function interpolations.
+        /// Integration cannot be defined in this case.
+        /// </summary>
+        /// <param name="a">A scalar by which to multiply</param>
+        /// <param name="f">The function being scaled.</param>
+        /// <returns></returns>
+        public static FuncInterpolation operator /(double a, FuncInterpolation f)
+        {
+            Func<double, double> hproc = (x) =>  a / f.proc(x),
+                hderiv = null, hinteg = null;
+
+            if (f.SupportsDifferentiation)
+                hderiv = (x) => - a * Math.Pow(f.proc(x),-2)*f.deriv(x); //by chain rule.
+
+            //Integration cannot be defined.
+
+            return new FuncInterpolation(hproc, hderiv, hinteg);
+        }
+
+        /// <summary>
+        /// The pointwise functional multiplication of function interpolations.
+        /// </summary>
+        /// <param name="a">A scalar by which to multiply</param>
+        /// <param name="f">The function being scaled.</param>
+        /// <returns></returns>
+        public static FuncInterpolation operator *(FuncInterpolation f, FuncInterpolation g)
+        {
+            Func<double, double> hproc = (x) => f.proc(x)* g.proc(x),
+                hderiv = null, hinteg = null;
+
+            if (f.SupportsDifferentiation && g.SupportsDifferentiation)
+                hderiv = (x) => f.proc(x) * g.deriv(x) + f.deriv(x) * g.proc(x); //by the product rule.
+
+            //Integration is not defined.
+
+            return new FuncInterpolation(hproc, hderiv, hinteg);
+        }
+
+
+        /// <summary>
+        /// Calculates the L2InnerProduct of two functions
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="region"></param>
+        /// <returns></returns>
+        public double L2InnerProduct(FuncInterpolation g, Interval region)
+        {
+            return NewtonCotesTrapeziumRule.IntegrateAdaptive((this*g).Interpolate,
+                region.A, region.B, 0.1);
+        }
+
+
+        /// <summary>
+        /// Calculates the L2 norm of a function over its region.
+        /// </summary>
+        /// <param name="f"></param>
+        /// <param name="region"></param>
+        /// <returns></returns>
+        public double L2Norm(Interval region)
+        {
+            return this.L2InnerProduct(this, region);
+        }
+
+        #endregion
+
+        #region IInterpolation Explicit
 
         /// <summary>
         /// Checks to see if a derivative is specified and returns its evaluation at t.
@@ -129,5 +278,7 @@ namespace FNNLib.Util
         {
             get { return integ == null; }
         }
+
+        #endregion
     }
 }
