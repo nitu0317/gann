@@ -1,4 +1,7 @@
-﻿using FNNLib.Util;
+﻿using FNNLib.Core.NeuralLibrary.NeuralNetwork;
+using FNNLib.Util;
+using MathNet.Numerics.Distributions;
+using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +16,22 @@ namespace FNNLib.Core
     /// </summary>
     /// <typeparam name="A">The set from which the layer maps.</typeparam>
     /// <typeparam name="B">The set to which the layer maps.</typeparam>
-    class Layer<A,B>
+    public abstract class Layer<A,B>
     {
-
-        public Layer(int Z_X, int Z_Y, Interval R)
+        /// <summary>
+        /// Constructs a layer wutg a given prior distribution.
+        /// </summary>
+        /// <param name="Z_X"></param>
+        /// <param name="Z_Y"></param>
+        /// <param name="dist"></param>
+        public Layer(int Z_X, int Z_Y,
+            IContinuousDistribution dist, Sigmoid activation)
         {
             this.Z_X = Z_X;
             this.Z_Y = Z_Y;
-            this.R = R;
+            this.Activation = activation;
+
+            K = Matrix<double>.Build.Random(Z_X, Z_Y, dist);
         }
 
         /// <summary>
@@ -33,10 +44,33 @@ namespace FNNLib.Core
         public abstract B FeedForward(A input);
 
 
-        public int Z_X { get; set; }
+        /// <summary>
+        /// A cached output from the feed forward action.
+        /// </summary>
+        public B Output { get; protected set; }
 
-        public int Z_Y { get; set; }
 
-        public Interval R { get; set; }
+
+
+        #region Properties
+
+        /// <summary>
+        /// The coefficient weight matrix.
+        /// </summary>
+        public Matrix<double> K { get; protected set; } //The k coefficient matrix.
+
+        /// <summary>
+        /// The row size of the K matrix.
+        /// </summary>
+        public int Z_X { get; private set; }
+
+        /// <summary>
+        /// The column size of the K matrix.
+        /// </summary>
+        public int Z_Y { get; private set; }
+
+        public Sigmoid Activation { get; protected set; }
+
+        #endregion
     }
 }
