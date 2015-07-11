@@ -44,14 +44,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Layer.cs" />
+    <Compile Include="Core\Layers\FunctionalLayer.cs" />
     <Compile Include="Core\Network.cs" />
+    <Compile Include="Core\Sigmoid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\FuncInterpolation.cs" />
+    <Compile Include="Util\Interval.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Layers\" />
     <Folder Include="Core\Sigmoid\" />
     <Folder Include="Experimentation\" />
   </ItemGroup>
