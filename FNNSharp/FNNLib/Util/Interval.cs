@@ -22,7 +22,13 @@ namespace FNNLib.Util
             this.B = a > b ? a : b;
         }
 
-        public double A { get; set; }
-        public double B { get; set; }
+        public double A { get; private set; }
+        public double B { get; private set; }
+
+
+        #region Predefined Intervals
+        public static Interval UnitBall = new Interval(-1, 1);
+        public static Interval AbsoluteUnitBall = new Interval(0, 1);
+        #endregion
     }
 }
