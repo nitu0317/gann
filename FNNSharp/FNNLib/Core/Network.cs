@@ -48,7 +48,15 @@ namespace FNNLib.Core
                 throw new InvalidOperationException("Tried to apply the network to input of incorrect codomain.");
         }
 
-
+        /// <summary>
+        /// Runs the error backpropagation algorithm
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public void ErrorBackpropagate(object input, double a)
+        {
+            throw new NotImplementedException();
+        }
 
 
         /// <summary>
