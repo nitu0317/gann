@@ -89,8 +89,10 @@ namespace FNNLib.Core
         public B FeedForward(A input)
         {
             //g(T_l[σ] + //β)
-            
-            return Output = this.Activation.Interpolate((dynamic)ForwardAction(input));
+
+            //Set output to g(T_l[σ]) and actionOutput to T_l[σ].
+            return Output = this.Activation.Interpolate(
+                (dynamic)(ActionOutput = ForwardAction(input)));
         }
 
 
@@ -99,12 +101,15 @@ namespace FNNLib.Core
         /// </summary>
         /// <param name="B_lp1">The next error parameter.</param>
         /// <returns></returns>
-        //public abstract Vector<double> BackPropagate(Vector<double> B_lp1);
+        public abstract void UpdateCoefficients(Vector<double> B_lp1, double a);
 
         /// <summary>
         /// A cached output from the feed forward action.
         /// </summary>
         public B Output { get; private set; }
+
+
+        protected B ActionOutput { get; private set; }
 
 
         #region ILayer

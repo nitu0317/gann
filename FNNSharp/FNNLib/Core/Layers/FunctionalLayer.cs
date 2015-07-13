@@ -43,6 +43,11 @@ namespace FNNLib.Core.Layers
             Sigmoid.HyperbolicTangent)
         { }
 
+        /// <summary>
+        /// Propogates the network forward.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         protected override IInterpolation ForwardAction(IInterpolation input)
         {
             //As per (2.3.6)
@@ -73,11 +78,35 @@ namespace FNNLib.Core.Layers
             
         }
 
+
+        /// <summary>
+        /// Back propagates with respect to some error vector on the next layer.
+        /// </summary>
+        /// <param name="B_lp1">The next error parameter.</param>
+        /// <returns></returns>
+        public  void UpdateCoefficients(Vector<double> B_lp1, double a)
+        {
+            K = K - a * I.OuterProduct(B_lp1); //Compute the outer product.
+        }
+
         #region Properties
         /// <summary>
         /// The interval alonmg which the functional layer is disposed.
         /// </summary>
         public Interval R { get; set; }
+        
+        /// <summary>
+        /// Calculates a layers Psi based on an action output.
+        /// </summary>
+        public IInterpolation Psi
+        {
+            get
+            {
+                return new FuncInterpolation(
+                    y => Activation.Differentiate(ActionOutput.Interpolate(y))
+                );
+            }
+        }
 
         #endregion
 
@@ -85,5 +114,6 @@ namespace FNNLib.Core.Layers
         Vector<double> I; //The interpolation from the paper.
         Vector<double> C; //C_s^{(l)}
         #endregion
+
     }
 }
