@@ -35,7 +35,7 @@ namespace FNNLib.Util
         /// <param name="a"></param>
         /// <param name="I"></param>
         /// <returns></returns>
-        public Interval operator*(double a, Interval I){
+        public static Interval operator*(double a, Interval I){
             return new Interval(I.A*a, I.B*a);
         }
 
@@ -45,7 +45,7 @@ namespace FNNLib.Util
         /// <param name="I"></param>
         /// <param name="a"></param>
         /// <returns></returns>
-        public Interval operator*(Interval I, double a){
+        public static Interval operator*(Interval I, double a){
             return a*I;
         }
         #endregion
