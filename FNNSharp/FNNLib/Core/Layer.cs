@@ -16,10 +16,27 @@ namespace FNNLib.Core
     /// </summary>
     public interface ILayer
     {
+        /// <summary>
+        /// Returns the type of the domain.
+        /// </summary>
         Type AType { get; }
+        
+
+        /// <summary>
+        /// Returns the typer of the codomain.
+        /// </summary>
         Type BType { get; }
 
+        /// <summary>
+        /// Feeds a give layer forward using input as (AType)
+        /// </summary>
+        /// <param name="input">Feeds the input forward</param>
+        /// <returns></returns>
         object FeedForward(object input);
+
+        /// <summary>
+        /// Gets the output of a layer.
+        /// </summary>
         object Output { get; set; }
 
     }

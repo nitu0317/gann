@@ -1,4 +1,5 @@
-﻿using FNNLib.Core.Layers;
+﻿using FNNLib.Core;
+using FNNLib.Core.Layers;
 using FNNLib.Util;
 using System;
 using System.Collections.Generic;
@@ -23,8 +24,10 @@ namespace FNNSharp
             
             while (true)
             {
-                FunctionalLayer f = new FunctionalLayer(100, 100, Interval.AbsoluteUnitBall);
-                ShowPlot fPlot = new ShowPlot(f.FeedForward(
+                Network fnn = new Network();
+                fnn.AddLayer(new FunctionalLayer(100, 100, Interval.AbsoluteUnitBall));
+                fnn.AddLayer(new FunctionalLayer(100, 100, Interval.AbsoluteUnitBall));
+                ShowPlot fPlot = new ShowPlot((FuncInterpolation)fnn.FeedForward(
                     new FuncInterpolation((x) => x * x)), "f functional test");
                 fPlot.ShowDialog();
             }
