@@ -19,8 +19,17 @@ namespace FNNLib.Core
         }
 
 
+        /// <summary>
+        /// Feeds the network forward with some input
+        /// </summary>
+        /// <param name="input">The input of the network : A</param>
+        /// <returns>The output of the network : B</returns>
         public object FeedForward(object input)
         {
+            if (layers.Count() == 0)
+                return input;
+
+
             if (AType.IsInstanceOfType(input))
             {
                 if (layers.Count() == 0)

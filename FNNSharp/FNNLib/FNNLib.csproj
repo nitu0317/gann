@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Layer.cs" />
+    <Compile Include="Core\Layers\DiscreteLayer.cs" />
     <Compile Include="Core\Layers\FunctionalLayer.cs" />
     <Compile Include="Core\Network.cs" />
     <Compile Include="Core\Sigmoid.cs" />
