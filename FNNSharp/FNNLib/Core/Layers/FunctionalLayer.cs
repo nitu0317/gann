@@ -24,7 +24,7 @@ namespace FNNLib.Core.Layers
         /// <param name="dist">The prior distribution.</param>
         public FunctionalLayer(int Z_X, int Z_Y, Interval R,
             IContinuousDistribution dist, Sigmoid activation)
-            : base(Z_X, Z_X, dist, activation)
+            : base(Z_X, Z_Y, dist, activation)
         {
             I = Vector<double>.Build.Dense(Z_X);  //As per (2.3.6)
             C = Vector<double>.Build.Dense(Z_Y);   //As per (2.3.7)
@@ -60,10 +60,11 @@ namespace FNNLib.Core.Layers
 
 
             //As per (2.3.8)
-            return this.Output = new FuncInterpolation((j) =>
+            return   new FuncInterpolation(
+                (j) =>
                 {
                     //Construct a j power vector.
-                    var J = Vector<double>.Build.Dense(Z_Y, (y) => Math.Pow(j, y));
+                    var J = Vector<double>.Build.Dense(Z_Y, y => Math.Pow(j, y));
                     //Return the dot product.
                     return J * C;
                 }

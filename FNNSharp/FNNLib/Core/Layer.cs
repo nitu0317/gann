@@ -17,17 +17,6 @@ namespace FNNLib.Core
     public interface ILayer
     {
         /// <summary>
-        /// Returns the type of the domain.
-        /// </summary>
-        Type AType { get; }
-        
-
-        /// <summary>
-        /// Returns the typer of the codomain.
-        /// </summary>
-        Type BType { get; }
-
-        /// <summary>
         /// Feeds a give layer forward using input as (AType)
         /// </summary>
         /// <param name="input">Feeds the input forward</param>
@@ -38,6 +27,21 @@ namespace FNNLib.Core
         /// Gets the output of a layer.
         /// </summary>
         object Output { get; set; }
+
+
+        #region Generic Type Information
+        /// <summary>
+        /// Returns the type of the domain.
+        /// </summary>
+        Type AType { get; }
+
+
+        /// <summary>
+        /// Returns the typer of the codomain.
+        /// </summary>
+        Type BType { get; }
+
+        #endregion 
 
     }
 
@@ -86,7 +90,7 @@ namespace FNNLib.Core
         {
             //g(T_l[σ] + //β)
             
-            return this.Activation.Interpolate((dynamic)ForwardAction(input));
+            return Output = this.Activation.Interpolate((dynamic)ForwardAction(input));
         }
 
 
@@ -100,7 +104,7 @@ namespace FNNLib.Core
         /// <summary>
         /// A cached output from the feed forward action.
         /// </summary>
-        public B Output { get; protected set; }
+        public B Output { get; private set; }
 
 
         #region ILayer
