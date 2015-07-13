@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FNNLib.Core.Layers;
+using FNNLib.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,12 +16,14 @@ namespace FNNLib.Core
         public Network()
         {
 
+            Layers.Add(new FunctionalLayer(10, 10, Interval.UnitBall));
+            Layers[0].FeedForward(new FuncInterpolation(x => 10));
         }
 
 
         #region Fields
 
-        IList<Layer> Layers;
+        List<ILayer> Layers;
 
         #endregion
     }

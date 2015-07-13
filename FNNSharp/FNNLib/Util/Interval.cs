@@ -9,17 +9,19 @@ namespace FNNLib.Util
     /// <summary>
     /// Represents a real closed interval. 
     /// </summary>
-    public class Interval
+    public struct Interval
     {
+
         /// <summary>
         /// Defines the interval with a left and right hand.
         /// </summary>
         /// <param name="a">The left hand.</param>
         /// <param name="b">The right hand.</param>
         public Interval(double a, double b)
+            : this()
         {
-            this.A = a > b ? b : a;
-            this.B = a > b ? a : b;
+            A = a > b ? b : a;
+            B = a > b ? a : b;
         }
 
         public double A { get; private set; }

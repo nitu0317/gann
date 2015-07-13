@@ -21,6 +21,7 @@ namespace FNNLib.Core
 
         object FeedForward(object input);
         object Output { get; set; }
+
     }
 
 
@@ -64,7 +65,7 @@ namespace FNNLib.Core
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public new B FeedForward(A input)
+        public B FeedForward(A input)
         {
             //g(T_l[σ] + //β)
             
@@ -82,7 +83,7 @@ namespace FNNLib.Core
         /// <summary>
         /// A cached output from the feed forward action.
         /// </summary>
-        public new B Output { get; protected set; }
+        public B Output { get; protected set; }
 
 
         #region ILayer
@@ -92,7 +93,7 @@ namespace FNNLib.Core
         /// </summary>
         /// <param name="input">The input object STRICTLY of : A</param>
         /// <returns></returns>
-        public object ILayer.FeedForward(object input)
+        object ILayer.FeedForward(object input)
         {
             return FeedForward((A)input);
         }
@@ -100,14 +101,14 @@ namespace FNNLib.Core
         /// <summary>
         /// Explicitly implements he output yeield of a feed forward action.
         /// </summary>
-        public object ILayer.Output
+        object ILayer.Output
         {
             get
             {
                 return this.Output;
             }
 
-            protected set
+            set
             {
                 this.Output = (B)value;
             }
