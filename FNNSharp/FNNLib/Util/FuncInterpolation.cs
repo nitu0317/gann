@@ -184,7 +184,7 @@ namespace FNNLib.Util
         /// <returns></returns>
         public double L2InnerProduct(FuncInterpolation g, Interval region)
         {
-            return NewtonCotesTrapeziumRule.IntegrateAdaptive((this*g).Interpolate,
+            return MathNet.Numerics.Integrate.OnClosedInterval((this * g).Interpolate,
                 region.A, region.B, 0.1);
         }
 

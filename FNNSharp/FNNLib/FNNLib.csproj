@@ -50,6 +50,7 @@
     <Compile Include="Core\Network.cs" />
     <Compile Include="Core\Sigmoid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\Helpers\IntegrateHelper.cs" />
     <Compile Include="Util\FuncInterpolation.cs" />
     <Compile Include="Util\Interval.cs" />
   </ItemGroup>

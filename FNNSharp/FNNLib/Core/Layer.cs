@@ -63,7 +63,7 @@ namespace FNNLib.Core
         /// </summary>
         /// <param name="B_lp1">The next error parameter.</param>
         /// <returns></returns>
-        public abstract Vector<double> BackPropagate(Vector<double> B_lp1);
+        //public abstract Vector<double> BackPropagate(Vector<double> B_lp1);
 
         /// <summary>
         /// A cached output from the feed forward action.

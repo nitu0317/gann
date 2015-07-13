@@ -1,5 +1,6 @@
 ﻿using FNNLib.Core.NeuralLibrary.NeuralNetwork;
 using FNNLib.Util;
+using MathNet.Numerics;
 using MathNet.Numerics.Distributions;
 using MathNet.Numerics.Integration;
 using MathNet.Numerics.Interpolation;
@@ -46,7 +47,7 @@ namespace FNNLib.Core.Layers
         {
             //As per (2.3.6)
             I = Vector<double>.Build.Dense(Z_X, (t) =>
-                 NewtonCotesTrapeziumRule.IntegrateAdaptive
+                 Integrate.OnClosedInterval
                     ((j) =>  //int sigmoid * x^t
                         input.Interpolate(j)*Math.Pow(j,t),
                      R.A, R.B, 0.1 //TODO: Find acceptable error.
@@ -56,6 +57,7 @@ namespace FNNLib.Core.Layers
 
             //As per (2.3.7)
             C = K.Transpose() * I;
+
 
             //As per (2.3.8)
             return this.Output = new FuncInterpolation((j) =>
