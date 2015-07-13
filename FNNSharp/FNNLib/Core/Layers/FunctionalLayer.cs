@@ -1,5 +1,6 @@
 ﻿using FNNLib.Core.NeuralLibrary.NeuralNetwork;
 using FNNLib.Util;
+using MathNet.Numerics;
 using MathNet.Numerics.Distributions;
 using MathNet.Numerics.Integration;
 using MathNet.Numerics.Interpolation;
@@ -42,11 +43,11 @@ namespace FNNLib.Core.Layers
             Sigmoid.HyperbolicTangent)
         { }
 
-        public override IInterpolation FeedForward(IInterpolation input)
+        protected override IInterpolation ForwardAction(IInterpolation input)
         {
             //As per (2.3.6)
             I = Vector<double>.Build.Dense(Z_X, (t) =>
-                 NewtonCotesTrapeziumRule.IntegrateAdaptive
+                 Integrate.OnClosedInterval
                     ((j) =>  //int sigmoid * x^t
                         input.Interpolate(j)*Math.Pow(j,t),
                      R.A, R.B, 0.1 //TODO: Find acceptable error.
@@ -57,13 +58,14 @@ namespace FNNLib.Core.Layers
             //As per (2.3.7)
             C = K.Transpose() * I;
 
+
             //As per (2.3.8)
             return this.Output = new FuncInterpolation((j) =>
                 {
                     //Construct a j power vector.
                     var J = Vector<double>.Build.Dense(Z_Y, (y) => Math.Pow(j, y));
                     //Return the dot product.
-                    return Activation.Interpolate(J*C);
+                    return J * C;
                 }
             );
 

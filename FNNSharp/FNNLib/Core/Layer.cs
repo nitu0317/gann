@@ -56,8 +56,28 @@ namespace FNNLib.Core
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public new abstract B FeedForward(A input);
+		protected abstract B ForwardAction(A input);
 
+        /// <summary>
+        /// Calculates the generalized sigma output for a given layer.
+        /// Apply g(T_l[σ] + β)
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public new B FeedForward(A input)
+        {
+            //g(T_l[σ] + //β)
+            
+            return this.Activation.Interpolate((dynamic)ForwardAction(input));
+        }
+
+
+        /// <summary>
+        /// Back propagates with respect to some error vector on the next layer.
+        /// </summary>
+        /// <param name="B_lp1">The next error parameter.</param>
+        /// <returns></returns>
+        //public abstract Vector<double> BackPropagate(Vector<double> B_lp1);
 
         /// <summary>
         /// A cached output from the feed forward action.
@@ -116,6 +136,11 @@ namespace FNNLib.Core
         /// The coefficient weight matrix.
         /// </summary>
         public Matrix<double> K { get; protected set; } //The k coefficient matrix.
+
+        /// <summary>
+        /// The bias on each layer.
+        /// </summary>
+       // public B Bias { get; set; }
 
         /// <summary>
         /// The row size of the K matrix.

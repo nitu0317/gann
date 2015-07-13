@@ -20,12 +20,14 @@ namespace FNNSharp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            FunctionalLayer f = new FunctionalLayer(100, 100, Interval.AbsoluteUnitBall);
-
-            ShowPlot fPlot = new ShowPlot(f.FeedForward(
-                new FuncInterpolation((x) => x * x)), "f functional test");
-            fPlot.ShowDialog();
-
+            
+            while (true)
+            {
+                FunctionalLayer f = new FunctionalLayer(100, 100, Interval.AbsoluteUnitBall);
+                ShowPlot fPlot = new ShowPlot(f.FeedForward(
+                    new FuncInterpolation((x) => x * x)), "f functional test");
+                fPlot.ShowDialog();
+            }
 
             Console.ReadKey();
 
