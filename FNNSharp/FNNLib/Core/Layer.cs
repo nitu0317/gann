@@ -11,12 +11,27 @@ using System.Threading.Tasks;
 namespace FNNLib.Core
 {
     /// <summary>
+    /// The abstract type for Layer which allows polymorphic 
+    /// IEnumerable representation
+    /// </summary>
+    public interface ILayer
+    {
+        Type AType { get; }
+        Type BType { get; }
+
+        object FeedForward(object input);
+        object Output { get; set; }
+    }
+
+
+
+    /// <summary>
     /// Describes the general class of layers, \Sigma_l: A -> B.
     /// Subclasses include n,n1,n2, and f, all of which are described in the white paper.
     /// </summary>
     /// <typeparam name="A">The set from which the layer maps.</typeparam>
     /// <typeparam name="B">The set to which the layer maps.</typeparam>
-    public abstract class Layer<A,B>
+    public abstract class Layer<A,B> : ILayer
     {
         /// <summary>
         /// Constructs a layer wutg a given prior distribution.
@@ -41,16 +56,59 @@ namespace FNNLib.Core
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public abstract B FeedForward(A input);
+        public new abstract B FeedForward(A input);
 
 
         /// <summary>
         /// A cached output from the feed forward action.
         /// </summary>
-        public B Output { get; protected set; }
+        public new B Output { get; protected set; }
 
 
+        #region ILayer
+        
+        /// <summary>
+        /// Allows FeedForward to be handled in terms of objects.
+        /// </summary>
+        /// <param name="input">The input object STRICTLY of : A</param>
+        /// <returns></returns>
+        public object ILayer.FeedForward(object input)
+        {
+            return FeedForward((A)input);
+        }
 
+        /// <summary>
+        /// Explicitly implements he output yeield of a feed forward action.
+        /// </summary>
+        public object ILayer.Output
+        {
+            get
+            {
+                return this.Output;
+            }
+
+            protected set
+            {
+                this.Output = (B)value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the type A of sets from which the layer maps
+        /// </summary>
+        public Type AType
+        {
+            get { return typeof(A); }
+        }
+
+        /// <summary>
+        /// Returns the type B of sets from which the layer maps.
+        /// </summary>
+        public Type BType
+        {
+            get { return typeof(B);  }
+        }
+        #endregion
 
         #region Properties
 

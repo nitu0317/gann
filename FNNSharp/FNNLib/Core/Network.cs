@@ -6,7 +6,21 @@ using System.Threading.Tasks;
 
 namespace FNNLib.Core
 {
-    class Network
+    /// <summary>
+    /// Defines a network for a generalized functional neural network,.
+    /// </summary>
+    public class Network
     {
+        public Network()
+        {
+
+        }
+
+
+        #region Fields
+
+        IList<Layer> Layers;
+
+        #endregion
     }
 }
