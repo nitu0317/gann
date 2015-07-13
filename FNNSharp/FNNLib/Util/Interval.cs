@@ -27,6 +27,28 @@ namespace FNNLib.Util
         public double A { get; private set; }
         public double B { get; private set; }
 
+        #region Operators
+
+        /// <summary>
+        /// The scaling operator for real intervals.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="I"></param>
+        /// <returns></returns>
+        public Interval operator*(double a, Interval I){
+            return new Interval(I.A*a, I.B*a);
+        }
+
+        /// <summary>
+        /// The lexically inverted scale operator.
+        /// </summary>
+        /// <param name="I"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public Interval operator*(Interval I, double a){
+            return a*I;
+        }
+        #endregion
 
         #region Predefined Intervals
         public static Interval UnitBall = new Interval(-1, 1);
