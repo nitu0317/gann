@@ -17,9 +17,7 @@ namespace FNNSharp
             Application.SetCompatibleTextRenderingDefault(false);
 
             Network fnn = new Network();
-            fnn.AddLayer(new FunctionalLayer(10, 10, Interval.UnitBall));
-
-            fnn.AddLayer(new FunctionalLayer(10, 10, Interval.UnitBall));
+            fnn.AddLayer(new FunctionalLayer(20, 20, Interval.UnitBall));
 
 
             ShowPlot fPlot = new ShowPlot(
@@ -37,7 +35,7 @@ namespace FNNSharp
 
                // Console.ReadKey();
                 double error  = fnn.Train(new FuncInterpolation(x => x),
-                    new FuncInterpolation(x => Math.Sin(2*x)), 0.5);
+                    new FuncInterpolation(x => Math.Exp(x)), 1);
                 Console.WriteLine(error);
                 fPlot.Replot((FuncInterpolation)fnn.Output, error.ToString());
 
