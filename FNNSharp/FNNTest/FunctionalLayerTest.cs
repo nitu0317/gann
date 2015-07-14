@@ -1,7 +1,6 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using FNNLib.Core.Layers;
+﻿using FNNLib.Core.Layers;
 using FNNLib.Util;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FNNTest
 {
@@ -18,7 +17,6 @@ namespace FNNTest
         public void Initialize()
         {
             f = new FunctionalLayer(10, 10, Interval.AbsoluteUnitBall);
-
         }
 
         /// <summary>
@@ -30,6 +28,6 @@ namespace FNNTest
             f.FeedForward(new FuncInterpolation((x) => x));
         }
 
-        FunctionalLayer f;
+        private FunctionalLayer f;
     }
 }

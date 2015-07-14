@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FNNLib.Util
+﻿namespace FNNLib.Util
 {
     /// <summary>
-    /// Represents a real closed interval. 
+    /// Represents a real closed interval.
     /// </summary>
     public struct Interval
     {
-
         /// <summary>
         /// Defines the interval with a left and right hand.
         /// </summary>
@@ -25,6 +18,7 @@ namespace FNNLib.Util
         }
 
         public double A { get; private set; }
+
         public double B { get; private set; }
 
         #region Operators
@@ -35,8 +29,9 @@ namespace FNNLib.Util
         /// <param name="a"></param>
         /// <param name="I"></param>
         /// <returns></returns>
-        public static Interval operator*(double a, Interval I){
-            return new Interval(I.A*a, I.B*a);
+        public static Interval operator *(double a, Interval I)
+        {
+            return new Interval(I.A * a, I.B * a);
         }
 
         /// <summary>
@@ -45,14 +40,18 @@ namespace FNNLib.Util
         /// <param name="I"></param>
         /// <param name="a"></param>
         /// <returns></returns>
-        public static Interval operator*(Interval I, double a){
-            return a*I;
+        public static Interval operator *(Interval I, double a)
+        {
+            return a * I;
         }
-        #endregion
+
+        #endregion Operators
 
         #region Predefined Intervals
+
         public static Interval UnitBall = new Interval(-1, 1);
         public static Interval AbsoluteUnitBall = new Interval(0, 1);
-        #endregion
+
+        #endregion Predefined Intervals
     }
 }

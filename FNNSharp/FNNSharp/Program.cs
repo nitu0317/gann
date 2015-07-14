@@ -3,59 +3,57 @@ using FNNLib.Core.Layers;
 using FNNLib.Util;
 using MathNet.Numerics.LinearAlgebra;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
-
 
 namespace FNNSharp
 {
-    class Program
+    internal class Program
     {
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            ///Build arbitrary 100 layer functional neural networks.
-            //while (true)
-            //{
-            //    Network fnn = new Network();
-            //    for (int i = 0; i < 100; i++ )
-            //    {
-            //        fnn.AddLayer(new FunctionalLayer(10, 10, Interval.UnitBall));
-            //    }
+            Network fnn = new Network();
+            fnn.AddLayer(new FunctionalLayer(10, 10, Interval.UnitBall));
+
+            fnn.AddLayer(new FunctionalLayer(10, 10, Interval.UnitBall));
 
 
-            //    ShowPlot fPlot = new ShowPlot((FuncInterpolation)fnn.FeedForward(
-            //        new FuncInterpolation((x) => -x*x + 3*x - 2)), "f functional test");
-            //    fPlot.ShowDialog();
-            //}
+            ShowPlot fPlot = new ShowPlot(
+                (FuncInterpolation)fnn.FeedForward(
+                new FuncInterpolation(x => x)), "f functional test");
 
+            Thread t = new Thread(
+                () => Application.Run(fPlot));
 
+            t.Start();
 
-            ///Build arbitrary discrete neural network.
-            while(true)
+            //Train a functional neural network
+            while (true)
             {
-                Network nn = new Network();
-                nn.AddLayer(new DiscreteLayer(2, 4));
-                nn.AddLayer(new DiscreteLayer(4, 4));
-                nn.AddLayer(new DiscreteLayer(4, 1));
 
-                Vector<double> output = (Vector<double>)nn.FeedForward(Vector<double>.Build.Random(2));
+               // Console.ReadKey();
+                double error  = fnn.Train(new FuncInterpolation(x => x),
+                    new FuncInterpolation(x => Math.Sin(2*x)), 0.5);
+                Console.WriteLine(error);
+                fPlot.Replot((FuncInterpolation)fnn.Output, error.ToString());
 
-                Console.WriteLine("o = " + output);
-                Console.ReadKey();
             }
 
+            ///Build arbitrary discrete neural network.
+            //while (true)
+            //{
+            //    Network nn = new Network();
+            //    nn.AddLayer(new FunctionalLayer(10, 10, Interval.UnitBall));
+
+                
+            //    Console.ReadKey();
+            //}
+
             Console.ReadKey();
-
-
         }
     }
 }

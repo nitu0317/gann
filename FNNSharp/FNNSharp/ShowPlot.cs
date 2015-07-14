@@ -30,13 +30,12 @@ namespace FNNSharp
 
         }
 
-        public void Replot(IInterpolation func)
+        public void Replot(IInterpolation func, string name)
         {
-            this.InitializeComponent();
             this.func = func;
-            this.funcName = this.funcName;
-            var myModel = new PlotModel { Title = funcName };
-            myModel.Series.Add(new FunctionSeries(func.Interpolate, -1, 1, 0.01, funcName));
+            this.funcName = name;
+            var myModel = new PlotModel { Title = name };
+            myModel.Series.Add(new FunctionSeries(func.Interpolate, -1, 1, 0.01, name));
             this.plot1.Model = myModel;
         }
 
@@ -49,5 +48,10 @@ namespace FNNSharp
          IInterpolation func;
 
          string funcName;
+
+         private void plot1_Click(object sender, EventArgs e)
+         {
+
+         }
     }
 }

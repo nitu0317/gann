@@ -1,17 +1,12 @@
 ﻿using FNNLib.Core.NeuralLibrary.NeuralNetwork;
-using FNNLib.Util;
 using MathNet.Numerics.Distributions;
 using MathNet.Numerics.LinearAlgebra;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FNNLib.Core
 {
     /// <summary>
-    /// The abstract type for Layer which allows polymorphic 
+    /// The abstract type for Layer which allows polymorphic
     /// IEnumerable representation
     /// </summary>
     public interface ILayer
@@ -28,24 +23,54 @@ namespace FNNLib.Core
         /// </summary>
         object Output { get; set; }
 
+        /// <summary>
+        /// Back propagates with respect to some error vector on the next layer.
+        /// </summary>
+        /// <param name="B_lp1">The next error parameter.</param>
+        /// <returns></returns>
+        void UpdateCoefficients(Vector<double> B_lp1, double a);
+
+        /// <summary>
+        /// Calculates the error of an output based on a desired object
+        /// </summary>
+        /// <param name="desired">The desired output</param>
+        /// <returns>The error</returns>
+        double Error(object desired);
+
+        #region Properties
+
+
+        /// <summary>
+        /// The coefficient weight matrix.
+        /// </summary>
+        Matrix<double> K { get;  set; } //The k coefficient matrix.
+
+        /// <summary>
+        /// The row size of the K matrix.
+        /// </summary>
+        int Z_X { get;  }
+
+        /// <summary>
+        /// The column size of the K matrix.
+        /// </summary>
+        int Z_Y { get; }
+
+        #endregion Properties
 
         #region Generic Type Information
+
         /// <summary>
         /// Returns the type of the domain.
         /// </summary>
         Type AType { get; }
-
 
         /// <summary>
         /// Returns the typer of the codomain.
         /// </summary>
         Type BType { get; }
 
-        #endregion 
-
+        #endregion Generic Type Information
     }
-
-
 
     /// <summary>
     /// Describes the general class of layers, \Sigma_l: A -> B.
@@ -53,7 +78,7 @@ namespace FNNLib.Core
     /// </summary>
     /// <typeparam name="A">The set from which the layer maps.</typeparam>
     /// <typeparam name="B">The set to which the layer maps.</typeparam>
-    public abstract class Layer<A,B> : ILayer
+    public abstract class Layer<A, B> : ILayer
     {
         /// <summary>
         /// Constructs a layer wutg a given prior distribution.
@@ -64,21 +89,10 @@ namespace FNNLib.Core
         public Layer(int Z_X, int Z_Y,
             IContinuousDistribution dist, Sigmoid activation)
         {
-            this.Z_X = Z_X;
-            this.Z_Y = Z_Y;
             this.Activation = activation;
 
             K = Matrix<double>.Build.Random(Z_X, Z_Y, dist);
         }
-
-        /// <summary>
-        /// Feeds the algorithm forward, yielding an output.
-        /// We do not wish to contain anterior layers, and let the network handle propagation
-        /// in an interative fashion.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-		protected abstract B ForwardAction(A input);
 
         /// <summary>
         /// Calculates the generalized sigma output for a given layer.
@@ -95,6 +109,44 @@ namespace FNNLib.Core
                 (dynamic)(ActionOutput = ForwardAction(input)));
         }
 
+        /// <summary>
+        /// Calculates the error of an output based on a desired object
+        /// </summary>
+        /// <param name="desired">The desired output</param>
+        /// <returns>The error</returns>
+        public double Error(B desired)
+        {
+            if (Output == null)
+                throw new InvalidOperationException("Error cannot be calculated."
+                    + " The network may not have been fed forward.");
+
+            return CalculateError(desired);
+        }
+
+        /// <summary>
+        /// A cached output from the feed forward action.
+        /// </summary>
+        public B Output { get; private set; }
+
+        protected B ActionOutput { get; private set; }
+
+        #region Abstract Actions
+
+        /// <summary>
+        /// Feeds the algorithm forward, yielding an output.
+        /// We do not wish to contain anterior layers, and let the network handle propagation
+        /// in an interative fashion.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected abstract B ForwardAction(A input);
+
+        /// <summary>
+        /// Calculates the error of an output based on a desired object
+        /// </summary>
+        /// <param name="desired">The desired output</param>
+        /// <returns>The error</returns>
+        protected abstract double CalculateError(B desired);
 
         /// <summary>
         /// Back propagates with respect to some error vector on the next layer.
@@ -103,17 +155,10 @@ namespace FNNLib.Core
         /// <returns></returns>
         public abstract void UpdateCoefficients(Vector<double> B_lp1, double a);
 
-        /// <summary>
-        /// A cached output from the feed forward action.
-        /// </summary>
-        public B Output { get; private set; }
-
-
-        protected B ActionOutput { get; private set; }
-
+        #endregion Abstract Actions
 
         #region ILayer
-        
+
         /// <summary>
         /// Allows FeedForward to be handled in terms of objects.
         /// </summary>
@@ -141,6 +186,16 @@ namespace FNNLib.Core
         }
 
         /// <summary>
+        /// Calculates the error of an output based on a desired object
+        /// </summary>
+        /// <param name="desired">The desired output</param>
+        /// <returns>The error</returns>
+        double ILayer.Error(object desired)
+        {
+            return Error((B)desired);
+        }
+
+        /// <summary>
         /// Returns the type A of sets from which the layer maps
         /// </summary>
         public Type AType
@@ -153,34 +208,47 @@ namespace FNNLib.Core
         /// </summary>
         public Type BType
         {
-            get { return typeof(B);  }
+            get { return typeof(B); }
         }
-        #endregion
+
+        #endregion ILayer
 
         #region Properties
 
         /// <summary>
         /// The coefficient weight matrix.
         /// </summary>
-        public Matrix<double> K { get; protected set; } //The k coefficient matrix.
+        public Matrix<double> K { get; set; } //The k coefficient matrix.
 
         /// <summary>
         /// The bias on each layer.
         /// </summary>
-       // public B Bias { get; set; }
+        // public B Bias { get; set; }
 
         /// <summary>
         /// The row size of the K matrix.
         /// </summary>
-        public int Z_X { get; private set; }
+        public int Z_X
+        {
+            get
+            {
+                return K.RowCount;
+            }
+        }
 
         /// <summary>
         /// The column size of the K matrix.
         /// </summary>
-        public int Z_Y { get; private set; }
+        public int Z_Y
+        {
+            get
+            {
+                return K.ColumnCount;
+            }
+        }
 
         public Sigmoid Activation { get; protected set; }
 
-        #endregion
+        #endregion Properties
     }
 }

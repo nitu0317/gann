@@ -1,23 +1,23 @@
-﻿using MathNet.Numerics.Integration;
-using MathNet.Numerics.Interpolation;
+﻿using MathNet.Numerics.Interpolation;
 using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FNNLib.Util
 {
-    public class FuncInterpolation :IInterpolation
+    public class FuncInterpolation : IInterpolation
     {
         #region Fields
+
         private Func<double, double> proc;
         private Func<double, double> deriv = null;
         private Func<double, double> integ = null;
-        #endregion
+
+        #endregion Fields
 
         #region Constructors
+
         /// <summary>
         /// Defines a functional interepolation with only a procedure ]
         /// and no integratrion/differentiation capabilities.
@@ -27,7 +27,6 @@ namespace FNNLib.Util
         {
             this.proc = proc;
         }
-
 
         /// <summary>
         /// Defines a functional interepolation with only a procedure ]
@@ -56,7 +55,7 @@ namespace FNNLib.Util
             this.integ = integ;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Operators
 
@@ -68,8 +67,8 @@ namespace FNNLib.Util
         /// <returns></returns>
         public static FuncInterpolation operator +(FuncInterpolation f, FuncInterpolation g)
         {
-            Func<double,double> hproc = (x) => f.proc(x) + g.proc(x),
-                hderiv = null , hinteg = null;
+            Func<double, double> hproc = (x) => f.proc(x) + g.proc(x),
+                hderiv = null, hinteg = null;
 
             if (f.SupportsDifferentiation && g.SupportsDifferentiation)
                 hderiv = (x) => f.deriv(x) + g.deriv(x); //by linearity of differentiation.
@@ -89,7 +88,6 @@ namespace FNNLib.Util
         {
             Func<double, double> hproc = (x) => f.proc(x) * a,
                 hderiv = null, hinteg = null;
-
 
             if (f.SupportsDifferentiation)
                 hderiv = (x) => f.deriv(x) * a; //by linearity of differentiation.
@@ -111,7 +109,7 @@ namespace FNNLib.Util
         }
 
         /// <summary>
-        /// The pointwise addition operator of function interpolations. 
+        /// The pointwise addition operator of function interpolations.
         /// Defined using + and *.
         /// </summary>
         /// <param name="f"></param>
@@ -145,11 +143,11 @@ namespace FNNLib.Util
         /// <returns></returns>
         public static FuncInterpolation operator /(double a, FuncInterpolation f)
         {
-            Func<double, double> hproc = (x) =>  a / f.proc(x),
+            Func<double, double> hproc = (x) => a / f.proc(x),
                 hderiv = null, hinteg = null;
 
             if (f.SupportsDifferentiation)
-                hderiv = (x) => - a * Math.Pow(f.proc(x),-2)*f.deriv(x); //by chain rule.
+                hderiv = (x) => -a * Math.Pow(f.proc(x), -2) * f.deriv(x); //by chain rule.
 
             //Integration cannot be defined.
 
@@ -164,7 +162,7 @@ namespace FNNLib.Util
         /// <returns></returns>
         public static FuncInterpolation operator *(FuncInterpolation f, FuncInterpolation g)
         {
-            Func<double, double> hproc = (x) => f.proc(x)* g.proc(x),
+            Func<double, double> hproc = (x) => f.proc(x) * g.proc(x),
                 hderiv = null, hinteg = null;
 
             if (f.SupportsDifferentiation && g.SupportsDifferentiation)
@@ -175,7 +173,6 @@ namespace FNNLib.Util
             return new FuncInterpolation(hproc, hderiv, hinteg);
         }
 
-
         /// <summary>
         /// Calculates the L2InnerProduct of two functions
         /// </summary>
@@ -185,9 +182,8 @@ namespace FNNLib.Util
         public double L2InnerProduct(FuncInterpolation g, Interval region)
         {
             return MathNet.Numerics.Integrate.OnClosedInterval((this * g).Interpolate,
-                region.A, region.B, 0.1);
+                region.A, region.B, 0.01);
         }
-
 
         /// <summary>
         /// Calculates the L2 norm of a function over its region.
@@ -200,10 +196,9 @@ namespace FNNLib.Util
             return this.L2InnerProduct(this, region);
         }
 
-        #endregion
+        #endregion Operators
 
         #region Basic Types
-
 
         /// <summary>
         /// A easily construct4ed cosntant func interpolation.
@@ -225,7 +220,8 @@ namespace FNNLib.Util
         /// <param name="m">The slope</param>
         /// <param name="b">The y intercept</param>
         /// <returns></returns>
-        public static FuncInterpolation Linear(double m, double b){
+        public static FuncInterpolation Linear(double m, double b)
+        {
             return m * new FuncInterpolation(
                 (x) => x,
                 (x) => 1,
@@ -242,10 +238,10 @@ namespace FNNLib.Util
         {
             return new FuncInterpolation(
                 (x) => Math.Pow(x, p),
-                (x) => (p)*Math.Pow(x,p-1),
+                (x) => (p) * Math.Pow(x, p - 1),
                 (x) => p == -1 ? //If some crazy ln stuff is occurring here.
                         Math.Log(x) :
-                        1.0/(p+1)*Math.Pow(x, p+1)
+                        1.0 / (p + 1) * Math.Pow(x, p + 1)
                     );
         }
 
@@ -257,9 +253,43 @@ namespace FNNLib.Util
                 return args.Select((k, i) => k * Mononomial(i))
                     .Aggregate((a, b) => a + b);
         }
+
+
+        /// <summary>
+        /// Generates a Power Vector
+        /// </summary>
+        /// <param name="n">The highest power in the vector</param>
+        /// <returns></returns>
+        public static IEnumerable<FuncInterpolation> PowerVector(int n, FuncInterpolation multiplier)
+        {
+
+            return Enumerable.Range(0, n-1)
+                .Select(i => 
+                    new FuncInterpolation(
+                        j => Math.Pow(j, i)
+                    ) * multiplier
+                );
+          
+        }
+
+        /// <summary>
+        /// Creates a power vector with no multiplier
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static IEnumerable<FuncInterpolation> PowerVector(int n)
+        {
+            return Enumerable.Range(0, n - 1)
+                .Select(i =>
+                    new FuncInterpolation(
+                        j => Math.Pow(j, i)
+                    )
+                );
+        }
+
         
 
-        #endregion
+        #endregion Basic Types
 
         #region IInterpolation Explicit
 
@@ -312,7 +342,7 @@ namespace FNNLib.Util
             else
                 throw new NotImplementedException();
         }
-        
+
         /// <summary>
         /// Returns the value of the procedure at some value t.
         /// </summary>
@@ -339,11 +369,12 @@ namespace FNNLib.Util
             get { return integ == null; }
         }
 
-        #endregion
+        #endregion IInterpolation Explicit
 
         #region IInterpolation Extensions
 
         #region IEnumerable
+
         /// <summary>
         /// Integrates a given vector over a set of vector ranges.
         /// </summary>
@@ -375,10 +406,10 @@ namespace FNNLib.Util
             return inv.Select(this.Differentiate);
         }
 
-        #endregion
-
+        #endregion IEnumerable
 
         #region Vector<double>
+
         /// <summary>
         /// Integrates a given vector over a set of vector ranges.
         /// </summary>
@@ -410,8 +441,7 @@ namespace FNNLib.Util
             return ApplyFuncToVector(this.Differentiate, inv);
         }
 
-        #endregion 
-
+        #endregion Vector<double>
 
         #region Functional Composition
 
@@ -452,10 +482,9 @@ namespace FNNLib.Util
                     this.Differentiate(inv.Interpolate(x)));
         }
 
-        #endregion
+        #endregion Functional Composition
 
-
-        #endregion
+        #endregion IInterpolation Extensions
 
         #region Helpers
 
@@ -465,14 +494,12 @@ namespace FNNLib.Util
         /// <param name="f"></param>
         /// <param name="v"></param>
         /// <returns></returns>
-        public static Vector<double> ApplyFuncToVector(Func<double,double> f, Vector<double> v)
+        public static Vector<double> ApplyFuncToVector(Func<double, double> f, Vector<double> v)
         {
             return Vector<double>.Build
                 .DenseOfEnumerable(v.Select(f)); //Project the function on to the vector.
         }
 
-   
-
-        #endregion 
+        #endregion Helpers
     }
 }

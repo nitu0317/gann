@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FNNLib.Core
+﻿namespace FNNLib.Core
 {
-    using MathNet.Numerics.Interpolation;
     using System;
 
     namespace NeuralLibrary.NeuralNetwork

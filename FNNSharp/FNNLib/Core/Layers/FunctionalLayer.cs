@@ -2,14 +2,9 @@
 using FNNLib.Util;
 using MathNet.Numerics;
 using MathNet.Numerics.Distributions;
-using MathNet.Numerics.Integration;
 using MathNet.Numerics.Interpolation;
 using MathNet.Numerics.LinearAlgebra;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FNNLib.Core.Layers
 {
@@ -54,18 +49,16 @@ namespace FNNLib.Core.Layers
             I = Vector<double>.Build.Dense(Z_X, (t) =>
                  Integrate.OnClosedInterval
                     ((j) =>  //int sigmoid * x^t
-                        input.Interpolate(j)*Math.Pow(j,t),
-                     R.A, R.B, 0.1 //TODO: Find acceptable error.
+                        input.Interpolate(j) * Math.Pow(j, t),
+                     R.A, R.B, 0.01 //TODO: Find acceptable error.
                     )
             );
-
 
             //As per (2.3.7)
             C = K.Transpose() * I;
 
-
             //As per (2.3.8)
-            return   new FuncInterpolation(
+            return new FuncInterpolation(
                 (j) =>
                 {
                     //Construct a j power vector.
@@ -74,27 +67,40 @@ namespace FNNLib.Core.Layers
                     return J * C;
                 }
             );
-
-            
         }
-
 
         /// <summary>
         /// Back propagates with respect to some error vector on the next layer.
         /// </summary>
         /// <param name="B_lp1">The next error parameter.</param>
         /// <returns></returns>
-        public  void UpdateCoefficients(Vector<double> B_lp1, double a)
+        public override void UpdateCoefficients(Vector<double> B_lp1, double a)
         {
             K = K - a * I.OuterProduct(B_lp1); //Compute the outer product.
         }
 
+        /// <summary>
+        /// Calculates the error of an output based on a desired object
+        /// </summary>
+        /// <param name="desired">The desired output</param>
+        /// <returns>The error</returns>
+        protected override double CalculateError(IInterpolation desired)
+        {
+            //Using 1/2int{(O - D)^2 dj} or 1/2 ||O - D||^2
+            return 0.5*Integrate.OnClosedInterval(
+                x => Math.Pow(
+                    desired.Interpolate(x) -Output.Interpolate(x)
+                    , 2),
+            R.A,R.B);
+        }
+
         #region Properties
+
         /// <summary>
         /// The interval alonmg which the functional layer is disposed.
         /// </summary>
         public Interval R { get; set; }
-        
+
         /// <summary>
         /// Calculates a layers Psi based on an action output.
         /// </summary>
@@ -108,12 +114,13 @@ namespace FNNLib.Core.Layers
             }
         }
 
-        #endregion
+        #endregion Properties
 
         #region Fields
-        Vector<double> I; //The interpolation from the paper.
-        Vector<double> C; //C_s^{(l)}
-        #endregion
 
+        private Vector<double> I; //The interpolation from the paper.
+        private Vector<double> C; //C_s^{(l)}
+
+        #endregion Fields
     }
 }

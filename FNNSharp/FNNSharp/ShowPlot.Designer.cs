@@ -33,7 +33,6 @@
             // 
             // plot1
             // 
-            // 
             this.plot1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plot1.Location = new System.Drawing.Point(0, 0);
             this.plot1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -45,16 +44,16 @@
             this.plot1.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plot1.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.plot1.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            
+            this.plot1.Click += new System.EventHandler(this.plot1_Click);
             // 
             // ShowPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(726, 480);
-            this.Controls.Add(this.plot1); //VERY IMPORTANT TO ADD COINTROLS -_-
+            this.Controls.Add(this.plot1);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "Form1";
+            this.Name = "ShowPlot";
             this.Text = "Example 1 (WindowsForms)";
             this.ResumeLayout(false);
 
