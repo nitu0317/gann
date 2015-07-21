@@ -24,18 +24,38 @@ namespace FNNLib.Core
         object Output { get; set; }
 
         /// <summary>
-        /// Back propagates with respect to some error vector on the next layer.
-        /// </summary>
-        /// <param name="B_lp1">The next error parameter.</param>
-        /// <returns></returns>
-        void UpdateCoefficients(Vector<double> B_lp1, double a);
-
-        /// <summary>
         /// Calculates the error of an output based on a desired object
         /// </summary>
         /// <param name="desired">The desired output</param>
         /// <returns>The error</returns>
         double Error(object desired);
+
+
+        #region Backpropagation
+
+        /// <summary>
+        /// Calculates the B copefficient on the desired output layer
+        /// </summary>
+        /// <param name="desired">The desired output with which to compare the layers output</param>
+        /// <returns></returns>
+        Vector<double> CalculateBError(object desired);
+
+        /// <summary>
+        /// Calculates the B coefficient for this layer
+        /// </summary>
+        /// <param name="Z_Ym1">The Z_Y for the anterior layer</param>
+        /// <param name="Blp1">The next vector in the BP sequnce</param>
+        /// <returns></returns>
+        Vector<double> CalculateB(int Z_Ym1, Vector<double> Blp1);
+
+
+        /// <summary>
+        /// Back propagates with respect to some error vector on the next layer.
+        /// </summary>
+        /// <param name="B_lp1">The next error parameter.</param>
+        /// <returns></returns>
+        void UpdateCoefficients(Vector<double> B_lp1, double a);
+        #endregion
 
         #region Properties
 
@@ -129,12 +149,17 @@ namespace FNNLib.Core
             return CalculateError(desired);
         }
 
+
+        #region Output
+
         /// <summary>
         /// A cached output from the feed forward action.
         /// </summary>
         public B Output { get; private set; }
 
         protected B ActionOutput { get; private set; }
+
+        #endregion
 
         #region Abstract Actions
 
@@ -154,12 +179,31 @@ namespace FNNLib.Core
         /// <returns>The error</returns>
         protected abstract double CalculateError(B desired);
 
+        #region Backpropagation
+
+        /// <summary>
+        /// Calculates the B copefficient on the desired output layer
+        /// </summary>
+        /// <param name="desired">The desired output with which to compare the layers output</param>
+        /// <returns></returns>
+        public abstract Vector<double> CalculateBError(B desired);
+
+        /// <summary>
+        /// Calculates the B coefficient for this layer
+        /// </summary>
+        /// <param name="Z_Ym1">The Z_Y for the anterior layer</param>
+        /// <param name="Blp1">The next vector in the BP sequnce</param>
+        /// <returns></returns>
+        public abstract Vector<double> CalculateB(int Z_Ym1, Vector<double> Blp1);
+
         /// <summary>
         /// Back propagates with respect to some error vector on the next layer.
         /// </summary>
         /// <param name="B_lp1">The next error parameter.</param>
         /// <returns></returns>
         public abstract void UpdateCoefficients(Vector<double> B_lp1, double a);
+
+        #endregion
 
         #endregion Abstract Actions
 
@@ -226,6 +270,16 @@ namespace FNNLib.Core
             {
                 return Psi;
             }
+        }
+
+        /// <summary>
+        /// Calculates the B copefficient on the desired output layer
+        /// </summary>
+        /// <param name="desired">The desired output with which to compare the layers output</param>
+        /// <returns></returns>
+        Vector<double> ILayer.CalculateBError(object desired)
+        {
+            return CalculateBError((B)desired);
         }
 
         #endregion ILayer

@@ -70,16 +70,6 @@ namespace FNNLib.Core.Layers
         }
 
         /// <summary>
-        /// Back propagates with respect to some error vector on the next layer.
-        /// </summary>
-        /// <param name="B_lp1">The next error parameter.</param>
-        /// <returns></returns>
-        public override void UpdateCoefficients(Vector<double> B_lp1, double a)
-        {
-            K = K - a * I.OuterProduct(B_lp1); //Compute the outer product.
-        }
-
-        /// <summary>
         /// Calculates the error of an output based on a desired object
         /// </summary>
         /// <param name="desired">The desired output</param>
@@ -93,6 +83,52 @@ namespace FNNLib.Core.Layers
                     , 2),
             R.A,R.B);
         }
+
+        #region Backpropagation
+        /// <summary>
+        /// Back propagates with respect to some error vector on the next layer.
+        /// </summary>
+        /// <param name="B_lp1">The next error parameter.</param>
+        /// <returns></returns>
+        public override void UpdateCoefficients(Vector<double> B_lp1, double a)
+        {
+            K = K - a * I.OuterProduct(B_lp1); //Compute the outer product.
+        }
+
+        /// <summary>
+        /// Calculates the B error vector (BError) as per (2.3.20)
+        /// </summary>
+        /// <param name="desired"></param>
+        /// <returns></returns>
+        public override Vector<double> CalculateBError(IInterpolation desired)
+        {
+            //As per (2.3.20)
+            return Vector<double>.Build.Dense(Z_Y,
+                        y => Integrate.OnClosedInterval(
+                                j => (Output.Interpolate(j) - desired.Interpolate(j))
+                                    * Psi.Interpolate(j)
+                                    * Math.Pow(j, y),
+                            R.A, R.B, 0.01) //0.1 ERROR
+                    );
+        }
+
+        /// <summary>
+        /// Calculates the B coefficient for a functional layer.
+        /// </summary>
+        /// <param name="Z_Ym1"></param>
+        /// <param name="Blp1"></param>
+        /// <returns></returns>
+        public override Vector<double> CalculateB(int Z_Ym1, Vector<double> Blp1)
+        {
+            return Matrix<double>.Build.Dense(Z_X, Z_Ym1,
+                (a, b) => Integrate.OnClosedInterval(
+                    j => Math.Pow(j, a + b)
+                        * Psi.Interpolate(j),
+                    R.A, R.B)
+                ) * Blp1;
+        }
+
+        #endregion
 
         #region Properties
 
@@ -122,5 +158,6 @@ namespace FNNLib.Core.Layers
         private Vector<double> C; //C_s^{(l)}
 
         #endregion Fields
+
     }
 }

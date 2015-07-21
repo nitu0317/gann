@@ -21,6 +21,7 @@ namespace FNNLib.Core.Layers
             : base(Z_X, Z_Y, dist, activation)
         {
         }
+        
 
         /// <summary>
         /// Constructs a discrete neural layer with a normal distribtuion
@@ -52,12 +53,11 @@ namespace FNNLib.Core.Layers
         /// <returns></returns>
         protected override double CalculateError(Vector<double> desired)
         {
-            if(desired.Count() != Output.Count())
+            if (desired.Count() != Output.Count())
                 throw new InvalidOperationException("Desired output vector is of different dimensionality than that of the output vector.");
 
-
             //We use the 0.5||O - D||^2 loss function.
-            return 0.5 * Math.Pow((desired - Output).L2Norm(),2);
+            return 0.5 * Math.Pow((desired - Output).L2Norm(), 2);
         }
 
         /// <summary>
@@ -70,8 +70,6 @@ namespace FNNLib.Core.Layers
             throw new NotImplementedException();
         }
 
-
-
         /// <summary>
         /// Calculates a layers Psi based on an action output.
         /// </summary>
@@ -81,6 +79,16 @@ namespace FNNLib.Core.Layers
             {
                 return FuncInterpolation.ApplyFuncToVector(x => Activation.Differentiate(x), this.ActionOutput);
             }
+        }
+
+        public override Vector<double> CalculateBError(Vector<double> desired)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Vector<double> CalculateB(int Z_Ym1, Vector<double> Blp1)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FNNLib.Core.NeuralLibrary.NeuralNetwork;
 using FNNLib.Util;
+using MathNet.Numerics;
 using MathNet.Numerics.Distributions;
 using MathNet.Numerics.Interpolation;
 using MathNet.Numerics.LinearAlgebra;
@@ -28,7 +29,6 @@ namespace FNNLib.Core.Layers
             : base(Z_X, Z_Y, dist, activation)
         {
             I = Vector<double>.Build.Dense(Z_X);  //As per (2.3.6)
-            C = Vector<double>.Build.Dense(Z_Y);   //As per (2.3.7)
             this.R = R;
         }
 
@@ -46,12 +46,27 @@ namespace FNNLib.Core.Layers
 
         protected override Vector<double> ForwardAction(IInterpolation input)
         {
-            throw new NotImplementedException();
+            //As per (2.3.6)
+            I = Vector<double>.Build.Dense(Z_X, (t) =>
+                  Integrate.OnClosedInterval
+                    ((j) =>  //int sigmoid * x^t
+                        input.Interpolate(j) * Math.Pow(j, t),
+                     R.A, R.B, 0.01 //TODO: Find acceptable error.
+                    )
+            );
+
+
+            return K * I; //Vectore of Z_Y dimensionality.
         }
 
+        /// <summary>
+        /// Returns the inner product norm in R^m.
+        /// </summary>
+        /// <param name="desired"></param>
+        /// <returns></returns>
         protected override double CalculateError(Vector<double> desired)
         {
-            throw new NotImplementedException();
+            return 0.5 * Math.Pow((Output - desired).L2Norm(),2);
         }
 
         /// <summary>
@@ -91,10 +106,19 @@ namespace FNNLib.Core.Layers
         #region Fields
 
         private Vector<double> I; //The interpolation from the paper.
-        private Vector<double> C; //C_s^{(l)}
 
         #endregion
 
 
+
+        public override Vector<double> CalculateBError(Vector<double> desired)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Vector<double> CalculateB(int Z_Ym1, Vector<double> Blp1)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

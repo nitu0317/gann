@@ -4,6 +4,7 @@ using FNNLib.Experimentation;
 using FNNLib.Util;
 using MathNet.Numerics.LinearAlgebra;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -46,13 +47,14 @@ namespace FNNSharp
 
             Console.WriteLine("Mononomial Test");
 
-
+            double lr = 1;
             while (true)
             {
-                double error =
+                //Make 4 test examples.
+                double error = Enumerable.Range(0, 4).Aggregate(0.0,
+                    (val, i) => 
+                        val + fnn.Train(FuncInterpolation.Mononomial(i), FuncInterpolation.Mononomial(i + 1), lr));
                     
-                     fnn.Train(new FuncInterpolation(x => x),
-                    new FuncInterpolation(x => Math.Sin(2*x)), 1) ;
 
                 Console.WriteLine(error);
                 if (Console.ReadKey().Key == ConsoleKey.A)
