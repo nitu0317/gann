@@ -2,6 +2,7 @@
 using FNNLib.Core.Layers;
 using FNNLib.Experimentation;
 using FNNLib.Util;
+using MathNet.Numerics.IntegralTransforms;
 using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Linq;
@@ -17,34 +18,51 @@ namespace FNNSharp
         {
 
             Network gann = new Network();
+            double lr = 1;
+            int x = 7, y = 2;
+            double error;
+            int epoch;
+
+            var transLayer = new N2TransitionalLayer(x, y, Interval.UnitBall);
+            //Copy K for comparison
+            Matrix<double> K = Matrix<double>.Build.Dense(x, y);
+
+
+            transLayer.K.CopyTo(K);
 
             #region C(x) to R^n Test
 
-            var transLayer = new N2TransitionalLayer(20,2,Interval.UnitBall);
+            
             gann.AddLayer(transLayer);
 
+            error = 10000;
 
-            //Copy K for comparison
-            Matrix<double> K = Matrix<double>.Build.Dense(20, 2);
-            transLayer.K.CopyTo(K);
-
-            double lr = 1;
-            while (true)
+           
+            for (epoch = 0; error > 0.01; epoch++ )
             {
-                double error =
+                error =
                     gann.Train(FuncInterpolation.Mononomial(1), Vector<double>.Build.Dense(new double[] { 1, 0 }), lr)
                     + gann.Train(FuncInterpolation.Mononomial(2), Vector<double>.Build.Dense(new double[] { 0, 1 }), lr)
                     + gann.Train(FuncInterpolation.Mononomial(3), Vector<double>.Build.Dense(new double[] { 1, 0 }), lr)
-                    + gann.Train(FuncInterpolation.Mononomial(4), Vector<double>.Build.Dense(new double[] { 0, 1 }), lr);
-                Console.WriteLine(gann.Output + " Error: " + error);
-               
-                if (Console.ReadKey().Key == ConsoleKey.A)
-                    break;
+                    + gann.Train(FuncInterpolation.Mononomial(4), Vector<double>.Build.Dense(new double[] { 0, 1 }), lr)
+
+                    + gann.Train(FuncInterpolation.Mononomial(21), Vector<double>.Build.Dense(new double[] { 1, 0 }), lr)
+
+                    + gann.Train(FuncInterpolation.Mononomial(13), Vector<double>.Build.Dense(new double[] { 1, 0 }), lr)
+                    + gann.Train(FuncInterpolation.Mononomial(30), Vector<double>.Build.Dense(new double[] { 0, 1 }), lr)
+
+                    + gann.Train(FuncInterpolation.Mononomial(50), Vector<double>.Build.Dense(new double[] { 0, 1 }), lr);
+                //Console.WriteLine(i + ": \n" + gann.Output + " Error: " + error);
+
+                Console.WriteLine(error);
 
             }
+            Console.WriteLine(epoch);
+
+            Console.WriteLine(transLayer.K);
 
             //Test the training
-            for (int i = 1; i < 10; i++)
+            for (int i = 1; i < 20; i++)
             {
                 gann.FeedForward(FuncInterpolation.Mononomial(i));
                 Console.WriteLine("Input: Mononomial(" + i + ") -> \n" + gann.Output.ToString());
@@ -52,20 +70,52 @@ namespace FNNSharp
             }
 
 
-            ///Fourier transform comparison
-            double lr = 1;
-            while (true)
-            {
-
-            }
-
+           
 
 
             #endregion
 
+            #region ANN Comparison
+
+            Network ann = new Network();
+            var discreteLayer = (new DiscreteLayer(x, y));
+            ann.AddLayer(discreteLayer);
+            error = 1000;
+
+            //Copy the coefficient matrix as to provide an equal start.
+            K.CopyTo(discreteLayer.K);
+
+            ///ANN comparison
+            for (epoch = 0; error > 0.01; epoch++)
+            {
+                error =
+                    ann.Train(FuncInterpolation.Mononomial(1).UnitSample(x), Vector<double>.Build.Dense(new double[] { 1, 0 }), lr)
+                    + ann.Train(FuncInterpolation.Mononomial(2).UnitSample(x), Vector<double>.Build.Dense(new double[] { 0, 1 }), lr)
+                    + ann.Train(FuncInterpolation.Mononomial(3).UnitSample(x), Vector<double>.Build.Dense(new double[] { 1, 0 }), lr)
+                    + ann.Train(FuncInterpolation.Mononomial(4).UnitSample(x), Vector<double>.Build.Dense(new double[] { 0, 1 }), lr)
+
+                    + ann.Train(FuncInterpolation.Mononomial(21).UnitSample(x), Vector<double>.Build.Dense(new double[] { 1, 0 }), lr)
+
+                    + ann.Train(FuncInterpolation.Mononomial(13).UnitSample(x), Vector<double>.Build.Dense(new double[] { 1, 0 }), lr)
+                    + ann.Train(FuncInterpolation.Mononomial(30).UnitSample(x), Vector<double>.Build.Dense(new double[] { 0, 1 }), lr)
+
+                    + ann.Train(FuncInterpolation.Mononomial(50).UnitSample(x), Vector<double>.Build.Dense(new double[] { 0, 1 }), lr);
+                Console.WriteLine(error);
+            }
+
+            Console.WriteLine(epoch);
+
+            //Test the training
+            for (int i = 1; i < 20; i++)
+            {
+                ann.FeedForward(FuncInterpolation.Mononomial(i).UnitSample(x));
+                Console.WriteLine("Input: Mononomial(" + i + ") -> \n" + ann.Output.ToString());
+                Console.ReadKey();
+            }
+            #endregion
 
             #region Functional Test
-                //gann.AddLayer(new FunctionalLayer(20, 20, Interval.UnitBall));
+            //gann.AddLayer(new FunctionalLayer(20, 20, Interval.UnitBall));
 
 
                 //#region Plotting Environment Setup

@@ -9,6 +9,7 @@ namespace FNNLib.Core.Layers
 {
     public class DiscreteLayer : Layer<Vector<double>, Vector<double>>
     {
+        private Vector<double> I;
         /// <summary>
         /// Constructs a discrerte neural layer
         /// </summary>
@@ -20,6 +21,7 @@ namespace FNNLib.Core.Layers
             IContinuousDistribution dist, Sigmoid activation)
             : base(Z_X, Z_Y, dist, activation)
         {
+            I = Vector<double>.Build.Dense(Z_X);  //As per (2.3.6)
         }
         
 
@@ -43,7 +45,10 @@ namespace FNNLib.Core.Layers
             if (input.Count() != K.RowCount)
                 throw new InvalidOperationException("Input vector of improper length");
             else
-                return K.Transpose() * input; //As per the definition of neural computation.
+            {
+                input.CopyTo(I);
+                return K.Transpose() * (input); //As per the definition of neural computation.
+            }
         }
 
         /// <summary>
@@ -67,7 +72,7 @@ namespace FNNLib.Core.Layers
         /// <param name="a">The learning rate.</param>
         public override void UpdateCoefficients(Vector<double> delta_lp1, double a)
         {
-            throw new NotImplementedException();
+            K = K - a * I.OuterProduct(delta_lp1);
         }
 
         /// <summary>
@@ -83,12 +88,12 @@ namespace FNNLib.Core.Layers
 
         public override Vector<double> CalculateBError(Vector<double> desired)
         {
-            throw new NotImplementedException();
+            return (Output - desired).PointwiseMultiply(Psi);
         }
 
         public override Vector<double> CalculateB(int Z_Ym1, Vector<double> Blp1)
         {
-            throw new NotImplementedException();
+            return Blp1.PointwiseMultiply(Psi);
         }
     }
 }

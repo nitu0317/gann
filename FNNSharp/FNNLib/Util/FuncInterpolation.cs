@@ -196,6 +196,18 @@ namespace FNNLib.Util
             return this.L2InnerProduct(this, region);
         }
 
+        /// <summary>
+        /// Gets a unit sample of some function
+        /// </summary>
+        /// <param name="samples"></param>
+        /// <returns></returns>
+        public Vector<double> UnitSample(int samples)
+        {
+            return Vector<double>.Build.Dense(samples,
+                i => this.Interpolate(i*2.0/(double)samples - 1.0)
+            );
+        }
+
         #endregion Operators
 
         #region Basic Types
