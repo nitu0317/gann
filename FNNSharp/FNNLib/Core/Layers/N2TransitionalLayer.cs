@@ -15,7 +15,7 @@ namespace FNNLib.Core.Layers
     /// <summary>
     /// Represents the N2 Transitional layer from the paper
     /// </summary>
-    class N2TransitionalLayer : Layer<IInterpolation, Vector<double>>
+    public class N2TransitionalLayer : Layer<IInterpolation, Vector<double>>
     {
                 /// <summary>
         /// Builds a n2 transitional layer with a given prior distribution.
@@ -56,7 +56,7 @@ namespace FNNLib.Core.Layers
             );
 
 
-            return K * I; //Vectore of Z_Y dimensionality.
+            return K.Transpose() * I; //Vectore of Z_Y dimensionality.
         }
 
         /// <summary>
@@ -69,6 +69,8 @@ namespace FNNLib.Core.Layers
             return 0.5 * Math.Pow((Output - desired).L2Norm(),2);
         }
 
+        #region Backpropagation
+
         /// <summary>
         /// Back propagates with respect to some error vector on the next layer.
         /// </summary>
@@ -79,6 +81,20 @@ namespace FNNLib.Core.Layers
             K = K - a * I.OuterProduct(B_lp1); //Compute the outer product.
         }
 
+
+
+        public override Vector<double> CalculateBError(Vector<double> desired)
+        {
+            return (Output-desired).PointwiseMultiply(Psi);
+        }
+
+        public override Vector<double> CalculateB(int Z_Ym1, Vector<double> Blp1)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        #endregion
 
         #region Properties
 
@@ -109,16 +125,5 @@ namespace FNNLib.Core.Layers
 
         #endregion
 
-
-
-        public override Vector<double> CalculateBError(Vector<double> desired)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Vector<double> CalculateB(int Z_Ym1, Vector<double> Blp1)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
