@@ -10,7 +10,7 @@ namespace FNNLib.Experimentation
     /// <summary>
     /// Holds an abstract dataset.
     /// </summary>
-    public abstract class DataSet : List<IDataPoint>
+    public abstract class DataSet : List<DataPoint>
     {
         /// <summary>
         /// Load dataset into the list.
@@ -34,7 +34,7 @@ namespace FNNLib.Experimentation
             {
                 n--;
                 int k = r.Next(n + 1);
-                IDataPoint value = this[k];
+                DataPoint value = this[k];
                 this[k] = this[n];
                 this[n] = value;
             }

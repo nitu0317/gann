@@ -1,4 +1,5 @@
 ﻿using FNNLib.Core.NeuralLibrary.NeuralNetwork;
+using FNNLib.Util;
 using MathNet.Numerics.Distributions;
 using MathNet.Numerics.LinearAlgebra;
 using System;
@@ -67,6 +68,19 @@ namespace FNNLib.Core.Layers
         public override void UpdateCoefficients(Vector<double> delta_lp1, double a)
         {
             throw new NotImplementedException();
+        }
+
+
+
+        /// <summary>
+        /// Calculates a layers Psi based on an action output.
+        /// </summary>
+        public override Vector<double> Psi
+        {
+            get
+            {
+                return FuncInterpolation.ApplyFuncToVector(x => Activation.Differentiate(x), this.ActionOutput);
+            }
         }
     }
 }

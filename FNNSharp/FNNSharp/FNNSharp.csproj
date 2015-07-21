@@ -92,6 +92,7 @@
     <Compile Include="ShowPlot.Designer.cs">
       <DependentUpon>ShowPlot.cs</DependentUpon>
     </Compile>
+    <Compile Include="SquareSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -45,6 +45,12 @@ namespace FNNLib.Core
         /// </summary>
         Matrix<double> K { get;  set; } //The k coefficient matrix.
 
+
+        /// <summary>
+        /// Gets the Psi for the current layer.
+        /// </summary>
+        object Psi { get; }
+
         /// <summary>
         /// The row size of the K matrix.
         /// </summary>
@@ -211,6 +217,17 @@ namespace FNNLib.Core
             get { return typeof(B); }
         }
 
+        /// <summary>
+        /// Invokes the psi action on some layer subclass
+        /// </summary>
+        object ILayer.Psi
+        {
+            get
+            {
+                return Psi;
+            }
+        }
+
         #endregion ILayer
 
         #region Properties
@@ -221,9 +238,9 @@ namespace FNNLib.Core
         public Matrix<double> K { get; set; } //The k coefficient matrix.
 
         /// <summary>
-        /// The bias on each layer.
+        /// Gets the Psi for the current layer.
         /// </summary>
-        // public B Bias { get; set; }
+        public abstract B Psi { get; }
 
         /// <summary>
         /// The row size of the K matrix.

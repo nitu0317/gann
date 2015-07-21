@@ -1,5 +1,6 @@
 ﻿using FNNLib.Core;
 using FNNLib.Core.Layers;
+using FNNLib.Experimentation;
 using FNNLib.Util;
 using MathNet.Numerics.LinearAlgebra;
 using System;
@@ -13,12 +14,14 @@ namespace FNNSharp
         [STAThread]
         private static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
 
             Network fnn = new Network();
             fnn.AddLayer(new FunctionalLayer(20, 20, Interval.UnitBall));
 
+
+            #region Plotting Environment Setup
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
             ShowPlot fPlot = new ShowPlot(
                 (FuncInterpolation)fnn.FeedForward(
@@ -27,31 +30,54 @@ namespace FNNSharp
             Thread t = new Thread(
                 () => Application.Run(fPlot));
 
+
+
             t.Start();
 
-            //Train a functional neural network
+            #endregion
+
+
+            SquareSet ss = new SquareSet();
+            ss.Load();
+
+            Trainer trainer = new Trainer(fnn, ss);
+
+            //trainer.Train(100000, 0.1, 1);
+
+            Console.WriteLine("Mononomial Test");
+
+
             while (true)
             {
+                double error =
+                    
+                     fnn.Train(new FuncInterpolation(x => x),
+                    new FuncInterpolation(x => Math.Sin(2*x)), 1) ;
 
-               // Console.ReadKey();
-                double error  = fnn.Train(new FuncInterpolation(x => x),
-                    new FuncInterpolation(x => Math.Exp(x)), 1);
                 Console.WriteLine(error);
-                fPlot.Replot((FuncInterpolation)fnn.Output, error.ToString());
-
+                if (Console.ReadKey().Key == ConsoleKey.A)
+                    break;
+                fPlot.Replot((FuncInterpolation)fnn.Output, "output");
             }
 
-            ///Build arbitrary discrete neural network.
-            //while (true)
-            //{
-            //    Network nn = new Network();
-            //    nn.AddLayer(new FunctionalLayer(10, 10, Interval.UnitBall));
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine("Input x^" + i);
 
-                
-            //    Console.ReadKey();
-            //}
+                fnn.FeedForward(FuncInterpolation.Mononomial(i));
+
+                fPlot.Replot((FuncInterpolation)fnn.Output, "output");
+                Console.ReadKey();
+            }
 
             Console.ReadKey();
+           
+
+
+
+
+
+
         }
     }
 }

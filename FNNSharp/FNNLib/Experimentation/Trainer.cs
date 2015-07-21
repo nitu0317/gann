@@ -48,9 +48,11 @@ namespace FNNLib.Experimentation
 
                 //Train online or perform batch training
                 if (online)
-                    error = trainingSet.Select(
-                        dp => network.Train(dp.Input, dp.Desired, lr))
-                            .Sum();
+                    error = trainingSet.Select
+                        (
+                            dp => network.Train(dp.Input, dp.Desired, lr)
+                        ).Sum();
+
                 //else //TODO: Implement batch training.
                 //    error = network.Train(trainingSet, lr);
 

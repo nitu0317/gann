@@ -104,7 +104,7 @@ namespace FNNLib.Core.Layers
         /// <summary>
         /// Calculates a layers Psi based on an action output.
         /// </summary>
-        public IInterpolation Psi
+        public override IInterpolation Psi
         {
             get
             {
