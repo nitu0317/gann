@@ -19,7 +19,7 @@ namespace FNNSharp
 
             Network gann = new Network();
             double lr = 1;
-            int x = 7, y = 2;
+            int x = 15, y = 2;
             double error;
             int epoch;
 
