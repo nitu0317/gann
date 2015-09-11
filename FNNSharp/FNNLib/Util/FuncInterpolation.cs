@@ -57,6 +57,7 @@ namespace FNNLib.Util
 
         #endregion Constructors
 
+        
         #region Operators
 
         /// <summary>
@@ -513,5 +514,6 @@ namespace FNNLib.Util
         }
 
         #endregion Helpers
+
     }
 }
