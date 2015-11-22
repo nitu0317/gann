@@ -1,0 +1,84 @@
+%!TEX root = main.tex
+
+\section{Generalized Artificial Neural Networks}
+
+
+
+We have clearly demonstrated the theoretical power of FNNs, but does there exist some more general structure which includes FNNs and ANNs without piecewise approximation? In other words, can we determine a form which encompasses the discrete classification of continuous datasets or visa versa all the while maintains either the power of discrete or functional artificial neural networks? The solution to such questions must furthermore maintain universal approximation and computational evaluability so as to allow the implementation of a real-world algorithm. 
+
+In this section of the paper we will propose the Generalized Artificial Neural Network through the examination of specific operations on different layers. 
+
+\subsection{The Generalization of ANNs}
+In order to generalize ANNs in a way that follows logically, we take the initial definition of functional neural networks and consider the notion of a layer.
+\begin{definition} If $A,B$ are (possibly distinct) Hilbert spaces over $\mathbb{R}$,
+we say $\mathcal{G}: A \to B$ is a generalized neural network if and only if 
+
+\begin{equation} \label{eq:gann}
+          \begin{alignedat}{2}
+        \mathcal{G}:\ &\sigma^{(l+1)} & &=  g\left(T_l\left[\sigma^{(l)}\right] + \beta^{(l)}\right)  \\
+        &\sigma^{(0)} & &= \xi 
+        \end{alignedat}
+\end{equation}
+for some input $\xi \in A$.
+\end{definition}
+
+In \eqref{eq:gann}, it is unclear how the form of $T_l$ is restricted. It might be recalled that $T_l$ takes a form similar to the operation of a layer $l+1$ on $l$ in the proof of universal approximation for $\{\mathcal{F}\}$. Let us consider a few other such forms of $T_l$ by first stating a formal definition.
+
+\begin{definition}
+We say that $T_l$ is the operation of a layer $l+1$ on $l$ in some $\mathcal{G}$ if and only if for $l=L-1$, $T:C\to B$ with $C$ the codomain of $\sigma^{(0)}$ and for $l = 0$, $T_l : A\to D$ where $D$ is the domain of $\sigma^{(1)}.$
+\end{definition}
+
+Using the above definition it is now possible to construct different classes of $T_l$ using ideas directly from the constructions of $\mathcal{N}$ and $\mathcal{F}$.
+
+\begin{definition}
+We suggest several classes of $T_l$ as follows
+	\begin{itemize}
+	\item $T_l$ is said to be $\mathfrak{f}$ functional if and only if 
+		\begin{equation} \label{eq:tlfunctional}
+		\begin{aligned} 
+			T_l = \mathfrak{f}: C(R^{(l)}) \to&\ C(R^{(l+1)}) \\
+			\sigma(i) \mapsto& \int_{R^{(l)}} \sigma(i) w^{(l)}(i,j)\ di.
+		\end{aligned}
+		\end{equation}
+	\item $T_l$ is said to be $\mathfrak{n}$ discrete if and only if 
+		\begin{equation} \label{eq:tldiscrete}
+		\begin{aligned} 
+			T_l = \mathfrak{n}: \mathbb{R}^n \to&\ \mathbb{R}^m \\
+			\vec{\sigma} \mapsto& \sum_j^m \vec{e}_j\sum_i^n \sigma_i w^{(l)}_{ij}
+		\end{aligned}
+		\end{equation}
+		where $\vec{e}_j$ denotes the $j^\mathrm{th}$ basis vector in $\mathbb{R}^m$.
+	\item $T_l$ is said to be $\mathfrak{n}_1$ transitional if and only if 
+		\begin{equation} \label{eq:tldiscrete}
+		\begin{aligned} 
+			T_l = \mathfrak{n}_1: \mathbb{R}^n \to&\  C(R^{(l+1)}) \\
+			\vec{\sigma} \mapsto& \sum_i^n \sigma_i w^{(l)}_i(j).
+		\end{aligned}
+		\end{equation}
+	\item $T_l$ is said to be $\mathfrak{n}_2$ transitional if and only if 
+		\begin{equation} \label{eq:tldiscrete}
+		\begin{aligned} 
+			T_l = \mathfrak{n}_2: C(R^{(l)}) \to&\ \mathbb{R}^m \\
+			\sigma(i) \mapsto& \sum_j^m \int_{R^{(l)}} \sigma(i) w^{(l)}_j(i)\ di
+		\end{aligned}
+		\end{equation}
+	\end{itemize}
+\end{definition}
+
+With the characterization of these layer classes complete, foundational theorems about this new generalization must be proposed. First we will show inclusion of other neural algorithms followed by universal approximation theorems (as by necessesity). 
+
+\begin{theorem}
+If $\{\mathcal{G}\}$ is the set of all generalized artificial neural networks then $\{\mathcal{F}\} \cup \{\mathcal{N}\}$ is a subset of $\{G\}$.
+\end{theorem}
+\begin{proof}
+Since $\{\mathcal{N}\} \subset \{\mathcal{F}\}$, we need only show that $\{\mathcal{F}\} \subset \{\mathcal{G}\}$, but for the sake of the reader, consider that one might take any $\mathcal{N}$ and show equivalency with some $\mathcal{G}$ strictly composed of $T_l$ which are discrete.
+
+For the case of functional inclusion, consider any functional neural network $\mathcal{F}$ with $L$ layers. Then let us construct $\mathcal{G} : C\left(R^{(0)}\right) \to C\left(R^{(L)}\right)$. First we endow $\mathcal{G}$ with $T_l$ which are strictly functional. Let each $T_l$ have an equivalent weight function $w^{(l)}$ to that of $\mathcal{F}$ on layer $l$. This construction yields the following reccurrance relation:
+\begin{equation}
+          \begin{alignedat}{2}
+        \mathcal{G}:\ &\sigma^{(l+1)}(j) & &=  g\left(\int_{R^{(l)}} \sigma^{(l)}(i) w^{(l)}(i,j)\ di + \beta^{(l)}\right)  \\
+        &\sigma^{(0)}(j) & &= \xi(j), 
+        \end{alignedat}
+\end{equation}
+which is exactly equivalent to that of $\mathcal{F}$. Hence for any $\mathcal{F}$ there exists a corresponding $\mathcal{G}$ with equivalency. Thus $\{\mathcal{F}\} \subset \{\mathcal{G}\}.$
+\end{proof}
