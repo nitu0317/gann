@@ -11,7 +11,7 @@ A single neuron consists of the cell body (the soma), the dendrites, and the axo
 \includegraphics{neuron}
 \caption{A biological neuron \cite{neuralimage}.}
 \end{figure}
-	With this in mind it is now possible to construct a mathematical model of an artificial neuron. Let \( A_j, P_j\) be the set of anterior and posterior neurons of a neuron, \(j\). Then, the cell membrane naturally becomes a linear combination of the dendritic potentials.
+    With this in mind it is now possible to construct a mathematical model of an artificial neuron. Let \( A_j, P_j\) be the set of anterior and posterior neurons of a neuron, \(j\). Then, the cell membrane naturally becomes a linear combination of the dendritic potentials.
    \begin{definition}
    We say that \(\mathrm{net}_j\) is the net electric potential over the membrane, if for a natural neural resting potential \(\beta\), 
 \[ \textrm{net}_j = \sum_{i \in A_j}{w_{ij}\sigma_i} + \beta \]where \(w_{ij}\) is the dendritic connection “strength” from the \(i\)\textsuperscript{th} anterior neuron to \(j\), \(\sigma_i\) is the action potential being propagated from the \(i\)\textsuperscript{th} anterior neuron. 
@@ -26,7 +26,7 @@ This model of the artificial neuron follows from the work that Pitt and McCulloc
 %\todo{improve}
 
 \subsection{Feed-Forward Artificial Neural Networks}
-	Now we have a sufficient mathematics base to define the feed-forward artificial neural network. The concept of a feed-forward ANN is biologically motivated by the functional organization of the visual cortex. It is appropriate to divide the structure of the visual cortex into layers which are denoted V1, V2, V3, and so on. The layers are organized such that a given layer is directly adjacent to and exhibiting full connectedness to the subsequent layer, an example being V1 to V2, V2 to V3, and subsequently for all of the primary layers of the visual cortex. From a functional point of view these layers store levels of visual abstraction like lines and shapes on the lower layers to faces and abstract visual concepts on the highest layers\cite{visualcortex}.
+    Now we have a sufficient mathematics base to define the feed-forward artificial neural network. The concept of a feed-forward ANN is biologically motivated by the functional organization of the visual cortex. It is appropriate to divide the structure of the visual cortex into layers which are denoted V1, V2, V3, and so on. The layers are organized such that a given layer is directly adjacent to and exhibiting full connectedness to the subsequent layer, an example being V1 to V2, V2 to V3, and subsequently for all of the primary layers of the visual cortex. From a functional point of view these layers store levels of visual abstraction like lines and shapes on the lower layers to faces and abstract visual concepts on the highest layers\cite{visualcortex}.
 
 \begin{figure}
 \centering
@@ -67,10 +67,10 @@ This model of the artificial neuron follows from the work that Pitt and McCulloc
     % Connect every node in the hidden layer with the output layer
     
         \foreach \source in {1,...,5}
-    	\foreach \dest in {1,...,4}
+        \foreach \dest in {1,...,4}
         \path (H1-\source) edge (H2-\dest);
     \foreach \source in {1,...,4}
-    	\foreach \dest in {1,...,3}
+        \foreach \dest in {1,...,3}
         \path (H2-\source) edge (O-\dest);
 
     % Annotate the layers
@@ -86,8 +86,8 @@ The goal is to model this representation of increasing abstraction whilst mainta
     \begin{definition}
     
     We say $\mathcal{N}$ is a feed-forward neural network if for an input vector $\pmb{x}$,
-	\[
-    	\begin{aligned}
+    \[
+        \begin{aligned}
         \mathcal{N}:\ & \sigma_j^{(l+1)} &= g\left(\sum_{i \in Z^{(l)}}w_{ij}^{(l)}\sigma_i^{(l)} + \beta^{(l)}\right) \\ & \sigma_j^{(1)} &= g\left(\sum_{i \in Z^{(0)}}w_{ij}^{(0)}x_i + \beta^{(0)} \right)
         \end{aligned}
     \]
@@ -122,7 +122,7 @@ Conveniently the gradient of a function describes a vector whose direction is th
 
 The calculation of each \(\frac{\partial E}{\partial w_{ij}^{(L)}}\) is non-trivial given that each weight influences the error function in multiple ways.  To find the contribution of a single weight, recall that every single neuron is connected to all neurons in the anterior and posterior layers. So, a single weight will influence not only its posterior neuron’s sigmoidal output but also that of every neuron for any path from the posterior neuron to the set of output neurons. Thus, the multiplicity of contribution via different neural routes follows directly from the multidimensional chain-rule. Recall the differential operator \(D_g f=\frac{\partial f}{\partial x}\),
 \begin{equation}
-	\begin{aligned}
+    \begin{aligned}
     \frac{\partial E}{\partial w_{ij}^{(l)}} &= D_{\sigma_0^{(L)}}\cdot D_{\mathrm{net}} \sigma_0^{(L)} \cdot D_{\sigma_0^{(L-1)}}\mathrm{net}\cdot \  \cdots \  \cdot  D_{\mathrm{net}} \sigma_j^{(l+1)} \cdot D_{w_{ij}^{(l)}}\mathrm{net} \\
     &+\  D_{\sigma_1^{(L)}}\cdot D_{\mathrm{net}} \sigma_1^{(L)} \cdot D_{\sigma_0^{(L-1)}}\mathrm{net}\cdot\  \cdots \  \cdot  D_{\mathrm{net}} \sigma_j^{(l+1)} \cdot D_{w_{ij}^{(l)}}\mathrm{net} \\
     &\ \vdots\\
@@ -133,7 +133,7 @@ The calculation of each \(\frac{\partial E}{\partial w_{ij}^{(L)}}\) is non-triv
                 &\ \vdots \\
                         &+\  D_{\sigma_n^{(L)}}\cdot D_{\mathrm{net}} \sigma_n^{(L)} \cdot D_{\sigma_m^{(L-1)}}\mathrm{net}\cdot \ \cdots \ \cdot  D_{\mathrm{net}} \sigma_j^{(l+1)} \cdot D_{w_{ij}^{(l)}}\mathrm{net} \\
                         &= \sum_{a_1}^{Z^{(L)}}\ \sum_{a_2}^{Z^{(L-1)}} \cdots \sum_{a_m}^{Z^{(l+2)}} \frac{\partial E}{\partial \sigma_{a_1}^{(L)}}\frac{\partial \sigma_{a_1}^{(L)}}{\partial \mathrm{net}} \frac{\partial \mathrm{net}}{\partial \sigma_{a_2}^{(L-1)}} \ \cdots\ \frac{\partial \sigma_{a_m}^{(l+2)}}{\partial \mathrm{net}}\frac{\partial \mathrm{net}}{\partial \sigma_{j}^{(l+1)}}  \frac{\partial \sigma_{j}^{(l+1)}}{\partial \mathrm{net}} \frac{\partial \mathrm{net}}{\partial w_{ij}^{(l)}}
-	\end{aligned}
+    \end{aligned}
 \end{equation} At first sight this algorithm looks quite complicated, but a computational implementation would be able to cache certain sums and essentially reduce the complexity thereof. With the error backpropagation algorithm complete, the notion of an artificial neural network, its training, and processing is complete. Now it is possible to conjecture on variants thereof and present the primary scope of this essay.
 \subsection{The Research Question}
 This construction is of serious mathematical interest as feed-forward neural networks have been shown to be universal approximators; that is, they can approximate any \(f:A\to B\), where \(A,B \in \mathbb{R}^m\) are vector spaces. However it is not certain what information the approximation provides: the gradient descent algorithm does not reveal any connections between the values of the inputs.  A standing question in the field asks what can be said about the weights satisfying an approximation of $f$ besides that they exist. Therefore it is of considerable interest to explore the general form of the weights as training may not be necessary and computational complexity can be lowered.
