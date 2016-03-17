@@ -1,10 +1,8 @@
-FNN++
+gann  
 ===
 
-FNN++ is an implementation of the Functional Neural Network algorithm created by William Guss. 
-FNN++ acts as a scientific computation suite accompanied by an API for managing all computations with functional neural networks.
-This library was created by William Guss, Phillip Kuznetsov, and Patrick Chen, and is licensed under the MIT license. 
-Feel free to fork the code here on GitHub or create pull requests for any features you might want added.
+gann++ is an implementation of the General Artificial Neural Network algorithm.
+gann++ acts as a scientific computation suite accompanied by an API for managing all computations with functional neural networks, continuous neural networks, anns, and n1,n2,b3.
 
 
 ## Functional Neural Networks
