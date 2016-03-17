@@ -1,0 +1,524 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% ICML 2016 EXAMPLE LATEX SUBMISSION FILE %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Use the following line _only_ if you're still using LaTeX 2.09.
+%\documentstyle[icml2016,epsf,natbib]{article}
+% If you rely on Latex2e packages, like most moden people use this:
+\documentclass{article}
+
+% use Times
+\usepackage{times}
+% For figures
+\usepackage{graphicx} % more modern
+%\usepackage{epsfig} % less modern
+\usepackage{subfigure} 
+
+% For citations
+\usepackage{natbib}
+
+% For algorithms
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+% As of 2011, we use the hyperref package to produce hyperlinks in the
+% resulting PDF.  If this breaks your system, please commend out the
+% following usepackage line and replace \usepackage{icml2016} with
+% \usepackage[nohyperref]{icml2016} above.
+\usepackage{hyperref}
+
+% Packages hyperref and algorithmic misbehave sometimes.  We can fix
+% this with the following command.
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Employ the following version of the ``usepackage'' statement for
+% submitting the draft version of the paper for review.  This will set
+% the note in the first column to ``Under review.  Do not distribute.''
+\usepackage[accepted]{icml2016}
+
+% Employ this version of the ``usepackage'' statement after the paper has
+% been accepted, when creating the final version.  This will set the
+% note in the first column to ``Proceedings of the...''
+%\usepackage[accepted]{icml2016}
+
+
+% The \icmltitle you define below is probably too long as a header.
+% Therefore, a short form for the running title is supplied here:
+\icmltitlerunning{Generalized Artificial Neural Networks }
+
+
+
+
+%%%%%%%%%%%%%%%
+% MATH
+%%%%%%%%%%%%%%%
+\usepackage{listings}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{framed} 
+\usepackage{amsmath}
+\usepackage{titling}
+\usepackage{amssymb}
+\usepackage{relsize}
+\usepackage{tikz}
+\usepackage{xr}
+
+\newcommand{\BlackBox}{\rule{1.5ex}{1.5ex}}  % end of proof
+\newtheorem{example}{Example} 
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma} 
+\newtheorem{proposition}[theorem]{Proposition} 
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newcommand{\Sum}{\mathlarger{\mathlarger{\sum}}}
+
+\newcommand{\rotB}{\scalebox{-1}[1]{B}}
+%%%%%%%%%%%%%%%
+
+\begin{document} 
+
+\twocolumn[
+\icmltitle{Dimensionality Reduction Using Generalized Artificial Neural Networks}
+
+% It is OKAY to include author information, even for blind
+% submissions: the style file will automatically remove it for you
+% unless you've provided the [accepted] option to the icml2016
+% package.
+\icmlauthor{William Guss}{wguss@berkeley.edu}
+\icmladdress{Machine Learning at Berkeley,
+             246 Cory Hall, Berkeley, CA 94720 USA}
+
+% You may provide any keywords that you 
+% find helpful for describing your paper; these are used to populate 
+% the "keywords" metadata in the PDF but will not be shown in the document
+\icmlkeywords{functional neural networks, generalized neural networks, dimensionality reduction}
+
+\vskip 0.3in
+]
+
+\begin{abstract} 
+In this paper, we generalize ANNs to infinite dimensional Banach spaces by developing a
+practical analog to the feedforward propagation algorithm. Using this new class of algorithms, GANN, 
+we prove a new universal approximation theorem for bounded linear operators and show that representation
+of weights by samples from a multivariate weight polynomial can drastically reduce the dimensionality of a
+learning problem. Lastly, we give a practical implementation of the error back-propagation algorithm in this
+space for the classification of continuous data.
+\end{abstract} 
+
+
+\section{Introduction}
+Although neural networks have proven an extremely effective mechanism of machine learning \cite{mlsurvey}, theoretically they remain a black-box model.  In answer to this problem \cite{neal} examined the notion of infinite hidden nodes with a network proving that such a construction becomes a Gaussian kernel. Then, \cite{roux} described a model for affine neural networks with continuous hidden layers in alignment with \cite{neal}. These authors showed effectively the viability of a "continuous" neural network, but left many similar constructions unexplored. 
+
+It is the subject of this paper to generalize the construction of a feed-forward ANN which maps uncountably infinite vector spaces, and then to demonstrate the practical implementations of algorithms such as error backpropagation in this generalized form.
+\section{Functional Neural Networks}
+  In the standard feed-forward case proposed in \cite{mcculloch}, if on the $l$th layer, $Z^{(l)} = {1,\dots,n}$ is the index set of neurons, $\beta$ is the bias, $g$ is the sigmoid activation function, and $\sigma_j$ is the output of the $j$th neuron, the following recurrence relation is natural.
+    \begin{definition}
+    
+    We say $\mathcal{N}: \mathbb{R}^n \to \mathbb{R}^m$ is a feed-forward neural network if for an input vector $\pmb{x}$,
+    \begin{equation}
+            \begin{aligned}
+        \mathcal{N}:\ & \sigma_j^{(l+1)} &= g\left(\sum_{i \in Z^{(l)}}w_{ij}^{(l)}\sigma_i^{(l)} + \beta^{(l)}\right) \\ & \sigma_j^{(1)} &= g\left(\sum_{i \in Z^{(0)}}w_{ij}^{(0)}x_i + \beta^{(0)} \right),
+        \end{aligned}
+    \end{equation}
+    where $1\leq l \leq L-1$. Furthermore we say $\{\mathcal{N}\}$ is the set of all neural networks.
+    \end{definition}
+Suppose that we wish to map one functional space to another with a neural network. Consider the standard model of an ANN as the number of neural nodes for every layer becomes uncountable. The index for each node then becomes real-valued, along with the weight and input vectors.
+
+ Let us denote \(\xi: X \subset \mathbb{R}\to\mathbb{R}\) as some arbitrary input function for the neural network. Likewise consider a real-valued weight function, \(w^{(l)}: \mathbb{R}^{2}\to\mathbb{R}\), for a layer $l$ which is composed of two indexing variables $i,j \in \mathbb{R}$. Finally as the number of neural nodes becomes uncountable we define a real-valued bound for any given layer $R^{(l)} \supset Z^{(l)}$.  As the indices become real valued, examination of the weighted sum seen in Definition 1 leads us to the following abuse of notation which is not too dissimilar from the derivation of the Laplace Transform from the power series.
+
+ \begin{equation}
+\begin{aligned}
+    \sigma^{(1)}(j) &= \lim_{\Delta i \to 0}g\left(\sum_{i\in R^{(0)}} \xi(i) w^{(0)}(i,j)\ \Delta i + \beta\right) \\
+    &= g\left(\int_{R^{(0)}} \xi(i) w^{(0)}(i,j)\ di\right)
+\end{aligned}
+\end{equation}
+The $\beta$ bias term is omitted as it can surely be formed as an artifact of integration of the weight function.
+Repeating the process inductively for all layers in a neural network, leads to a recurrence relation for this construction. 
+
+\begin{definition}
+We call $\mathcal{F}: L^1(X) \to L^1(Y)$ a functional neural network if,
+\begin{equation}
+          \begin{alignedat}{2}
+        \mathcal{F}:\ &\sigma^{(l+1)}(j) & &=  g\left(\int_{R^{(l)}} \sigma^{(l)}(i) w^{(l)}(i,j)\ di \right)  \\
+        &\sigma^{(0)}(j) & &= \xi(j). 
+        \end{alignedat}
+\end{equation}
+Furthermore let $\{\mathcal{F}\}$ denote the set of all functional neural networks.
+\end{definition}
+To demonstrate the accuracy of this generalization, let us propose the following theorem which is near that of \cite{roux}.
+\begin{theorem} Suppose $\mathcal{F}$ is a functional neural network with a set of piecewise constant weight functions $W = \left\{w^{(0)}, w^{(1)}, \dots, w^{(L-1)}\right\}$ each with constituent pieces of length one. Then given the input function $\xi(i) = x_n, n = \max\left\{m\in \mathbb{Z}\ |\ m\leq i\right\}$ for some input vector $\pmb{x}$, $\mathcal{F}$ is discretized; that is assuming $i,j \in \mathbb{R}$ and $Z^{(l)} = R^{(l)}\ \cap \mathbb{Z}$ then for $0 \leq l \leq L-1$ we have that
+\begin{equation}\mathcal{F}(\xi)= \mathcal{N}(\pmb{x}),\end{equation}
+so $\{\mathcal{F}\} \supset \{\mathcal{N}\}$
+\end{theorem}
+\begin{proof}
+Let $P(l)$ be the proposition that $\sigma^{(l+1)}(j)$ becomes discretized when $w^{(l)}(i,j)$ and $\sigma^{(l)}(i,j)$ are piecewise constant with constituent functions of length one. Moreover let $w_{ij}^{(l)}$ denote the value of $w^{(l)}(i,j)$ for $(i,j) = \max\left\{(x,y) \in \mathbb{Z}^2\ |\ x\leq i \wedge y \leq j\right\}$. Then by induction we show $P(l), 0 \leq l \leq L-1$. \\
+
+
+\textit{Basis Step.} Recall that $\sigma^{(0)}(j) = \xi(j)$. Then one would suppose
+\begin{equation}\sigma^{(1)}(j) = g\left(\int_{R^{(0)}} \xi(i) w^{(0)}(i,j)\ di +  \right)\end{equation}
+but because the weight function and the input function are piecewise constant and not guaranteed to be continuous for $R^{(0)}$, we must take the improper integral along each constituent piece of length one. Supposing that each summation in the following is taken over $k\in Z^{(0)}$,
+\begin{equation}
+\begin{aligned}
+    \sigma^{(1)}(j) &= g\left(\sum_{k}\lim_{b\to k}\int_{k-1}^b\xi(i) w^{(0)}(i,j)\ di +  \right) \\
+    &= g\left(\sum_{k}w^{(0)}_{kj}\lim_{b\to k}\int_{k-1}^b\xi(i)\ di +  \right) \\
+        &= g\left(\sum_{k}w_{kj}^{(0)}x_b +  \right)
+ \end{aligned}
+ \end{equation}
+ 
+ 
+\textit{Inductive Step.} Now assume that for some $l$ we have that
+\begin{equation}\sigma^{(l+1)}(j) = g\left(\sum_{i\in Z^{(l)}}w_{ij}^{(l)}\sigma_i^{(l)} +   \right)\end{equation}
+We now show that by the inductive hypothesis if $P(0) \wedge P(l) \to P(l+1)$, then $P(k)\  \forall k$. Consider the next neural layer defined as
+\begin{equation}\sigma^{(l+2)}(j) = g\left(\int_{R^{(l+1)}}\sigma^{(l+1)}(i) w(i,j)\ di +  \right)\end{equation}
+Then because $w(i,j)$ and $\sigma^{(l+1)}$ are piecewise constant by definition and not necessarily continuous for $R^{(l+1)}$ we must again take the improper Riemann integral over the constituent pieces. Consider $k\in Z^{(l+1)}$
+\begin{equation}
+    \begin{aligned}
+        \sigma^{(l+2)}(j) &= g\left(\sum_{k}\lim_{b\to k}\int_{k-1}^b\sigma^{(l+1)}(i) w(i,j)\ di +  \right) \\
+                                          &= g\left(\sum_{k}w_{kj}^{(l+1)}\sigma_k^{(l+1)}\lim_{b\to k}\int_{k-1}^b\ di +  \right) \\
+                                          &= g\left(\sum_{k}w_{kj}^{(l+1)}\sigma_k^{(l+1)} +  \right)
+    \end{aligned}
+\end{equation}
+Therefore by the inductive hypothesis the proof follows and $\mathcal{F}(\xi) = \mathcal{N}(\pmb{x})$ for piecewise constant input and weight functions.
+
+\end{proof}
+
+
+From the logic of the preceding proof we can establish that the input function need only be properly Lebesgue integrable over $R^{(0)}$. Moreover, we come to an extremely important intuition; the weight matrix for a given layer $l$ can be thought of as a piecewise constant weight surface, and the linear combination of weights can be thought of as a piecewise integral transformation along a given $j$ on the weight surface. However, functional neural networks allow for infinite weight surfaces and therefore can represent the entire class of integral transforms. With this in mind, it is now possible to consider functional neural networks as universal approximators.
+
+
+\section{Universal Approximation of Bounded Linear Operators}
+In the case of discretized neural networks, George Cybenko and Kolmogorov have shown that with sufficient weights and connections, a feed-forward neural network is a universal approximator of arbitrary $f:\mathbb{R}^n \to \mathbb{R}^m$ \cite{univapprox}; that is, constructs of the form $\mathcal{N}(\pmb{x})$ are dense in $C(I^n, \mathbb{R}^m)$ where $I^n$ is the unit hypercube $[0,1]^n$.  Cybenko proved this remarkable result by utilizing the Riesz Representation Theorem for Hilbert spaces and the Hahn-Banach theorem. He showed by contradiction that there exists no bounded linear functional $h(x)$ in the form of $\mathcal{N}(\pmb{x})$ such that $\int_{I_n}h(x)\ d\mu(x) = 0$.
+
+Although this is result legitimizes neural networks, it is rather vacuous since it does not actually impart constraints on the type of networks which might approximate these functions.
+Fortunately using the intuitions presented in Theorem 1, it would be advantageous to examine the generalization of Cybenko's theorem to the larger class of functional neural networks. However, there is no clear way with which to do this; discretized neural networks map vector spaces and therefore approximate continuous functions, whereas functional neural networks are defined as arbitrary mappings between Hilbert spaces (more specifically the set of $L^2$ integrable functions). Moreover letting $n$ approach infinity in Cybenko's proof fails to hold in that there is not an obvious topology for $C(C(\mathbb{R}), C(\mathbb{R}))$ which satisfies it. Therefore we must develop an approximation theorem for $\mathcal{F}: C(X) \to C(Y)$ over the set of linear operators. 
+
+First, however, let us develop the notion of $\mathcal{F}$ as a universal approximator of arbitrary functions. By Theorem 1, we have that $\{\mathcal{F}\} \supset \{\mathcal{N}\}$ ,and in that sense for piecewise constant $w(i,j)$ and $\xi(i)$ functional neural networks approximate any arbitrary mapping from $\mathbb{R}^n \to \mathbb{R}$ where $n = |Z^{(0)}|, m = |Z^{(L-1)}|$ by Cybenko's theorem. However, when considering the fully continuous case the following corollary arises from the Stone-Weierstrass theorem.
+\begin{corollary}
+Suppose $\mathcal{F}$  is a multi-layer functional ANN. Then for some real-valued continuous function $f:\mathbb{R} \to \mathbb{R}$ , there exists a set of weights $W$ such that  $\forall \epsilon > 0$, $\|\mathcal{F}(\xi) - f\|_\infty < \epsilon$
+\end{corollary}
+\begin{proof}
+In this proof we will omit the inductive step as it is elementary and employs the same logic as the basis step. Consider the first neural layer
+\begin{equation}\sigma^{(1)}(j) = g\left(\int_{R^{(0)}}   \xi(i) w^{(0)}(i,j) \ di\right)\end{equation}
+because we take $w^{(0)}$ to be some approximating polynomial by the Stone-Weierstrass theorem, let $w^{(0)} = \left[(g^{-1})' \circ\left(h(\Xi,j)\right)\right]h'(\Xi,j)$ approximately, where $\Xi$ is the primitive of $\xi$. Supposing that $h$ is some polynomial satisfying $h(\Xi,j)\Big|_{R^{(0)}} = f(j)$, then by the chain rule of integration
+\begin{equation}
+    \begin{aligned}
+    \sigma^{(1)}(j) &=g\left(\int_{R^{(0)}}   \xi(i)  \left[(g^{-1})' \circ\left(h(\Xi,j)\right)\right]h'(\Xi,j)\ di\right) \\
+    &= g\left(g^{-1}\left(h(\Xi,j)\right)\right)\Bigg|_{R^{(0)}} \\
+    &= f(j)
+    \end{aligned}
+\end{equation}
+\end{proof}
+
+
+
+At this point it is important to note that the proof given above implies that $\xi$ is disregarded through manipulation of $w^{(0)}$. Instead, $h$ is a function of $\Xi$ which is the primitive of $\xi$. If we were to not let $h(\Xi,j)\Big|_{R^{(0)}} = f(j)$, then we could claim that for arbitrary $h$ we have proven any functional composition of $\xi$ is possible; that is, in some light sense we have proven Cybenko's theorem in the general case by treating the weight set as some hypersurface. Moreover, the intuition follows that if we were to discretized the satisfying $h$ and $\xi$ (Theorem 1) then it is possible that a similar weight surface is developed for a trained $\mathcal{N}$. This result is remarkable as new light is shed on the black-box model of neural networks showing that approximation of $h$ is made in the discrete sense. 
+
+
+Although we have shown through the corollary that approximation of arbitrary functional composition is possible, we have yet to consider values of $w$ in the general sense. In other words, what can be said about the general approximation of bounded linear operators mapping  $C(\mathbb{R}^n)$ to $C(\mathbb{R}^n)$ where $C$ denotes the set of continuous (integrable) real valued functions? Evidently, the form of $\mathcal{F}$ resembles the general class of integral transforms, $\int f(x)\cdot E(x,k)\ dx$. Integral transforms are shown to approximate a multitude of operators through varying kernel functions. For example consider some $g(t)$ and the integral transform
+\begin{equation}(\mathcal{P}g)(s) = \int_0^\infty g(t)\delta'(s-t)\ dt\end{equation}
+where $\delta$ is the Dirac-Delta function. Then we have that $(\mathcal{P}g)(s) = \frac{dg}{dt}\Big|_s$ by the properties of the Delta function. Similar approximations of linear operators can be made by varying the kernel function $E$. Thus there is considerable interest in determining the density of integral transforms and thereby functional neural networks in the set of bounded linear operators.
+
+
+Further investigation into dense forms of bounded linear operators leads us to the Schwartz theorem of bounded linear operator representation by integral kernels. The theorem simply states that all linear operators can be represented in some light sense by integral transforms with arbitrary kernels. However, this theorem is too general for our purposes and we would like to show that in the specific case of some functional neural network $\mathcal{F}$ that for any given layer such that $l\neq 0$ any linear operator can be approximated with point-wise convergence from the Weierstrass polynomial approximation theory.
+
+In order to do this we will return to the Riesz representation theorem that states the following \cite{revisited}. 
+\begin{theorem}
+Let $\phi:C(X) \to \mathbb{R}$ be any bounded linear form where $X$ is a compact Hausdorff space and $C(X)$ is the Banach space of continuous functions over $X$. Then there exists a unique regular Borel measure $\mu$ on $X$ such that
+\begin{equation}\phi(f) =\int_X f(t)\  d\mu(t),\; \; f\in C(X), \; \; t\in X\end{equation} and $\|\phi\| = |\mu|(X)$ where $|\mu|$ is the total variation of $\mu$ on $X$. 
+\end{theorem}
+As opposed to generalizing Cybenko's theorem to Banach spaces ($\mathbb{R}^\infty$), we can actually manipulate the representation theorem to encapsulate bounded linear operators over locally compact Hausdorf spaces. Using the aforementioned logic the universal representation theorem for functional neural networks is now proposed.
+\begin{theorem}
+Given a functional neural network $\mathcal{F}$ then some layer $l \in \mathcal{F}$, the let $K:C(R^{(l)})\to C(R^{(l)})$ be a bounded linear operator. If we denote the operation of layer $l$ on layer $l-1$ as $\sigma^{(l+1)} = g\left(\Sigma_{l+1}\sigma^{(l)}\right)$, then for every $\epsilon >0$, there exists a weight polynomial $w^{(l)}(i,j)$ such that the supremum norm over $R^{(l)}$ \begin{equation}\left\|K\sigma^{(l)} -\Sigma_{l+1}\sigma^{(l)}\right\|_{\infty} < \epsilon\end{equation}
+
+\end{theorem}
+\begin{proof} Let $\zeta_t :C(R^{(l)})\to R^{(l)}$ be a linear form which evaluates its arguments at $t\in R^{(l)}$; that is, $\zeta_t(f) = f(t)$.  Then because $\zeta_t$is bounded on its domain, $\zeta_t\circ K = K^\star\zeta_t$ is a bounded linear functional. Then from the Riesz Representation Theorem (Theorem 1) we have that there is a unique regular Borel measure $\mu_t$ on $R^{(l)}$ such that 
+\begin{equation}
+\begin{aligned}
+    \left(K\sigma^{(l)}\right)(t) = K^\star \zeta_t\left(\sigma^{(l)}\right) &= \int_{R^{(l)}} \sigma^{(l)}(s)\ d\mu_t(s), \\
+    \|\mu_t\| &= \|K^\star \zeta_t\| 
+\end{aligned}
+\end{equation}
+Then if there exists a regular Borel measure $\mu$ such that $\mu_t$ is significantly smaller that $\mu$ for all $t$, then we have that, by the Radon-Nikodim derivative, $d\mu_t(s) = K_t(s)d\mu(s)$ under the assumption that $K_t$ is $L^1$ integrable over $R^{(l)}$ with the measure $\mu$. Thus it follows that 
+\begin{equation}
+\begin{aligned}
+K\left[\sigma^{(l)}\right](t) &= \int_{R^{(l)}} \sigma^{(l)}(s)K_t(s)\ d\mu(s) \\
+&= \int_{R^{(l)}} \sigma^{(l)}(s)K(t,s)\  d\mu(s).
+\end{aligned}
+\end{equation}
+Therefore, for any bounded linear operator $K:C(X)\to C(X)$ there exists a unique $K(t,s)$ such that $K[f] = \int_X f(s)K(t,s) d\mu(s)$ . Now we show that the operation of $\Sigma_l$ can approximate any such operator. Because $K$ is of the form of $\Sigma_l$ where the only difference is the weighting function, we assert the following claim.
+
+Let $G$ be defined as a linear functional applied to a Gaussian heat kernel whose application with a function $f:\mathbb{R} \to \mathbb{R}$ yields the following definition, \begin{equation}G[f](x) = \frac1{b\sqrt{\pi}}\int_\mathbb{R} f(u)\mathrm{e}^{\left(\frac{u-x}b\right)}\ du.\end{equation}Then it follows that by the Weierstrass approximation theorem that for all $\epsilon > 0$, the supremum norm $\left\|f-G[f]\right\|_\infty < \epsilon$.   Then because $G$ is a polynomial, $f$ must be a limit of polynomials. So now consider the operation of $K\left[\sigma^{(l)}\right](t)$ with kernel  $K(t,s)$. By the Weierstrass approximation theorem $K(t,s)$ must be a limit of polynomials and therefore we let $w^{(l)}(i,j)$ assume that limit. That is,
+\begin{equation}
+\begin{aligned}
+    \lim_{b \to 0}\left\|K\left[\sigma^{(l)}\right] -  \int_{R^{(l)}} \sigma^{(l)}(s)\ G[k]\  d\mu(s) \right\|_\infty &= \\
+      \left\|K\left[\sigma^{(l)}\right] -  \Sigma_{l+1}\left[\sigma^{(l)}\right]  \right\|_\infty &< \epsilon
+\end{aligned}
+ \end{equation}
+ Thus we have that as a limit of polynomials the operation of any arbitrary layer of a functional neural network $\mathcal{F}$ approaches any arbitrary linear bounded operator $K:C(R^{(l)})\to C(R^{(l)})$; that is, functionals of the form $\Sigma_{l+1}$ are dense in the set of all bounded continuous linear operators.
+\end{proof}
+
+
+In the above proof, a remarkable fact has been shown: functional neural networks can perform most mathematical operations on their inputs, and so neural networks preserve universal approximation in infinite dimensions!
+
+
+\section{Generalized Artificial Neural Networks}
+To implement Functional Neural Networks in a meaningful context, we need some algorithm
+which uses the computational power of $\{\mathcal{F}\}$ to yield finite dimensional classifications of $\xi.$ 
+
+So the question arises: \emph{does there exist some more general structure which includes FNNs and ANNs without piecewise approximation?}  The solution to such questions must furthermore maintain universal approximation and computational evaluability so as to allow the implementation of a real-world algorithm. 
+
+Therefore, in this section of the paper we will propose the Generalized Artificial Neural Network through the examination of specific operations on different layers and then search
+the space of these GANNs for an algorithm that lets us make use of $\{\mathcal{F}\}.$
+
+\subsection{The Generalization of ANNs}
+In order to generalize ANNs in a way that follows logically, we take the initial definition of functional neural networks and consider the notion of a layer.
+\begin{definition} If $A,B$ are (possibly distinct) Banach spaces over $\mathbb{R}$,
+we say $\mathcal{G}: A \to B$ is a generalized neural network if and only if 
+
+\begin{equation} \label{eq:gann}
+          \begin{alignedat}{2}
+        \mathcal{G}:\ &\sigma^{(l+1)} & &=  g\left(T_l\left[\sigma^{(l)}\right] + \beta^{(l)}\right)  \\
+        &\sigma^{(0)} & &= \xi 
+        \end{alignedat}
+\end{equation}
+for some input $\xi \in A.$.
+\end{definition}
+
+In \eqref{eq:gann}, it is unclear how the form of $T_l$ is restricted. It might be recalled that $T_l$ takes a form similar to the operation of a layer $l+1$ on $l$ in the proof of universal approximation for $\{\mathcal{F}\}$. Let us consider a few other such forms of $T_l$ by first stating a formal definition.
+
+\begin{definition}
+We say that $T_l$ is the operation of a layer $l+1$ on $l$ in some $\mathcal{G}$ if and only if for $l=L-1$, $T:C\to B$ with $C$ the codomain of $\sigma^{(0)}$ and for $l = 0$, $T_l : A\to D$ where $D$ is the domain of $\sigma^{(1)}.$
+\end{definition}
+
+Using the above definition it is now possible to construct different classes of $T_l$ using ideas directly from the constructions of $\mathcal{N}$ and $\mathcal{F}$.
+
+\begin{definition}
+We suggest several classes of $T_l$ as follows
+  \begin{itemize}
+  \item $T_l$ is said to be $\mathfrak{f}$ functional if and only if 
+   =  \begin{equation} \label{eq:tlfunctional}
+    \begin{aligned} 
+      T_l = \mathfrak{f}: C(R^{(l)}) \to&\ C(R^{(l+1)}) \\
+      \sigma \mapsto& \int_{R^{(l)}} \sigma(i) w^{(l)}(i,j)\ di.
+    \end{aligned}
+    \end{equation}
+  \item $T_l$ is said to be $\mathfrak{n}$ discrete if and only if 
+    \begin{equation} \label{eq:tldiscrete}
+    \begin{aligned} 
+      T_l = \mathfrak{n}: \mathbb{R}^n \to&\ \mathbb{R}^m \\
+      \vec{\sigma} \mapsto& \sum_j^m \vec{e}_j\sum_i^n \sigma_i w^{(l)}_{ij}
+    \end{aligned}
+    \end{equation}
+    where $\vec{e}_j$ denotes the $j^\mathrm{th}$ basis vector in $\mathbb{R}^m$.
+  \item $T_l$ is said to be $\mathfrak{n}_1$ transitional if and only if 
+    \begin{equation} \label{eq:tldiscrete}
+    \begin{aligned} 
+      T_l = \mathfrak{n}_1: \mathbb{R}^n \to&\  C(R^{(l+1)}) \\
+      \vec{\sigma} \mapsto& \sum_i^n \sigma_i w^{(l)}_i(j).
+    \end{aligned}
+    \end{equation}
+  \item $T_l$ is said to be $\mathfrak{n}_2$ transitional if and only if 
+    \begin{equation} \label{eq:tldiscrete}
+    \begin{aligned} 
+      T_l = \mathfrak{n}_2: C(R^{(l)}) \to&\ \mathbb{R}^m \\
+      \sigma(i) \mapsto& \sum_j^m \vec{e}_j\int_{R^{(l)}} \sigma(i) w^{(l)}_j(i)\ di
+    \end{aligned}
+    \end{equation}
+  \end{itemize}
+\end{definition}
+\begin{remark}
+  Observe that without loss of generality $\{G\} \supset \{F\} \cup \{N\};$ that is,
+  every $\mathcal{N}$ can be expressed in terms of $\mathcal{G}: \mathfrak{n} \to \dots \to \mathfrak{n},$ and the same for every $\mathcal{F}. $ 
+\end{remark}
+
+\subsection{Continuous Classifiers and Dimensionality Reduction}
+In the case that data is sampled from a continuous process over time, it is general practice
+to build a feature vector in dimensions identically equal to the number of samples $n$. Then with such a feature vector, a practitioner can build a network architecture to accommodate her learning task. Unfortunately, if the input is of high quality, this introduces high-dimensionality into the weight matrix and thereby any optimization algorithm chosen.
+
+
+%[CITE http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.144.9688&rep=rep1&type=pdf]
+
+
+However, searching $\{\mathcal{G}\}$ space yields a theoretically better approach.
+\begin{definition}
+    $\mathcal{G}$ is said to be a continuous classifier network if it is defined such that
+    \begin{equation}
+        \mathcal{G}: \mathfrak{f} \to \mathfrak{f} \to \dots \mathfrak{f} \to \mathfrak{n}_2,
+    \end{equation}
+    and for every $l < L-1$,
+    \begin{equation}
+w^{(l)}(i,j) = 
+    \sum_{b}^{Z^{(l)}_Y} \sum_{a}^{Z^{(l)}_X} k^{(l)}_{a,b}i^{a}j^{b}.
+\end{equation}
+\end{definition}
+In construction every single weight polynomial can capture lower-order properties of the weight surface with even less
+dimensionality than a typical piecewise weight surface ($w_ij$). In fact polynomials can best-fit a function of $n$ discrete points in the worst case with $n$ coefficients, but they typically perform better within some $\epsilon$ error.
+[ Numerical Methods of Curve Fitting. By P. G. Guest, Philip George Guest. Page 349.]
+The key here is that the resolution of the input function $\xi$ only affects the feed-forward step
+on the first $\mathfrak{f}$ layer, and not the number, $n$, of parameters $k_{a,b}$ in the model.
+
+
+Suppose in some instance we have a weight polynomial on an $\mathfrak{n}_2$ with $M \in O(1)$ parameters, which has learned a model. Then the following theorem gives a direct comparison of an ANN performing the same task.
+
+\begin{theorem}
+  Let $\mathcal{G}$ be a GANN with only one $\mathfrak{n}_2$ transitional layer. If a continuous function, say $f(t)$ is sampled uniformly from $t = 0$, to $t = N$, such that $x_n = f(n)$, and if $\mathcal{G}$ has an input function which is piecewise linear with
+
+  \begin{equation}
+  \xi = \left(x_{n+1} - x_n\right)\left(z - n\right) + x_n
+  \end{equation}
+
+  for $n \leq z < n+1$, then there exist some discrete neural network $\mathcal{N}$ such that $\mathcal{G}(\xi) = \mathcal{N}(\pmb{x}).$
+\end{theorem}
+\begin{proof}
+  Recall that for the $j$th output neuron of a single layer discretized neural network,
+  \begin{equation}
+    \mathcal{N}_j(\pmb{x}) = g\left(\sum^N_{i=1}w_{i,j}x_i + \beta\right).
+  \end{equation}
+  Let this $\mathcal{N}$ compose the same sigmoid as the aforementioned $\mathfrak{n}_2$ transitional layer. We need only show that equivalence holds on the inside.
+
+
+  Because the definition of a network at the $j$th componet gives us
+
+  \begin{equation}  \label{eq:n2nrelation}
+    \mathcal{G}_j(\xi) = g\left(\mathfrak{n}_2[\xi] + \beta\right),
+  \end{equation}
+  it follows that,
+  \begin{equation} \label{eq:n2piecewisein}
+  \begin{aligned}
+    \mathfrak{n}_2(\xi) &= \int_R\xi(t)\;u_j(t)\;dt \\ 
+     &= \sum_n^{N-1}\int_n^{n+1} \left((x_{n+1} - x_n)(z - n) + x_n\right) u_j(z)\;dz\\ 
+      &= \sum_n^{N-1}(x_{n+1} - x_n) \\
+      &\hspace*{1cm}\times \int_n^{n+1} (z - n) \sum_m^M k_{m,j} z^m\;dz\\
+      &\hspace*{1cm} + x_n\int_n^{n+1} u_j(z)\;dz\\
+        &= \sum_n^{N-1}(x_{n+1} - x_n)\\
+        &\hspace*{1cm} \times \sum_m^M k_{m,j} \left[\frac{1}{m+2}z^{m+2} - \frac{nz^{m+1}}{m+1}\right]_n^{n+1}\\
+        &\hspace*{1cm}  + \sum_m^M k_{m,j} x_n \frac1{m+1}z^{m+1}\Big|^{n+1}_n
+      \end{aligned}
+      \end{equation}
+      \\
+      Now, let $V_{n,j} = \sum_m k_{m,j} \left[\frac{1}{m+2}z^{m+2} - \frac{nz^{m+1}}{m+1}\right]_n^{n+1}$ and $Q_{n,j} = \sum_m k_{m,j} \frac1{m+1}z^{m+1}\big|^{n+1}_n.$ We can now easily simplify \eqref{eq:n2piecewisein} using the telescoping trick of summation.
+      \begin{equation}
+        \begin{aligned}
+        \mathfrak{n}_2(\xi) &= x_NV_{N-1,j} \\
+        &\hspace*{1cm}+ \sum_{n=2}^{N-1}x_n\left(Q_{n,j} - V_{n,j} + V_{n-1,j}\right)\\
+        &\hspace*{1cm} + x_1\left(Q_{1,j} - V{1,j}\right).
+        \end{aligned}
+      \end{equation}
+      By simply letting $w_{1,j} = \left(Q_{1,j} - V_{1,j}\right), w_{n,j} = \left(Q_{n,j} - V_{n,j} + V_{n-1,j}\right),$ and $w_{N,j} = V_{N-1,j}$
+      the following relation is satisfied,
+      $\mathfrak{n}_2(\xi) = \mathfrak{n}(\pmb{x}).$
+      Hence, $\mathcal{G}(\xi) = \mathcal{N}(\pmb{x})$ and the proof is complete.
+    \end{proof}
+
+    Notice that in the last proof, we went from $M \in O(1)$ dimensions to $O(N)$ 
+    where $N$ is the number of samples on the input signal $\xi$! So there is constant space dimensionality
+    reduction when using the $\mathfrak{n}_2,$ and it is not to hard to see this for $\mathfrak{f}.$
+
+    \section{Implementation}
+    With these theoretical guarantees given for $\{\mathcal{G}\}$, the implementation of the feedforward and error backpropagation algorithms in this context is an essential next step. Since the derivations are too long to include here, we defer the reader to other supplemental materials.
+
+    Feedforward propagation is straight forward, and relies on memoizing functionals
+    by using the separability of weight polynomials. Essentially, integration need only
+    occur once to yield coefficients on power functions. See Algorithm 1.
+
+
+
+
+\begin{algorithm}[tb]
+   \caption{Feedforward Propagation on $\{\mathcal{F}\}$}
+   \label{alg:example}
+\begin{algorithmic}
+   \STATE {\bfseries Input:} input function $\xi$
+   \FOR{$l \in \{0,\dots,L-1\}$}
+   \FOR{$t \in Z_X^{(l)}$}
+   \STATE Calculate $I^{(l)}_t = \int_{R^{(l)}} \sigma^{(l)}(j_l)j_l^{t}\;dj_l.$
+   \ENDFOR
+   \FOR{$s \in  Z_Y^{(l)}$}
+   \STATE Calculate $C^{(l)}_{s} = \sum_{a}^{Z^{(l)}_X} k_{a,s} I^{(l)}_{a}.$
+   \ENDFOR
+   \STATE Memoize $\sigma^{(l+1)}(j)=g\left(\sum_{b}^{Z^{(l)}_Y} j^{b} C^{(l)}_{b}\right).$
+   \ENDFOR
+   \STATE The output is given by $\mathcal{F}[\xi] = \sigma^{(L)}$.
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[tb]
+   \caption{Error Backpropagation}
+   \label{alg:example}
+\begin{algorithmic}
+   \STATE {\bfseries Input:} input $\gamma$, desired $\delta,$ learning rate $\alpha,$ time $t.$
+   \FOR{$l \in \{0, \dots, L\}$}
+    \STATE Calculate $\Psi^{(l)}=g'\left(\int_{R^{(l-1)}}{\sigma^{(l-1)} w^{(l-1)}\ dj_{l-1}}\right)$
+   \ENDFOR
+   \STATE For every $t$, compute  $\rotB_{L,t}$ from from \eqref{eq:rotBrelation}.
+   \STATE Update the output coefficient matrix
+          $k_{x,y}^{(L-1)} - I_x^{(L-1)}
+                  \int_{R^{(L)}} \left[\mathcal{F}(\gamma) - \delta\right] 
+                    \Psi^{(L)} j_L^y \; dj_L \to  k_{x,y}^{(L-1)}.$
+    \FOR{$l = L-2$ \textbf{to} $0$}
+    \STATE If it is null, compute and memoize $ \rotB_{l+2,t}$ from \eqref{eq:rotBrelation}.
+    \STATE Compute but do not store $\rotB_{l+1} \in \mathbb{R}.$
+    \STATE Compute $\frac{\partial E}{\partial k_{x,y}^{(l)}} = \rotB_l$ from from \eqref{eq:rotBrelation}.
+    \STATE Update the weights on layer $l$: $k_{x,y}^{(l)}(t) \to k_{x,y}^{(l)} $
+    \ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+    For error backpropagation, we chose the most direct analogue for the loss function, in particular since we showed universal approximation using the $C^\infty$ norm, the integral norm will converge. 
+\begin{definition}
+    For a functional neural network $\mathcal{F}$ and a dataset $\left\{(\gamma_n(j), \delta_n(j))\right\}$ we say that the error for a given $n$ is defined by
+    \begin{equation} \label{eq:error}
+        E = \frac12 \int_{R^{(L)}}\left(\mathcal{F}(\gamma_n) - \delta_n \right)^2\;dj_L
+    \end{equation}
+\end{definition}
+Using this definition we take gradient with respect to the coefficients of the polynomials on each weight surface. Eventially we get a recurrence relation in the same way one might for discrete neaural networks.
+\begin{equation} \label{eq:rotBrelation}
+  \begin{aligned}
+    \rotB_{L,t} &= \int_{R^{(L)}}  \sum_b^{Z^{(L-1)}_Y} k^{(L-1)}_{t,b} j_L^b 
+      \left[\mathcal{F}(\gamma) - \delta\right] \Psi^{(L)}\;dj_L. \\
+    \rotB_{s,t} &= \int_{R^{(s)}}\sum_b^{Z^{(s-1)}_Y} \sum_a^{Z^{(s)}_X} 
+      k^{(s-1)}_{t,b} j_s^{a+b} \Psi^{(s)} \rotB_{s+1,a}\; dj_s. \\
+    \rotB_{l+1} &= \int_{R^{(l+1)}} \sum_a^{Z^{(l+1)}_X}
+      j^{a+y}_{l+1} \Psi^{(l+1)} \rotB_{l+2, a}\; dj_{l+1}. \\
+     \frac{\partial E}{\partial k^{(l)}_{x,y}} = \rotB_{l} &= \int_{R^{(l)}}
+      j_{l}^x \sigma^{(l)} \rotB_{l+1}\; dj_l.
+  \end{aligned}
+  \end{equation}
+  where $\Psi$ is defined as $g'(T[\sigma]+\beta).$ Using this recurrence relation, we can drastically reduce the time to update each weight by memoizing. That philosophy yields algorithm 2, and therefore we have completed the practical analohgues to these algorithms.
+
+\section{Conclusion}
+In this paper we first extended the standard ANN recurrence relation to infinite dimensional input and output spaces. In this context of this new algorithm, FNN, we proved two new universal approximation theorems. The proposition of functional neural networks lead to new insights into the black box model of traditional neural networks.
+
+ Functional networks are a logical generalization of the discrete neural network and therefore all theorems shown for traditional neural networks apply to piecewise functional neural networks. Furthermore the creation of homologous theorems for universal approximation provided a way to find a relationship between the weights of traditional neural networks. This suggests that the discrete weights of a normal artificial neural network can be transformed into continuous surfaces which approximate kernels satisfying the training dataset. We then showed that functional neural networks are also able to approximate bounded linear operators.
+
+The desire to implement $\{\mathcal{F}\}$ in actual learning problems motivated the exploration of a new space of algorithms: $\{G\}.$ This new space not only contains standard ANNs and FNNs but also similar extensions such as that proposed in \cite{roux}. We then showed that a subset of $\{G\}$ containg algorithms called continuous classifiers actually reduce the dimensionality of the learning problem when expressed in $\mathfrak{n}_2$ instead of $\mathfrak{n}$ layers. 
+
+Finally  we proposed computationally feasible error backpropagation and forward propagation algorithms (up to an approximation).
+
+
+\subsection{Future Work}
+Although we have shown that advantage of using different subset of $\{G\}$ for learning tasks, there is still much work to be done. In this paper we did not explore different classes of weight surfaces, some of which may provide better computational integrability. It was also suggested to us that $\{F\}$ may link kernel learning methods and deep learning. Lastly, it remains to be seen how the general class of $\{G\},$ especially continuous classifiers, can be applied in practice.
+
+% In the unusual situation where you want a paper to appear in the
+% references without citing it in the main text, use \nocite
+\nocite{langley00}
+
+\bibliography{example_paper}
+\bibliographystyle{icml2016}
+
+\end{document} 
+
+
+% This document was modified from the file originally made available by
+% Pat Langley and Andrea Danyluk for ICML-2K. This version was
+% created by Lise Getoor and Tobias Scheffer, it was slightly modified  
+% from the 2010 version by Thorsten Joachims & Johannes Fuernkranz, 
+% slightly modified from the 2009 version by Kiri Wagstaff and 
+% Sam Roweis's 2008 version, which is slightly modified from 
+% Prasad Tadepalli's 2007 version which is a lightly 
+% changed version of the previous year's version by Andrew Moore, 
+% which was in turn edited from those of Kristian Kersting and 
+% Codrina Lauth. Alex Smola contributed to the algorithmic style files.  

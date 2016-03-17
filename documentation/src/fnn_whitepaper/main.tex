@@ -1,0 +1,129 @@
+%!TEX root = main.tex
+
+
+\documentclass[titlepage, twoside]{article}
+
+\usepackage{lipsum}
+\usepackage[pdftex]{graphicx}
+\usepackage[margin=1.5in]{geometry}
+\usepackage[english]{babel}
+   \addto{\captionsenglish}{\renewcommand{\bibname}{Works Cited}}
+\usepackage{listings}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{framed} 
+\usepackage{amsmath}
+\usepackage{titling}
+\usepackage{amssymb}
+\usepackage{relsize}
+\usepackage{tikz}
+\usepackage{xr}
+
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage[colorinlistoftodos]{todonotes}
+
+% margins
+\usepackage{bm}
+
+% references
+\usepackage{varioref}
+\renewcommand\refname{Works Cited}
+
+
+
+%%%%%%%%%%%%%%%
+% MATH
+%%%%%%%%%%%%%%%
+
+\numberwithin{equation}{subsection}
+\newcommand{\BlackBox}{\rule{1.5ex}{1.5ex}}  % end of proof
+\newtheorem{example}{Example} 
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma} 
+\newtheorem{proposition}[theorem]{Proposition} 
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newcommand{\Sum}{\mathlarger{\mathlarger{\sum}}}
+
+\numberwithin{theorem}{subsection}
+
+\newcommand{\rotB}{\scalebox{-1}[1]{B}}
+%%%%%%%%%%%%%%%
+
+
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+
+\usepackage{float}
+
+\newcommand{\nosection}[1]{%
+  \refstepcounter{section}%
+  \addcontentsline{toc}{section}{\protect\numberline{\thesection}#1}%
+  \markright{#1}}
+\newcommand{\unit}[1]{\ensuremath{\, \mathrm{#1}}}
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhead[L]{Functional Neural Networks}
+\fancyhead[CO]{Weierstrass Approximation}
+\fancyhead[CE]{William Guss}
+\fancyhead[R]{\thepage}
+\fancyfoot[LR]{}
+\fancyfoot[C]{}
+\usepackage{csquotes}
+\numberwithin{equation}{subsection}
+
+
+%%%%%%%%%%%%%%%%%%
+%BIBLIOGRAPHY
+%%%%%%%%%%%%%%%%%%
+\usepackage{csquotes}
+\usepackage[style=ieee, backend=biber]{biblatex}
+\addbibresource{FNN.bib}
+\DefineBibliographyStrings{english}{
+  references = {Bibliography},
+}
+\def\layersep{2cm}
+
+
+
+\begin{document}
+\title{Generalized Artifical Neural Networks}
+\subtitle{Approximated by Weierstrass Polynomials}
+\author{
+  Guss, William\\
+  \texttt{wguss@berkeley.edu}
+}
+\date{\today}
+\maketitle
+\pagenumbering{roman}
+\thispagestyle{empty}
+
+\begin{abstract}
+\input{abstract}
+\end{abstract}
+
+\newpage
+  \thispagestyle{empty}
+  \tableofcontents
+
+\pagenumbering{arabic}
+
+\include{introduction}
+\include{fnn}
+\include{gann}
+\include{conclusion}
+
+\newpage
+\addcontentsline{toc}{section}{Works Cited}
+\printbibliography
+
+\end{document}

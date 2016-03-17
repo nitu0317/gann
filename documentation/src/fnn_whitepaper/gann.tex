@@ -1,0 +1,173 @@
+%!TEX root = main.tex
+
+\section{Generalized Artificial Neural Networks}
+
+
+
+We have clearly demonstrated the theoretical power of FNNs, but does there exist some more general structure which includes FNNs and ANNs without piecewise approximation? In other words, can we determine a form which encompasses the discrete classification of continuous datasets or visa versa all the while maintains either the power of discrete or functional artificial neural networks? The solution to such questions must furthermore maintain universal approximation and computational evaluability so as to allow the implementation of a real-world algorithm. 
+
+In this section of the paper we will propose the Generalized Artificial Neural Network through the examination of specific operations on different layers. 
+
+\subsection{The Generalization of ANNs}
+In order to generalize ANNs in a way that follows logically, we take the initial definition of functional neural networks and consider the notion of a layer.
+\begin{definition} If $A,B$ are (possibly distinct) Hilbert spaces over $\mathbb{R}$,
+we say $\mathcal{G}: A \to B$ is a generalized neural network if and only if 
+
+\begin{equation} \label{eq:gann}
+          \begin{alignedat}{2}
+        \mathcal{G}:\ &\sigma^{(l+1)} & &=  g\left(T_l\left[\sigma^{(l)}\right] + \beta^{(l)}\right)  \\
+        &\sigma^{(0)} & &= \xi 
+        \end{alignedat}
+\end{equation}
+for some input $\xi \in A$.
+\end{definition}
+
+In \eqref{eq:gann}, it is unclear how the form of $T_l$ is restricted. It might be recalled that $T_l$ takes a form similar to the operation of a layer $l+1$ on $l$ in the proof of universal approximation for $\{\mathcal{F}\}$. Let us consider a few other such forms of $T_l$ by first stating a formal definition.
+
+\begin{definition}
+We say that $T_l$ is the operation of a layer $l+1$ on $l$ in some $\mathcal{G}$ if and only if for $l=L-1$, $T:C\to B$ with $C$ the codomain of $\sigma^{(0)}$ and for $l = 0$, $T_l : A\to D$ where $D$ is the domain of $\sigma^{(1)}.$
+\end{definition}
+
+Using the above definition it is now possible to construct different classes of $T_l$ using ideas directly from the constructions of $\mathcal{N}$ and $\mathcal{F}$.
+
+\begin{definition}
+We suggest several classes of $T_l$ as follows
+	\begin{itemize}
+	\item $T_l$ is said to be $\mathfrak{f}$ functional if and only if 
+	 =	\begin{equation} \label{eq:tlfunctional}
+		\begin{aligned} 
+			T_l = \mathfrak{f}: C(R^{(l)}) \to&\ C(R^{(l+1)}) \\
+			\sigma \mapsto& \int_{R^{(l)}} \sigma(i) w^{(l)}(i,j)\ di.
+		\end{aligned}
+		\end{equation}
+	\item $T_l$ is said to be $\mathfrak{n}$ discrete if and only if 
+		\begin{equation} \label{eq:tldiscrete}
+		\begin{aligned} 
+			T_l = \mathfrak{n}: \mathbb{R}^n \to&\ \mathbb{R}^m \\
+			\vec{\sigma} \mapsto& \sum_j^m \vec{e}_j\sum_i^n \sigma_i w^{(l)}_{ij}
+		\end{aligned}
+		\end{equation}
+		where $\vec{e}_j$ denotes the $j^\mathrm{th}$ basis vector in $\mathbb{R}^m$.
+	\item $T_l$ is said to be $\mathfrak{n}_1$ transitional if and only if 
+		\begin{equation} \label{eq:tldiscrete}
+		\begin{aligned} 
+			T_l = \mathfrak{n}_1: \mathbb{R}^n \to&\  C(R^{(l+1)}) \\
+			\vec{\sigma} \mapsto& \sum_i^n \sigma_i w^{(l)}_i(j).
+		\end{aligned}
+		\end{equation}
+	\item $T_l$ is said to be $\mathfrak{n}_2$ transitional if and only if 
+		\begin{equation} \label{eq:tldiscrete}
+		\begin{aligned} 
+			T_l = \mathfrak{n}_2: C(R^{(l)}) \to&\ \mathbb{R}^m \\
+			\sigma(i) \mapsto& \sum_j^m \vec{e}_j\int_{R^{(l)}} \sigma(i) w^{(l)}_j(i)\ di
+		\end{aligned}
+		\end{equation}
+	\end{itemize}
+\end{definition}
+
+With the characterization of these layer classes complete, foundational theorems about this new generalization must be proposed. First we will show inclusion of other neural algorithms followed by universal approximation theorems (as by necessity). 
+
+\begin{theorem}
+If $\{\mathcal{G}\}$ is the set of all generalized artificial neural networks then $\{\mathcal{F}\} \cup \{\mathcal{N}\}$ is a subset of $\{G\}$.
+\end{theorem}
+\begin{proof}
+Since $\{\mathcal{N}\} \subset \{\mathcal{F}\}$, we need only show that $\{\mathcal{F}\} \subset \{\mathcal{G}\}$, but for the sake of the reader, consider that one might take any $\mathcal{N}$ and show equivalency with some $\mathcal{G}$ strictly composed of $T_l$ which are discrete.
+
+For the case of functional inclusion, consider any functional neural network $\mathcal{F}$ with $L$ layers. Then let us construct $\mathcal{G} : C\left(R^{(0)}\right) \to C\left(R^{(L)}\right)$. First we endow $\mathcal{G}$ with $T_l$ which are strictly functional. Let each $T_l$ have an equivalent weight function $w^{(l)}$ to that of $\mathcal{F}$ on layer $l$. This construction yields the following recurrence relation:
+\begin{equation}
+          \begin{alignedat}{2}
+        \mathcal{G}:\ &\sigma^{(l+1)}(j) & &=  g\left(\int_{R^{(l)}} \sigma^{(l)}(i) w^{(l)}(i,j)\ di + \beta^{(l)}\right)  \\
+        &\sigma^{(0)}(j) & &= \xi(j), 
+        \end{alignedat}
+\end{equation}
+which is exactly equivalent to that of $\mathcal{F}$. Hence for any $\mathcal{F}$ there exists a corresponding $\mathcal{G}$ with equivalency. Thus $\{\mathcal{F}\} \subset \{\mathcal{G}\}.$
+\end{proof}
+
+
+
+\subsection{Input Quality as a Kernal Predicate for Neural Networks}
+In this section we will explore various anylitically integrable input functions on certain $\mathcal{G}$. In particular, we wish to explore the case of $\mathfrak{n}_2$ as it seems this construction may embody the most practical application of this new generalization: the classification of continuous signals. We wish to prove mathemnatically and demonstrate through application that such a method is better than current classifciation methods for continuous signals, or at the least, the two methods are isomorphic. 
+
+It is well established that all processes are sampled discretely, so in the least, some sort of approximate method must be used to create suitable inputs $\xi$ for $\mathfrak{n}_2$ transitional layers. The following exploration is interesting. 
+
+\begin{theorem}
+	Let $\mathcal{G}$ be a GANN with only one $\mathfrak{n}_2$ transitional layer. If a continuous function, say $f(t)$ is sampled uniformly from $t = 0$, to $t = N$, such that $x_n = f(n)$, and if $\mathcal{G}$ has an input function which is piecewise linear with
+
+	\begin{equation}
+	\xi = \left(x_{n+1} - x_n\right)\left(z - n\right) + x_n
+	\end{equation}
+
+	for $n \leq z < n+1$, then there exist some discrete neural network $\mathcal{N}$ such that $\mathcal{G}(\xi) = \mathcal{N}(\pmb{x}).$
+\end{theorem}
+\begin{proof}
+	Recall that for the $j$th output neuron of a single layer discretized neural network,
+	\begin{equation}
+		\mathcal{N}_j(\pmb{x}) = g\left(\sum^N_{i=1}w_{i,j}x_i + \beta\right).
+	\end{equation}
+	Let this $\mathcal{N}$ compose the same sigmoid as the aforementioned $\mathfrak{n}_2$ transitional layer. We need only show that quivalence holds on the inside.
+
+
+	Because 
+
+	\begin{equation}  \label{eq:n2nrelation}
+		\mathcal{G}_j(\xi) = g\left(\mathfrak{n}_2[\xi] + \beta\right),
+	\end{equation}
+	it follows that,
+	\begin{equation} \label{eq:n2piecewisein}
+	\begin{aligned}
+		\mathfrak{n}_2(\xi) &= \int_R\xi(t)\;u_j(t)\;dt \\ 
+		 &= \sum_n^{N-1}\int_n^{n+1} \left((x_{n+1} - x_n)(z - n) + x_n\right) u_j(z)\;dz\\ 
+		  &= \sum_n^{N-1}(x_{n+1} - x_n) \int_n^{n+1} (z - n) \sum_m^M k_{m,j} z^m\;dz + x_n\int_n^{n+1} u_j(z)\;dz\\
+		    &= \sum_n^{N-1}(x_{n+1} - x_n) \sum_m^M k_{m,j} \left[\frac{1}{m+2}z^{m+2} - \frac{nz^{m+1}}{m+1}\right]_n^{n+1}  + \sum_m^M k_{m,j} x_n \frac1{m+1}z^{m+1}\Big|^{n+1}_n
+      \end{aligned}
+      \end{equation}
+      \\
+      Now, let $V_{n,j} = \sum_m k_{m,j} \left[\frac{1}{m+2}z^{m+2} - \frac{nz^{m+1}}{m+1}\right]_n^{n+1}$ and $Q_{n,j} = \sum_m k_{m,j} \frac1{m+1}z^{m+1}\big|^{n+1}_n.$ We can now easily simplify \eqref{eq:n2piecewisein} using the telescoping trick of summation. It follows that,
+      \begin{equation}
+      	\mathfrak{n}_2(\xi) = x_NV_{N-1,j} + \sum_{n=2}^{N-1}x_n\left(Q_{n,j} - V_{n,j} + V_{n-1,j}\right) + x_1\left(Q_{1,j} - V{1,j}\right).
+      \end{equation}
+      By simply letting $w_{1,j} = \left(Q_{1,j} - V_{1,j}\right), w_{n,j} = \left(Q_{n,j} - V_{n,j} + V_{n-1,j}\right),$ and $w_{N,j} = V_{N-1,j}$
+      the following relation is satisfied,
+      $\mathfrak{n}_2(\xi) = \mathfrak{n}(\pmb{x}).$
+      Hence, $\mathcal{G}(\xi) = \mathcal{N}(\pmb{x})$ and the proof is complete.
+\end{proof}
+
+The previous theorem shows that at the least there is an isomorphism from $\left\{\mathcal{G}\right\}$ of that kind to the discretized neural network for piecewise linear interpolations. What can be said about higher order interpolations? The following theorem provides the same isomorphism.
+
+\begin{theorem}
+	Let $\phi : \mathbb{R}^N \to C(\mathbb{R})$ be the mapping for the polynomial interpolation of a uniformly sampled function $f(t)$ described by some vector of points. Then if $\mathcal{G}$ is a GANN with only one $\mathfrak{n}_2$ transitional layer, then there exists a discretized neural network $\mathcal{N}$ such that for all $\pmb{x} \in \mathbb{R}^N$, 
+	\begin{equation}
+		\mathcal{G}\left[\phi(\pmb{x})\right] = \mathcal{N}(\pmb{x}).
+	\end{equation}
+\end{theorem}
+
+\begin{proof}
+	It has been well established that a closed form definition for polynomial interpolation is as follows. If $N$ points are sampled from a function $f(t)$ along intervals $[p_i,p_{i+1}],$
+	\begin{equation} \label{eq:interpolate}
+		\begin{aligned}
+			\phi(\pmb{x}) 
+			&=\sum_{n=0}^{N}\left ( \prod_{\stackrel{\!0\leq m\leq n}{m\neq n}}\frac{z-p_m}{p_n-p_m}\right ) x_n.
+		\end{aligned}
+	\end{equation}
+	For simplicity, let $h_n(z) = \prod_m \frac{z-p_m}{p_n-p_m} = \sum_s H_{n,s} z^s$ for some $H_{n,s}$ which satisfy the relationship. Because \eqref{eq:n2nrelation} implies that only equivalence of $\mathfrak{n}_2$ and $\mathfrak{n}$ must be shown,
+
+	\begin{equation}
+		\begin{aligned}
+			\mathfrak{n}_2[\phi(\pmb x)] &= \int_R\phi(\pmb{x})\;u_j\;dz \\ 
+			 &= \sum_n^N x_n \int_R h_n(z)u_j(z)\;dz \\
+			 &= \sum_n^N x_n \sum_{s}^N H_{n,s} \sum_t^T k_{t,j} \frac1{s+t+1}z^{s+t+1} \Big|_R
+	      \end{aligned}
+	\end{equation}
+
+	Now defining $w_{n,j} =\sum_{s}^N H_{n,s} \sum_t^T k_{t,j} \frac1{s+t+1}z^{s+t+1} \big|_R$, it holds that $\mathfrak{n}_2[\phi(\pmb x)] = \mathfrak{n}[\pmb x].$ Therefore, $\mathcal{G}[\phi(\pmb x)] = \mathcal{N}(\pmb x).$ This completes the proof.
+
+\end{proof}
+
+Considering the logic of the previous proof in reverse, it is clear the some neural networks might infact be approximating these $\mathfrak{n}_2$ transitional layers. The following is a theorem that suggests some discrete neural networks approximate kernels on infinite dimensional space.
+
+\begin{theorem}
+	Discrete nueral networks with one hidden layer can approximate a kernel $K(x,w)$ which induces the inner product on the infinite dimensional $L_2$ space of continuous functions.
+\end{theorem}
+\begin{proof}
+	Consider the kernel, $K(x,  w) = \langle \phi(x), \phi(w) \rangle_{L_2}$ where $\phi:\mathbb{R}^N \to L_2(\mathbb R)$ as in \eqref{eq:interpolate}. 
+\end{proof}

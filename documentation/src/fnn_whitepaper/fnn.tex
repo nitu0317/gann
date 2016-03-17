@@ -1,0 +1,315 @@
+%!TEX root = main.tex
+\section{Functional Neural Networks}
+
+
+
+
+\subsection{Derivation}
+Now that the functional neural network has been theoretically defined, the next step is to determine whether the implementation of a numerical algorithm is possible. The problem is approached using techniques already developed for discretized networks. To produce an output for a network with $L$ layers, the implementation would propagate through all the layers while caching previous computations along the way. Likewise, for the error backpropagation method, we will cache and eliminate variables until we are able to define an algorithm that is suitably computable. 
+
+In order to begin exploration of such an implementation, we need to both more rigorously define our notion of the weight surface and what is itself computationally evaluable.
+
+
+As were for discretized neural networks, the parameters of functional neural networks are defined. In particular, the weight surface for each layer is ideally optimized for a desired output operator. To construct these weight surfaces we will parameterize them using  coefficients of Weierstrass polynomials. Consider the following definition.
+\begin{definition} We say that a weight function is parameterized if it is defined as follows.
+\begin{equation}
+w^{(l)}(i,j) = 
+    \sum_{x_{2l+1}}^{Z^{(l)}_Y} \sum_{x_{2l}}^{Z^{(l)}_X} k^{(l)}_{x_{2l},x_{2l+1}}j_{l}^{x_{2l}}j_{l+1}^{x_{2l+1}}
+\end{equation}
+where $k_{a,b}$ is some real valued coefficient and the order of the polynomial is arbitrary.
+\end{definition}
+
+With that in mind, let us define the notion of numerical integrability (and thereby evaluability).
+% put a definition for numerical integrability
+\begin{definition} \label{nint}
+Let $f: \mathbb{R}^{2n}\to\mathbb{R}$, 
+We say that some function $\phi$ of the form \begin{equation}\phi(x) = \int_{E\subset\mathbb{R}^n}{f(x,y)dy}\end{equation} can be numerical integrated if and only if
+\begin{equation}\phi(x) = h(x)\int_{E\subset\mathbb{R}^n}{g(y)dy}\end{equation} for some $h,g: \mathbb{R}^{n}\to\mathbb{R}$.
+\end{definition}
+
+Using the above definition we will explore the feed-forward and back-propagation actions of any given $\mathcal{F}$.
+
+
+
+
+
+
+
+
+
+
+
+
+% Subsection: Fast forward Propagation
+\subsubsection{Feed-Forward Propagation}
+
+Consider the notion of numerical integrability defined in definition \ref{nint} applied to the calculation of output for some functional neural network.
+
+\begin{theorem}
+If $\mathcal{F}$ is a functional neural network with $L$ consecutive layers, then given any $l$ such that $0\leq l <  L$, $\sigma^{(l+1)}$ is numerically integrable, and if $\xi$ is any continuous and Riemann integrable input function, then $\mathcal{F}[\xi]$ is numerically integrable.
+\end{theorem}
+
+\begin{proof}
+Consider the first layer. We can write the sigmoidal output of the $(l+1)^{\mathrm{th}}$ layer as a function of the previous layer; that is,
+\begin{equation}
+\sigma^{(l+1)} = g\left(\int_{R^{(l)}} w^{(l)}(j_l, j_{l+1})\sigma^{(l)}(j_{l})\; dj_{l}\right).
+\end{equation}
+Clearly this composition can be expanded using the polynomial definition of the weight surface. Hence
+\begin {equation}
+\begin{aligned}
+\sigma^{(l+1)} &= g\left(\int_{R^{(l)}}\sigma^{(l)}(j_l)\sum_{x_{2l+1}}^{Z^{(l)}_Y}\sum_{x_{2l}}^{Z^{(l)}_X}{k_{x_{2l},x_{2l+1}}j_l^{x_{2l}}j_{l+1}^{x_{2l+1}}\;dj_l}\right) \\
+&= g\left(\sum_{x_{2l+1}}^{Z^{(l)}_Y}j^{x_{2l+1}}\sum_{x_{2l}}^{Z^{(l)}_X}{k_{x_{2l},x_{2l+1}}}\int_{R^{(l)}} \sigma^{(l)}(j_l)j_l^{x_{2l}}\; dj_l\right),
+\end{aligned}
+\end{equation}
+and therefore $\sigma^{(l+1)}$ is numerically integrable. For the purpose of constructing an algorithm, let $I^{(l)}_{x_{2l}}$ be the evaluation of the integral in the above definition for any given $x_{2l}$
+
+It is important to note that the previous proof requires that $\sigma^{(l)}$ be Riemann integrable. Hence, with $\xi$ satisfying those conditions it follows that every $\sigma^{(l)}$ is integrable inductively. That is, because $\sigma^{(0)}$ is integrable it follows that by the numerical integrability of all $l$, $\mathcal{F}[\xi] = \sigma^{(L)}$ is numerically integrable. This completes the proof.
+\end{proof}
+Using the logic of the previous proof, it follows that the development of some inductive algorithm is possible. 
+
+    
+    \subsubsection{Feed-Forward Algorithm}
+    Fortunately in the proof it was shown that by calculation of a constant, $I$, on each layer, the functional neural network becomes numerically integrable. The mechanism by which this can occur leads us to a simple algorithm for calculating
+    $\mathcal{F}[\xi]$:
+    
+    \begin{enumerate}
+    \item  For each $l \in \{0,\dots,L-1\}$
+      \begin{enumerate}
+      \item For all $t \in Z^{(l)}_X$, calculate
+         \begin{equation} \label{eq:ICache} 
+            I^{(l)}_t = \int_{R^{(l)}} \sigma^{(l)}(j_l)j_l^{t}\;dj_l.
+         \end{equation}
+
+       \item Calculate, for every $s \in Z^{(l)}_Y$,
+         \begin{equation} \label{eq:CCache}
+            C^{(l)}_{s} = \sum_{x_{2l}}^{Z^{(l)}_X} k_{x_{2l},s} I^{(l)}_{x_{2l}} 
+         \end{equation}
+
+        \item Finally, using \eqref{eq:ICache} and \eqref{eq:CCache}, cache 
+          \begin{equation}
+            \sigma^{(l+1)}=g\left(\sum_{x_{2l+1}}^{Z^{(l)}_Y} j^{x_{2l+1}} C^{(l)}_{x_{2l+1}}\right)
+          \end{equation}
+          for use in the next iteration of loop.
+      \end{enumerate}
+      \item The last $\sigma^{(l)}$ calculated is the output of the functional neural network.
+    \end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+% Subsection: Fast error backpropr
+\subsubsection{Continuous Error Backpropagation}
+
+Just as important as the feed-forward of neural network algorithms is the notion of training. As is common with many non-convex problems with discretized neural networks, a stochastic gradient descent method will be developed using a continuous analogue to error backpropagation. 
+
+As is typical in optimization, a loss function is defined as follows. 
+\begin{definition}
+    For a functional neural network $\mathcal{F}$ and a dataset $\left\{(\gamma_n(j), \delta_n(j))\right\}$ we say that the error for a given $n$ is defined by
+    \begin{equation} \label{eq:error}
+        E = \frac12 \int_{R^{(L)}}\left(\mathcal{F}(\gamma_n) - \delta_n \right)^2\;dj_L
+    \end{equation}
+\end{definition}
+This error definition follows from $\mathcal{N}$ as the typical error function for $\mathcal{N}$ is just the square norm of the difference of the desired and predicted output vectors. In this case we use the $L^2$ norm on $C(R^{(L)})$ in the same fashion.
+
+We first propose the following lemma as to aid in our derivation of a computationally suitable error backpropagation algorithm.
+
+
+\begin{lemma}
+Given some layer, $l>0$, in $\mathcal{F}$, functions of the form $\Psi^{(l)} =g'\left(\Sigma_l\sigma^{(l)}\right)$ are numerically integrable. 
+\end{lemma}
+
+\begin{proof}
+If\begin{equation}\Psi^{(l)}=g'\left(\int_{R^{(l-1)}}{\sigma^{(l-1)} w^{(l-1)}\ dj_{l-1}}\right)\end{equation}
+then
+\begin{equation}
+\Psi^{(l)}=
+ g'\left(
+   \sum_b^{Z^{(l-1)}_Y} j_{l}^{b}
+   \sum_{a}^{Z^{(l-1)}_X} k_{a,b}^{(l-1)}
+    \int_{R^{(l-1)}}{\sigma^{(l-1)} j_{l-1}^a \ dj_{l-2}}
+  \right)
+\end{equation}
+hence $\Psi$ can be numerically integrated and thereby evaluated.
+\end{proof}
+
+The ability to simplify the derivative of the output of each layer greatly reduces the computational time of the error backpropagation. It becomes a function defined on the interval of integration of the next iterated integral.
+
+\begin{theorem}
+The gradient, $\nabla E(\gamma,\delta)$, for the error function \eqref{eq:error} on some $\mathcal{F}$ can be evaluated numerically.
+\end{theorem}
+
+\begin{proof}
+  Recall that $E$ over $\mathcal{F}$ is composed of $k^{(l)}_{x,y}$ for $x \in Z^{(l)}_X, y \in Z^{(l)}_Y$, and $0\leq l \leq L$.
+  If we show that $\frac{\partial E}{\partial k^{(l)}_{x,y}}$ can be numerically evaluated for arbitrary, $l,x,y$, then every component of $\nabla E$ is numerically evaluable and hence $\nabla E$ can be numerically evaluated.
+  Given some arbitrary $l$ in $\mathcal{F}$, let $n = L - l$.
+  We will examine the particular partial derivative for the case that $n = 1$, and then for arbitrary $n$, induct over each iterated integral.
+
+  Consider the following expansion for $n = 1$,
+  \begin{align}
+  \frac{\partial E}{\partial k^{(L-n)}_{x,y}} &= 
+    \frac{\partial}{\partial k^{(L-1)}_{x,y}} 
+    \frac{1}{2} \int_{R^{(l)}} \left[\mathcal{F}(\gamma) - \delta\right]^2\ dj_L \nonumber \\
+  &= \int_{R^{(l)}} \left[\mathcal{F}(\gamma) - \delta\right] \Psi^{(L)} 
+    \int_{R^{(l-1)}} j_{L-1}^x j_{L}^y \sigma^{(L-1)} dj_{L-1}\ dj_L \nonumber \\
+  &= \int_{R^{(l)}} \left[\mathcal{F}(\gamma) - \delta\right] \Psi^{(L)} j_{L}^y 
+    \int_{R^{(l-1)}} j_{L-1}^x \sigma^{(L-1)} dj_{L-1}\ dj_L \label{eq:n1case}
+  \end{align}
+  Since the second integral in \eqref{eq:n1case} is exactly $I^{(L-1)}_x$ from    \eqref{eq:ICache}, it follows that 
+  
+  \begin{equation}
+  \frac{\partial E}{\partial k^{(n)}_{x,y}} = I^{(L-1)}_x
+    \int_{R^{(l)}} \left[\mathcal{F}(\gamma) - \delta\right] \Psi^{(L)} j_{L}^y  \ dj_L
+  \end{equation}
+  and clearly for the case of $n=1$, the theorem holds. 
+
+  Now we will show that this is all the case for larger $n$. 
+  It will become clear why we have chosen to include $n=1$ in the proof upon expansion of the pratial derivative in these higher order cases.
+
+  Let us expand the gradient for $n\in \{2,\dots,L\}$.
+  \begin{equation} \label{eq:gradNGen}
+  \begin{aligned} 
+  \frac{\partial  E}{\partial k^{L-n}_{x,y}} = 
+  \int_{R^{(L)}}  &[\mathcal{F}(\gamma)-\delta] \Psi^{(L)} 
+   \underbrace{\int_{R^{(L-1)}} w^{(L-1)} \Psi^{(L-1)} 
+  \idotsint_{R^{(L-n+1)}} w^{(L-n+1)} \Psi^{(L-n+1)}}_{n-1\text{ iterated integrals}} \\ 
+    &\int_{R^{(L-n)}} \sigma^{(L-n)} j^{a}_{L-n}j^{b}_{L-n+1}\; dj_{L-n}\dots dj_L
+  \end{aligned}
+  \end{equation}
+  As aforementioned, proving the $n=1$ case is required because for $n=1$, \eqref{eq:gradNGen} has a section of $n-1 = 0$ iterated integrals which cannot be possible for the proceeding logic.
+
+  We now use the order invariance properly of iterated integrals (that is, $\int_A\int_B f(x,y)\;dxdy = \int_B\int_A f(x,y)\;dydx$) and reverse the order of integration of \eqref{eq:gradNGen}.
+
+  In order to reverse the order of integration we must ensure each iterated integral has an integrand which contains variables which are guaranteed integration over some region. To examine this, we propose the following recurrence relation for the gradient. 
+
+  Let $\{B_s\}$ be defined along $L -n \leq s \leq L$, as follows
+  \begin{equation}
+  \begin{aligned}
+    B_L &= \int_{R^{(L)}} \left[\mathcal{F}(\gamma) - \delta\right] 
+      \Psi^{(L)} B_{L-1} \;dj_L, \\
+    B_s &= \int_{R^{(l)}} \Psi^{(l)}
+     \sum_a^{Z^{(l)}_X} \sum_b^{Z^{(l)}_Y} j_l^a j_{l+1}^b B_{l-1} \; dj_l, \\
+    B_{L-n} &= \int_{R^{(L-n)}} j_{L-n}^x j_{L-n+1}^y \; dj_{L-n}
+  \end{aligned}
+  \end{equation}
+  such that $\frac{\partial E}{\partial k_{x,y}^{(l)}} = B_L$. If we wish to reverse the order of integration, we must find a reoccurrence relation on a sequence,
+  $\{\rotB_s\}$  such that $\frac{\partial E}{\partial k_{x,y}^{(L-n)}} = \rotB_{L-n} = B_L.$ Consider the gradual reversal of \eqref{eq:gradNGen}.
+
+  Clearly,
+  \begin{equation} \label{eq:rev1}
+  \begin{aligned}
+    \frac{\partial E}{\partial k_{x,y}^{(l)}} =
+      \int_{R^{(L-n)}}&  \sigma^{(L-n)} j^{x}_{L-n}
+      \int_{R^{(L)}}[\mathcal{F}(\gamma)-\delta] \Psi^{L} 
+      \int_{R^{(L-1)}} w^{(L-1)} \Psi^{(L-1)} \\ & 
+      \idotsint_{R^{(L-n+1)}} j^{y}_{L-n+1}w^{(L-n+1)} \Psi^{(L-n+1)}  \; dj_{L-n+1}\dots dj_L dj_{L-n}
+  \end{aligned}
+  \end{equation} 
+  is the first order reversal of \eqref{eq:gradNGen}. We now show the second order case with first weight function expanded.
+  \begin{equation}\label{eq:rev2}
+  \begin{aligned}
+    \frac{\partial E}{\partial k_{x,y}^{(l)}} =
+      \int_{R^{(L-n)}}&  \sigma^{(L-n)}  j^{x}_{L-n}
+      \int_{R^{(L-n+1)}} \sum_b^{Z_Y} \sum_a^{Z_X} k_{a,b} j_{L-n+1}^{a+y} \Psi^{(L-n+1)}
+      \int_{R^{(L)}}[\mathcal{F}(\gamma)-\delta] \Psi^{L} \\ & 
+      \idotsint_{R^{(L-n+1)}} j^b_{L-n+2} w^{(L-n+2)} \Psi^{(L-n+2)}  \; dj_{L-n+1}\dots dj_L dj_{L-n}.
+  \end{aligned}
+  \end{equation}
+
+  Repeated iteration of the method seen in \eqref{eq:rev1} and \eqref{eq:rev2}, where the inner most integral is moved to the outside of the $(L-s)^\mathrm{th}$ iterated integral, with $s$ is the iteration, yields the following full reversal of \eqref{eq:gradNGen}. For notational simplicity recall that $l = L-n$, then
+ \begin{equation}\label{eq:revn}
+  \begin{aligned}
+    \frac{\partial E}{\partial k_{x,y}^{(l)}} =&
+      \int_{R^{(l)}}  \sigma^{(l)}  j^{x}_{l}
+      \int_{R^{(l+1)}} \sum_a^{Z^{(l+1)}_X} j_{l+1}^{a+y} \Psi^{(l+1)}
+      \int_{R^{(l+2)}} \sum_b^{Z_Y^{(l+1)}} \sum_c^{Z_X^{(l+2)}}
+         k^{(l+1)}_{a,b} j^{b+c}_{l+2} \Psi^{(l+2)} \\&
+      \int_{R^{(l+3)}} \sum_d^{Z_Y^{(l+2)}} \sum_e^{Z_X^{(l+3)}}
+         k^{(l+2)}_{c,d} j^{d+e}_{l+3} \Psi^{(l+3)} 
+      \idotsint_{R^{(L)}} \sum_q^{Z^{(L-1)}_Y} k^{(L-1)}_{p,q} j_L^q 
+       \; [\mathcal{F}(\gamma)-\delta] \Psi^{(L)} \\ &
+      \qquad \qquad dj_{L}\dots dj_{L-n}.
+  \end{aligned}
+  \end{equation}
+
+  Observing the reversal in \eqref{eq:revn}, we yield the following recurrence relation for $\{\rotB_s\}$. Bare in mind, $l= L-n$, $x$ and $y$ still correspond with $\frac{\partial E}{\partial k^{(l)}_{x,y}}$, and the following relation uses its definition on $s$ for cases not otherwise defined.
+  \begin{equation} \label{eq:rotBrelation}
+  \begin{aligned}
+    \rotB_{L,t} &= \int_{R^{(L)}}  \sum_b^{Z^{(L-1)}_Y} k^{(L-1)}_{t,b} j_L^b 
+      \left[\mathcal{F}(\gamma) - \delta\right] \Psi^{(L)}\;dj_L. \\
+    \rotB_{s,t} &= \int_{R^{(s)}}\sum_b^{Z^{(s-1)}_Y} \sum_a^{Z^{(s)}_X} 
+      k^{(s-1)}_{t,b} j_s^{a+b} \Psi^{(s)} \rotB_{s+1,a}\; dj_s. \\
+    \rotB_{l+1} &= \int_{R^{(l+1)}} \sum_a^{Z^{(l+1)}_X}
+      j^{a+y}_{l+1} \Psi^{(l+1)} \rotB_{l+2, a}\; dj_{l+1}. \\
+     \frac{\partial E}{\partial k^{(l)}_{x,y}} = \rotB_{l} &= \int_{R^{(l)}}
+      j_{l}^x \sigma^{(l)} \rotB_{l+1}\; dj_l.
+  \end{aligned}
+  \end{equation}
+  Note that $\rotB_{L-n} = B_L$ by this logic.
+
+  With \eqref{eq:rotBrelation}, we need only show that $\rotB_{L-n}$ is integrable. Hence we induct on $L-n \leq s \leq L$ over $\{\rotB_s\}$ under the proposition that $\rotB_s$ is not only numerically integrable but also constant. 
+
+  Consider the base case $s = L$. For every $t$,
+  because every function in the integrand of $\rotB_L$ in \eqref{eq:rotBrelation} is composed of $j_L$, functions of the form $\rotB_L$ must be numerically integrable and clearly, $\rotB_L \in \mathbb{R}$.
+
+  Now suppose that $\rotB_{s+1,t}$ is numerically integrable and constant. Then, trivially, $\rotB_{s,u}$ is also numerically integrable by the contents of the integrand in \eqref{eq:rotBrelation} and $\rotB_{s,u} \in \mathbb{R}$. Hence, the proposition that $s+1$ implies $s$ holds for $l+1 < s < L$.
+
+  Lastly we must show that both $\rotB_{l+1}$ and $\rotB_{l}$ are numerically integrable. By induction $\rotB_{l+2}$ must be numerically integrable. Hence by the contents of its integrand $\rotB_{l+1}$ must also be numerically integrable and real. As a result, $\rotB_l =  \frac{\partial E}{\partial k^{(l)}_{x,y}}$ is real and numerically integrable.
+
+  Since we have shown that $ \frac{\partial E}{\partial k^{(l)}_{x,y}}$ is numerically integrable, $\nabla E$ must therefore be numerically evaluable as aforementioned. This completes the proof.
+\end{proof}
+
+
+\subsubsection{Continuous Error Backpropagation Algorithm}
+The logic of the proceeding proof required the establishment of $\{\rotB_s\}$ as a sequence with a recurrence relation defining each component of the gradient on some coefficient in the network. Interestingly enough for $L$ large enough certain elements of $\{\rotB_s\}$ can be reused for different $n$. In order to more accurately describe this process, we propose the following algorithm for calculating gradients in stochastic gradient descent. \\
+
+\begin{enumerate}
+\item For all $\lambda \in \{ 1,\dots, L \}$, calculate $\Psi^{(\lambda)}$.
+
+\item Calculate $K - \nabla E \to K$ where $K$ is the vector of all coefficient matrices by calculating each partial matrix over $l \in \{0,\dots, L-1\}$
+
+  \begin{enumerate}
+  \item If $l = L - 1 \Leftrightarrow (n = 1)$, then store into the coefficient matrix
+    \begin{equation}
+       k_{x,y}^{(L-1)} - I_x^{(L-1)}
+        \int_{R^{(L)}} \left[\mathcal{F}(\gamma) - \delta\right] 
+          \Psi^{(L)} j_L^y \; dj_L \to  k_{x,y}^{(L-1)}
+    \end{equation}
+    for every $x,y.$
+    
+
+    \item  If $l < L - 1 \Leftrightarrow n > 1$, then
+    \begin{enumerate}
+      \item Ensure that $\rotB_{l+2,t}$ from \eqref{eq:rotBrelation} is computed for all $t \in Z^{(l+1)}_X$
+
+      \item Then for all $x\in Z^{(l)}_X$ and $y\in Z^{(l)}_Y$,
+      \begin{enumerate}
+
+        \item Compute
+          \begin{equation}
+           \rotB_{l+1} = \int_{R^{(l+1)}} \sum_a^{Z^{(l+1)}_X}
+             j^{a+y}_{l+1} \Psi^{(l+1)} \rotB_{l+2, a}\; dj_{l+1}. 
+          \end{equation}
+
+        \item Compute 
+        \begin{equation}
+           \frac{\partial E}{\partial k^{(l)}_{x,y}} = \rotB_{l} = \int_{R^{(l)}}
+            j_{l}^x \sigma^{(l)} \rotB_{l+1}\; dj_l.
+        \end{equation}
+      
+        \item Update the weights such that 
+        \begin{equation}
+          k_{x,y}^{(l)} - \rotB_l \to k_{x,y}^{(l)}
+        \end{equation}
+      \end{enumerate}
+    \end{enumerate}
+  \end{enumerate}
+\end{enumerate}
+
+With the completion of the implementation, the theoretical definition of functional neural networks is complete.
