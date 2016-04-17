@@ -21,3 +21,8 @@ void Test::World()
 {
 	std::cout << " World!" << std::endl;
 }
+
+
+void Test::PrintVector()
+{
+}
