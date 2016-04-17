@@ -20,34 +20,34 @@ namespace FNNSharp
 
             Network gann = new Network();
 
-            double lr = 1;
-            int hidden = 1000, outp = 1, inp = 1;
+            //double lr = 1;
+            //int hidden = 1000, outp = 1, inp = 1;
 
-            double error;
-            int epoch;
-
-
-            #region Saturation Test
-
-            var hidOut = new N2TransitionalLayer(2, outp, Interval.UnitBall,
-                new MathNet.Numerics.Distributions.Normal(0, 10),Sigmoid.Linear);
-            var inHid = new N1TransitionalLayer(hidden, 2, Interval.UnitBall,
-                new MathNet.Numerics.Distributions.Normal(0, 10), Sigmoid.HyperbolicTangent);
+            //double error;
+            //int epoch;
 
 
-            gann.AddLayer(inHid);
-            gann.AddLayer(hidOut);
+            //#region Saturation Test
 
-            var fPLot = new ShowPlot(new FuncInterpolation(
-                x =>
-                    ((Vector<double>)gann.FeedForward(Vector<double>.Build.Dense(1,x)))[0]
-                ), "cont neural net test");
-
-
-            Application.Run(fPLot);
+            //var hidOut = new N2TransitionalLayer(2, outp, Interval.UnitBall,
+            //    new MathNet.Numerics.Distributions.Normal(0, 10),Sigmoid.Linear);
+            //// var inHid = new N1TransitionalLayer(hidden, 2, Interval.UnitBall,
+            ////    new MathNet.Numerics.Distributions.Normal(0, 10), Sigmoid.HyperbolicTangent);
 
 
-            #endregion
+            //gann.AddLayer(inHid);
+            //gann.AddLayer(hidOut);
+
+            //var fPLot = new ShowPlot(new FuncInterpolation(
+            //    x =>
+            //        ((Vector<double>)gann.FeedForward(Vector<double>.Build.Dense(1,x)))[0]
+            //    ), "cont neural net test");
+
+
+            //Application.Run(fPLot);
+
+
+            //#endregion
 
             //Copy K for comparison
             //Matrix<double> K = Matrix<double>.Build.Dense(hidden, outp);
@@ -56,12 +56,12 @@ namespace FNNSharp
 
             #region C(x) to R^n Test
 
-            
+
             //gann.AddLayer(transLayer);
 
             //error = 10000;
 
-           
+
             //for (epoch = 0; error > 0.01; epoch++ )
             //{
             //    error =
@@ -94,7 +94,7 @@ namespace FNNSharp
             //}
 
 
-           
+
 
 
             #endregion
@@ -139,63 +139,63 @@ namespace FNNSharp
             #endregion
 
             #region Functional Test
-            //gann.AddLayer(new FunctionalLayer(20, 20, Interval.UnitBall));
+            gann.AddLayer(new FunctionalLayer(20, 20, Interval.UnitBall));
 
 
-                //#region Plotting Environment Setup
-                //Application.EnableVisualStyles();
-                //Application.SetCompatibleTextRenderingDefault(false);
+            #region Plotting Environment Setup
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
-                //ShowPlot fPlot = new ShowPlot(
-                //    (FuncInterpolation)fnn.FeedForward(
-                //    new FuncInterpolation(x => x)), "f functional test");
+            ShowPlot fPlot = new ShowPlot(
+                (FuncInterpolation)gann.FeedForward(
+                new FuncInterpolation(x => x)), "f functional test");
 
-                //Thread t = new Thread(
-                //    () => Application.Run(fPlot));
-
-
-
-                //t.Start();
-
-                //#endregion
+            Thread t = new Thread(
+                () => Application.Run(fPlot));
 
 
-                //SquareSet ss = new SquareSet();
-                //ss.Load();
 
-                //Trainer trainer = new Trainer(fnn, ss);
+            t.Start();
 
-                ////trainer.Train(100000, 0.1, 1);
-
-                //Console.WriteLine("Mononomial Test");
-
-                //double lr = 1;
-                //while (true)
-                //{
-                //    //Make 4 test examples.
-                //    double error = Enumerable.Range(0, 4).Aggregate(0.0,
-                //        (val, i) => 
-                //            val + fnn.Train(FuncInterpolation.Mononomial(i), FuncInterpolation.Mononomial(i + 1), lr));
+            #endregion
 
 
-                //    Console.WriteLine(error);
-                //    if (Console.ReadKey().Key == ConsoleKey.A)
-                //        break;
-                //    fPlot.Replot((FuncInterpolation)fnn.Output, "output");
-                //}
+            SquareSet ss = new SquareSet();
+            ss.Load();
 
-                //for (int i = 0; i < 10; i++)
-                //{
-                //    Console.WriteLine("Input x^" + i);
+            Trainer trainer = new Trainer(gann, ss);
 
-                //    fnn.FeedForward(FuncInterpolation.Mononomial(i));
+            //trainer.Train(100000, 0.1, 1);
 
-                //    fPlot.Replot((FuncInterpolation)fnn.Output, "output");
-                //    Console.ReadKey();
-                //}
+            Console.WriteLine("Mononomial Test");
+
+            double lr = 1;
+            while (true)
+            {
+                //Make 4 test examples.
+                double error = Enumerable.Range(0, 4).Aggregate(0.0,
+                    (val, i) =>
+                        val + gann.Train(FuncInterpolation.Mononomial(i), FuncInterpolation.Mononomial(i + 1), lr));
 
 
-                #endregion
+                Console.WriteLine(error);
+                if (Console.ReadKey().Key == ConsoleKey.A)
+                    break;
+                fPlot.Replot((FuncInterpolation)gann.Output, "output");
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine("Input x^" + i);
+
+                gann.FeedForward(FuncInterpolation.Mononomial(i));
+
+                fPlot.Replot((FuncInterpolation)gann.Output, "output");
+                Console.ReadKey();
+            }
+
+
+            #endregion
 
             Console.ReadKey();
            
