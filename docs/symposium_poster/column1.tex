@@ -1,0 +1,28 @@
+%!TEX root = main.tex
+
+\begin{alertblock}{Abstract}
+Classification and prediction tasks
+on high resolution continuous data require models with \emph{exponentially many parameters}.
+ In this paper we generalize artificial neural networks to infinite dimensional Banach spaces to attack the curse of dimensionality. Using this new class of algorithms, $\{\mathcal{G}\}$, 
+we prove a new universal approximation theorem for bounded continuous operators and show that this new functional representation
+of weights is invariant to the number of samples.
+\end{alertblock}
+
+
+\begin{block}{The Problem with High Resolution}
+
+Computationally, we deal with \emph{discrete data}, but most of the time this data is sampled from a \emph{continuous process}. For example,
+\begin{itemize}
+	\item \emph{Audio}: Inherently a continuous $f: \mathbb{R} \to \mathbb{R}$ sampled as a vector $v \in \mathbb{R}^{44,100\times t}$
+	\item \emph{Images}: Truthfully a function $f: \mathbb{R}^2 \to \mathbb{R}^3,$ but sampled as $v \in \mathbb{R}^{3872\times 2592}$
+\end{itemize}
+However, performing tractable machine learning on this data almost always requires some \emph{lossy preprocessing} like PCA or Discrete Fourier Analysis[1]. Even the state of the art approaches, convolutional neural networks, \emph{do not escape the dimensionality issues associated with high resolution data} [1,2]. \\[1cm]
+\end{block}
+
+\begin{block}{Our Solution}
+\textbf{In answer to this problem, we assume the data is a continuous $f: X \to \mathbb{R}$.}
+\begin{itemize}
+	\item This leads to a powerful generalization of ANNs, $\{\mathcal{G}\}$ which are \emph{universal approximators of $K: L^p(X) \to L^q(X)$}
+	\item Assuming continuity gives \emph{invariance to input resolution} and a \emph{massive reduction of parameters}.
+\end{itemize}
+\end{block}
