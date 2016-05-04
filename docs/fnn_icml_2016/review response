@@ -1,0 +1,30 @@
+We would like to thank the reviewers for examining the paper and producing thoughtful remarks and questions. In our response we hope to clarify the meaning of the paper and adjust the paper according to the advice of each reviewer. 
+
+Our paper extends ANNs to infinite dimensional input and output spaces in order to provide another platform for theoretical analysis of ANNs. Our goal in developing GANNs was to unify investigation into infinite ANNs under one theory (if accepted, a more direct discussion of this will be added). In doing so we provide universal approximation results for the a particular class of GANN, the FNNs. We then show that substantial parameter reduction is possible using weight polynomials and continuous classifiers as opposed to normal ANNs. Lastly, we provide an analogue to the error back propagation algorithm for FNNs.
+
+Since assessing the reviews we’ve invested a significant amount of time into overhauling many parts of the paper and we’ve proved a new theorem suggesting that FNNs can approximate nonlinear continuous operators. We’ve accounted for all of the comments and will list the most important changes, In no particular order:
+	We’ve approached the hypotheses on all of our theorems and definitions with more rigour in particular:
+		We’ve reassesed and specified all of the spaces which we deal with: 
+		FNN: $f \in C(L^p, L^p) = \{F: L^p \to L^p : F continuous w.r.t. Uniform norm \}$
+		ANN: $n \in C(I^n, \mathbb{R})$
+		N2: $n_2 \in C(L^p, \mathbb{R})$
+		N1: $n_1 \in C(\mathbb{R}, L^p)$
+		Corollary 4 deals with $F$ approximating the constant mapping, given a fixed $f$ map all $\xi \in L^p$ to $f$. (The insight of this corollary is in how one solves for the weight matrix.)
+		We’ve changed definiton $8$ to be expressed in terms of a commutative diagram so that $T_l$ is well defined.
+	We’ve standardized notation as per neural network papers in ICML 2015, and renamed definitions:
+		FNNs -> Operator Neural Networks (ONNs) (For this response we will still use FNN). 
+			This caused much confusion. We mean that $f: L^p \to L_p$. we aim to prove that FNNs are dense in $C(L^p, L^p)$, however on lines 216-219, we claim Cybenko’s proof cannot be generalized to this space because his definition of $\sigma$ discriminatory is in terms of integration over the entire input space for the network. In our case,  assigning a measure to the input space of FNNs, L^p, is difficult (see Weiner measure), and defining the discriminatory $\sigma$ in terms of functional integration is not valid since there is not a Riesz representation theorem for the bounded linear functionals of $C(L^p, L^p)$. 
+			L^p spaces do give a natural generalization of  finite dimensional vector spaces, however the Banach space of continuous operators between $L^p$ spaces does not. 
+		 Discretized neural networks -> ANNs (strictly). 
+			We did this so as to clarify that the weights of normal neural networks are not discrete, but that the dimensionality of the weight matrices are.
+		$\sigma$ as the output of the layer -> $\sigma$ as the non-linear activation function
+		The title should be Parameter Reduction using ...
+	The reviewers comments prompted us to prove a much stronger statement for FNNs: 
+		Theorem. Let $K \in C(L^p, L^p)$ be any continuous (possibly nonlinear) operator then for every $\epsilon > 0$, and for every $\xi \in L^p$ there exists a two layer FNN (ONN), $F$ so that  $$\|K\xi -  F\xi\| < \epsilon.$$
+			We give a sketch proof. First we show that continuous classifiers are dense in the space $C(L^p, \mathbb{R})$ using Theorem 5.1.3 of (Stinchcombe, 1999). Then we construct a lattice of dirac spikes on the $n_2$ layer for a particular functional which maps $\xi \to K[f](y)$ for some $y$. Then we build an operator from each of these functionals by superposition. If the paper is accepted we will add this theorem following Theorem 3 in lieu of the linear operator discussion.
+		This theorem is not a restatement of any fundamental theorem for bounded nonlinear operators in functional analysis, and we hope that it furthermore substantiates the use of FNNs.
+	We condensed much of the restated bounded linear operator discussion so that we could include the proof of error back propagationin the paper for the sake of clarity as suggested by the reviewers. Although we believe that the discussion made an accessible onramp for those not versed in functional analysis, this restructuring allows us to present our new, stronger representation theory.
+	We believe that there is a strong link between our work and Kernel methods and so if our paper is accepted we will add a discussion of their relationship with respect to Deep Multiple Kernel Learning (Strobl et al, 2013) and other infinite neural network kernel methods (Hazan & Jaakkola, 2015). 
+	We wlll also add a empirical evaluation of Continuous Classifiers on a variety of datasets to test our parameter reduction theory.
+
+We hope that this response clarifies things.
