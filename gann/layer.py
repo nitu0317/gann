@@ -28,9 +28,13 @@ class Layer(metaclass=ABCMeta):
 		"""
 		return NotImplemented
 
+	def get_shape(self):
+		return self.get_output().get_shape().as_list()
+
+
 	#####################################
 	# Private Hooks
 	####################################
 	def _add_to_network(self, prev_layer):
 		with tf.variable_scope(self.name):
-			make_layer(prev_layer)
+			self.make_layer(prev_layer)
