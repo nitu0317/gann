@@ -9,7 +9,7 @@ class Input(Layer):
 		super().__init__("input")
 
 	def make_layer(self, prev_layer):
-		self.output = tf.placeholder(dtype="float", shape=[None] + size, name="input")
+		self.output = tf.placeholder(dtype="float", shape=[None] + self.size, name="input")
 	
 	def get_output(self):
 		return self.output

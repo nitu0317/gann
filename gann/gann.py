@@ -12,15 +12,15 @@ class GANN:
 		# TODO: Specify GPU usage if on GPU
 		self.sess = tf.InteractiveSession()
 
+		self._layers = []
 		# Make the inputs
 		in_layer = Input(input_shape)
-		in_layer._add_to_network(None):
-		self._layers = [in_layer]
+		self.add_layer(in_layer)
 
 
 	def forward(self, in_tens):
 		result = self.sess.run(self.get_output_tensor(),
-			{self.get_input_op: in_tens})
+			{self.get_input_op(): in_tens})
 		return result
 
 
@@ -31,8 +31,15 @@ class GANN:
 		"""
 		Adds a layer to the GANN and calls make_layer
 		"""
-		layer._add_to_network(self._layers[-1])
+		prev_layer = self._layers[-1] if self._layers else None
+		layer._add_to_network(prev_layer)
+		print(
+			"Adding layer: ", layer.get_output().name,
+			 " with shape ", layer.get_shape())
 		self._layers.append(layer)
+
+	def finalize(self):
+		self.sess.run(tf.initialize_all_variables())
 
 
 	def make_training_method(self, loss=None):
@@ -61,7 +68,7 @@ class GANN:
 
 	def get_input_op(self):
 		# Slightly jank.
-		return self.layers[0].get_output()
+		return self._layers[0].get_output()
 
 	def get_optimizer_op(self):
 		return self.optimizer

@@ -1,3 +1,6 @@
+import tensorflow as tf
+import math
+
 def random_tensor(shape, fanning=1):
 	"""
 	Makes a random tesnor with a given shape and a certain fanning.
@@ -6,4 +9,4 @@ def random_tensor(shape, fanning=1):
 		var= tf.Variable(tf.random_uniform(shape,-1/math.sqrt(fanning),1/math.sqrt(fanning)))
 	return var
 
-	
+
