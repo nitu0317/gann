@@ -35,3 +35,4 @@ def get_derivative(f, interval, num_sample):
 		delta = tf.matmul(samps, diffOp)
 
 		return t / delta
+
