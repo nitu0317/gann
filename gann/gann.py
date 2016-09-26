@@ -1,12 +1,11 @@
 import tensorflow as tf
 
 from layer import Layer
-from layers.input import Input
 
 LEARNING_RATE=1e-3
 
 class GANN:
-	def __init__(self, input_shape):
+	def __init__(self, input_layer):
 		"""
 		Initializes a generalized artificial neural network.
 		"""
@@ -14,9 +13,7 @@ class GANN:
 		self.sess = tf.InteractiveSession()
 
 		self._layers = []
-		# Make the inputs
-		in_layer = Input(input_shape)
-		self.add_layer(in_layer)
+		self.add_layer(input_layer)
 
 
 	def forward(self, in_tens):
