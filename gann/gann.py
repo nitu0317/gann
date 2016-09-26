@@ -61,7 +61,10 @@ class GANN:
 
 		# TODO: Add Batch Norm, L2 Regularization.
 		self.y_input = tf.placeholder(dtype="float",shape=self.get_output_shape(),name="desired")
-		self.cost = tf.reduce_mean(tf.square(self.y_input - out_tens)) 
+		if not loss:
+			self.cost = tf.reduce_mean(tf.square(self.y_input - out_tens)) 
+		else:
+			self.cost = loss(self.y_input, out_tens)
 		self.optimizer = tf.train.AdamOptimizer(learning_rate).minimize(self.cost)
 
 		return self.y_input, self.optimizer
