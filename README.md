@@ -19,4 +19,4 @@ whereas functional neural networks act on any banach space, such as the set of c
 where F denotes the action of a functional neural network and A, B are closed intervals in R.
 
 Interestingly enough it has been shown that functional neural networks are universal approximators of arbitrary operations, and furthermore that all feed-forward neural networks are a subset of the family of functional neural networks. 
-If you would like to know more about FNNs, [read our white-paper](./documentation/FunctionalNN.pdf).
+If you would like to know more about FNNs, [read our white-paper](./docs/fnn_icml_2016/submission.pdf).
