@@ -6,6 +6,7 @@ import numpy as np
 
 from gann import GANN
 from layers.n_discrete import NDiscrete
+from layers.input import DiscreteInput
 
 def main():
 	"""
@@ -13,7 +14,7 @@ def main():
 	"""
 	tf.set_random_seed(1)
 
-	g = GANN([2])
+	g = GANN(DiscreteInput([2]))
 	g.add_layer(NDiscrete(3, activation=tf.nn.relu))
 	g.add_layer(NDiscrete(1, activation=tf.nn.sigmoid))
 	g.make_training_method(learning_rate=1e-2)
