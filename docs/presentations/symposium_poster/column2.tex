@@ -1,0 +1,134 @@
+%!TEX root = main.tex
+
+\begin{figure}
+\centering
+\input{neuraldiagram}
+\caption{Left: A neural network $\mathcal{N}$ as the number of nodes $\to \infty.$ Right: 
+A generalized neural network $\mathcal{G}.$}
+\end{figure}
+
+
+\begin{columns}[t,totalwidth=\twocolwid] % Split up the two columns wide column
+
+\begin{column}{\onecolwid}\vspace{-.6in} % The first column within column 2 (column 2.1)
+
+	\begin{block}{Operator Neural Networks}
+	 	\textbf{Definition 1.}
+	    \emph{We say $\mathcal{N}: \mathbb{R}^n \to \mathbb{R}^m$ is a feed-forward neural network if for an input vector $\pmb{x}$,}
+	        \begin{equation}
+	                \begin{aligned}
+	            \mathcal{N}:\ & \sigma_j^{(l+1)} = g\left(\sum_{i}w_{ij}^{(l)}\sigma_i^{(l)} + \beta^{(l)}\right) &\\  & \sigma_i^{(0)} \ \ \ =x_i.& 
+	            \end{aligned}
+	        \end{equation}
+	         \emph{Furthermore we say $\{\mathcal{N}\}$ is the set of all neural networks.}
+
+
+	      \begin{equation*}
+			\Big\Downarrow      
+	      \end{equation*}
+
+	     \textbf{Definition 2. }\emph{We call $\mathcal{O}: L^p(X) \to L^q(Y)$ an operator neural network if,}
+		\begin{equation}
+	          \begin{alignedat}{2}
+	        \mathcal{O}:\ &\sigma^{(l+1)}(j) & &=  g\left(\int_{X} \sigma^{(l)}(i) w^{(l)}(i,j)\ di \right)  \\
+	        &\sigma^{(0)}(i) & &= f(i). 
+	        \end{alignedat}
+		\end{equation}
+		\emph{Furthermore let $\{\mathcal{O}\}$ denote the set of all operator neural networks.}
+	\end{block}
+
+
+\end{column} % End of column 2.1
+
+
+\begin{column}{\onecolwid}\vspace{-.6in} % The second column within column 2 (column 2.2)
+
+
+\begin{block}{Layer Types}
+	We suggest several types of layers in the category. \\
+    $\;\;T_l$ is \emph{$\mathfrak{o}$-operational} if
+     \begin{equation} \label{eq:tlfunctional}
+    \begin{aligned} 
+       \mathfrak{o}: L^p(X}) \to&\ L^q(Y}) \\
+      \sigma \mapsto& \int_{X} \sigma(i) w^{(l)}(i,j)\ di.
+    \end{aligned}
+    \end{equation}
+   $\;\;T_l$ is \emph{ $\mathfrak{n}$-discrete } if
+    \begin{equation} \label{eq:tldiscrete}
+    \begin{aligned} 
+       \mathfrak{n}: \mathbb{R}^n \to&\ \mathbb{R}^m \\
+      \vec{\sigma} \mapsto& \sum_j^m \vec{e}_j\sum_i^n \sigma_i w^{(l)}_{ij}
+    \end{aligned}
+    \end{equation}
+     $\;\;T_l$ is \emph{$\mathfrak{n}_1$-transitional } if
+    \begin{equation} \label{eq:tldiscrete}
+    \begin{aligned} 
+       \mathfrak{n}_1: \mathbb{R}^n \to&\  L^q(Y) \\
+      \vec{\sigma} \mapsto& \sum_i^n \sigma_i w^{(l)}_i(j).
+    \end{aligned}
+    \end{equation}
+    $\;\;T_l$ is \emph{$\mathfrak{n}_2$-transitional } if
+    \begin{equation} \label{eq:tldiscrete}
+    \begin{aligned} 
+       \mathfrak{n}_2: L^p(X) \to&\ \mathbb{R}^m \\
+      \sigma(i) \mapsto& \sum_j^m \vec{e}_j\int_{X} \sigma(i) w^{(l)}_j(i)\ di
+    \end{aligned}
+    \end{equation}
+\end{block}
+
+
+
+\end{column}
+
+\end{columns}
+
+
+
+
+\begin{columns}[t,totalwidth=\twocolwid] % Split up the two columns wide column
+
+\begin{column}{\onecolwid}\vspace{-.6in} % The first column within column 2 (column 2.1)
+
+	\begin{block}{Generalized Neural Networks}
+
+	{Both $\mathcal{O}$ and $\mathcal{N}$ look really similar. Is there some more general category or structure containing them?} \\[0.7cm]
+
+	\textbf{Definition 3.} \emph{If $A,B$ are (possibly distinct) Banach spaces over a field $\mathbb{F}$,
+		we say $\mathcal{G}: A \to B$ is a generalized neural network if and only if }
+	\begin{equation} \label{eq:gann}
+	          \begin{alignedat}{2}
+	        \mathcal{G}:\ &\sigma^{(l+1)} & &=  g\left(T_l\left[\sigma^{(l)}\right] + \beta^{(l)}\right)  \\
+	        &\sigma^{(0)} & &= \xi 
+	        \end{alignedat}
+	\end{equation}
+	\emph{for some input $\xi \in A$, and a linear form $T_l$. Denote the set of all such networks, $\{\mathcal{G}\}$} \\[0.7cm]
+	\textbf{Remark.} \mathcal{G} is a \emph{category}, and we can write neural networks as \emph{commutative diagrams}.
+	\end{block}
+\end{column}
+
+
+\begin{column}{\onecolwid}\vspace{-.6in} % The first column within column 2 (column 2.1)
+
+\begin{block}{ANNs as Commutative Diagrams}
+This generalization is nice from a creative standpoint. We make new "classifiers" as we like. \\
+
+	\textbf{Examples:}
+	\begin{itemize}
+		\item A three-layer neural network is just
+		\begin{equation*}
+			\mathcal{N}_3: \mathbb{R}^{10000} \xrightarrow{g \circ \mathfrak{n}}\mathbb{R}^{30}  \xrightarrow{g \circ \mathfrak{n}} \mathbb{R}^{3}.
+		\end{equation*}
+		\item A three-layer operator network is simply
+		\begin{equation*}
+			\mathcal{O}_3: L^p(R) 	 \xrightarrow{g \circ \mathfrak{o}} L^1(R) \xrightarrow{g \circ \mathfrak{o}} C(R).
+		\end{equation*}
+		\item We can even classify functions!
+		\begin{equation*}
+			\mathcal{C}:  L^p(X) 	 \xrightarrow{g \circ \mathfrak{o}} L^1(X)  \xrightarrow{g \circ \mathfrak{o}} L^1(X)\xrightarrow{g \circ \mathfrak{n}_2}  \mathbb{R}^n.
+		\end{equation*}
+	\end{itemize}
+\end{block}
+
+\end{column}
+
+\end{columns}
